@@ -5,6 +5,14 @@
 **Time Spent So Far**: 20 minutes  
    - **10 mins**: Writing initial thoughts and project details.
    - **10 mins**: Refining approach and organization with AI assistance.
+   - **05 mins**: Set up GitHub repo & R project for the project.
+
+- Braain storm process with clear detail then execute the plan
+- Bring in data from past 10 years
+- Clean data to have features for each team
+   - Make sure each outcome is a row (remove likelihood of duplicate games)
+   - Make sure each feature is a column
+
 
 #### **1. Introduction & Purpose (5 mins)**
    - Clarify the goal: Create an R Shiny app to predict NFL game outcomes (win/loss) using various factors.
