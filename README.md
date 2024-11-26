@@ -1,17 +1,72 @@
 
 
+
+
+
+
 ### **ETV Process I - Critical Thinking Session 1**
 **Total Project Duration Goal**: 2 hours  
-**Time Spent So Far**: 20 minutes  
+**Time Spent So Far**: 50 minutes  
+11/26/2024 - 125 miutes on extraction format
    - **10 mins**: Writing initial thoughts and project details.
    - **10 mins**: Refining approach and organization with AI assistance.
    - **05 mins**: Set up GitHub repo & R project for the project.
 
-- Braain storm process with clear detail then execute the plan
+- Brain storm process with clear detail then execute the plan
 - Bring in data from past 10 years
 - Clean data to have features for each team
    - Make sure each outcome is a row (remove likelihood of duplicate games)
    - Make sure each feature is a column
+
+Let Audience see all tables they have access to
+Find the URL for one years outcome: 15 minutes and you have to think hard
+Note that #tablename after .htm is important
+Really explain what is going on regarding the table your extracting (emphasize offense and defense aspects of table and how the play a role in labeling, offense is referring to the team you searched info)
+Bringing the html page of URL 
+Extracting the appropriate table from the html page, show you need to know which number the table you want to extract, this will be very important
+Understanding teams change location and names so, we have to prepare for that
+Focus on 1 team and recent year to make sure code works well
+WHen we bring in a table notice how every thing is in quotes
+
+Transitioning into Tranformation Phase (This is just to get it into tidy format not to answer any question and it is important to note this, these skills sometime when these exact skills are not brought up into class)
+
+
+Clean columns names, reminds me that data is messy and the effort here might break for another year if different information is stored by the website
+
+
+
+1. Notes columsn 4-6 and 9 do not have column names, and some columns have row 1 names while others have both, we can shy from this or we can approach this and use AI to enhance our understanding. No, all columns have issues and we need to address them accordingly
+
+I think a big issue will be having to explain the nuanced details of each steps AND PROVIDING QUESTIONS TO FOSTER DEEPER UNDERSTANDING OF MATERIAL, 
+
+THIS MAKES THIS NOT STATISTICS AND NOT CS
+
+
+
+
+
+
+Cleaning table for jsut 1
+
+Turn entire process into a function
+
+
+
+
+
+
+
+
+Resources:
+https://rvest.tidyverse.org/
+dplyr
+ggplot2
+
+Philosophy:
+- We need to know already existing paths (this teaching demonstration) not only to learn from but to explore what can be done 
+- We sometimes want our code to fix every single issue possible and never experience errors, but that is not reality, we have to gain skills to be handle this data edge cases 
+
+
 
 
 #### **1. Introduction & Purpose (5 mins)**
@@ -59,4 +114,39 @@
    - Summarize key takeaways.
    - Outline tasks to be completed before the next session.
    - Identify any potential challenges or areas that need further exploration.
+   
+   
+   
+
+## Specital Notes:
+### A: `user_agent`
+This is a User-Agent string, which is a piece of text that identifies the web browser and operating system to websites when making HTTP requests. In this case, it's being used with the `user_agent()` function, likely in R's rvest package for web scraping.
+
+When using rvest for web scraping, setting a user-agent is important because:
+
+1. It helps your web scraping requests appear more like regular browser traffic
+2. Some websites block or limit requests that don't have a proper user-agent string
+3. It's considered good practice to identify your scraping bot appropriately
+
+This particular user-agent string indicates:
+- A Chrome browser (version 91.0.4472.124)
+- Running on Windows 10 64-bit
+- Using the WebKit engine (537.36)
+
+You would typically use this with rvest like this:
+
+```r
+library(rvest)
+
+# Set up the session with the user agent
+session <- session(
+  "https://example.com",
+  user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+)
+
+# Then use the session for scraping
+webpage <- read_html(session)
+```
+
+
 

@@ -1,0 +1,215 @@
+---
+title: "ETV Process"
+author: "Immanuel Williams PhD"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(rvest)
+library(httr)
+library(dplyr)
+library(purrr)
+```
+
+
+
+## Simplistic Call
+```{r}
+## Createtion of URL
+team_name <- "was"
+year <- 2023
+generic_url <- paste0("https://www.pro-football-reference.com/teams/",team_name,"/",year,".htm#all_games")
+```
+
+
+```{r}
+## Special Note 1: Maybe Optional (Further Research is needed on its relevance)
+request_details <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+response <- GET(url, user_agent(request_details),timeout(20))
+```
+
+
+```{r}
+webpage <- generic_url %>% 
+  rvest::read_html()
+
+web_table <- webpage %>% 
+  rvest::html_table() %>% 
+  purrr::pluck(2) %>% 
+  setNames(make.unique(ifelse(names(.) == "", "col", names(.))))
+```
+
+
+## Column Names Cleaning
+
+
+
+Type 1: Columns with Both Header and First Row Values
+- Example columns: 11-25 (Score, Offense, Defense columns)
+- Initial state: Has both column header AND meaningful first row value
+- Challenge: Need to combine both pieces of information with hyphen
+- Solution needed: Merge header + first row value (e.g., "Score-Tm")
+- Why special: Preserves complete context from both sources
+
+Type 2: Empty Header and Empty First Row
+- Example columns: 4-6, 9 (time, boxoffice, etc.)
+- Initial state: No header AND no meaningful first row value
+- Challenge: No useful information from either source
+- Solution needed: Assign completely new custom names
+- Why special: Requires external knowledge about what these columns represent
+
+Type 3: Empty Header but Valuable First Row
+- Example columns: 1-3, 7, 8, 10 (Week, Day, Date, etc.)
+- Initial state: No header BUT has meaningful first row value
+- Challenge: Only first row contains useful naming information
+- Solution needed: Use first row value as column name
+- Why special: Must preserve the meaningful information from first row only
+
+Why One Size Doesn't Fit All:
+1. Information Sources Vary:
+   - Some columns have two sources of information
+   - Some have no useful information
+   - Some have partial information
+   
+2. Naming Requirements Differ:
+   - Some need combined names
+   - Some need completely new names
+   - Some need preservation of existing values
+
+3. Processing Order Matters:
+   - Type 3 must be handled first to give empty columns initial names
+   - Type 2 needs specific column positions after initial naming
+   - Type 1 combines information last after other naming is stable
+
+4. Error Handling Varies:
+   - Type 1 needs checks for combining values
+   - Type 2 needs precise position matching
+   - Type 3 needs empty string checks
+
+
+### Modificaiton 1 (Web Table): Type 3 Handling
+
+- Creates first_row variable to store the first row values that we'll use for naming
+- mod_1_table handles empty columns (Type 3)
+- map2_chr compares each column name with first row values
+- If column name starts with "col" (our temporary name), use the first row value
+- Otherwise keep the original column name
+- This affects columns 1-3, 7, 8, 10 which had empty names but values in first row
+
+```{r}
+first_row <- web_table %>% 
+  dplyr::slice(1)
+
+mod_1_web_table <- web_table %>% 
+  setNames(
+    purrr::map2_chr(
+      names(web_table),
+      first_row,
+      ~if(startsWith(.x, "col")){.y} else {.x}
+    )
+)
+```
+
+
+### Modificaiton 2 (Web Table):  Type 2 Handling
+
+- Handles the special case columns that need custom names
+- Uses direct column position referencing with rename()
+- Assigns custom names to columns 4 (Time), 5 (Boxoffice), 6 (Game Outcome), 9 (Game Location)
+- These columns had empty names AND empty first row values
+
+
+```{r}
+mod_2_web_table <- mod_1_web_table %>% 
+  rename(
+    "Time" = 4,
+    "Boxoffice" = 5,
+    "Game Outcome" = 6,
+    "Game Location" = 9
+  )
+```
+
+
+## Modificaiton 3 (Web Table): Type 1 Handling
+
+- Processes columns 11-25 which have both header names and first row values
+- match() finds the position of each column name
+- For columns 11 and beyond, combines the column name with first row value using hyphen
+- Keeps other column names unchanged
+- slice(-1) removes the first row since its values are now part of column names
+- These were columns that already had names but needed to be combined with first row values
+
+
+```{r}
+mod_3_web_table <- mod_2_web_table %>% 
+  setNames(
+    purrr::map2_chr(
+      names(mod_2_web_table),
+      first_row,
+      ~{
+        col_index <- match(.x, names(mod_2_web_table))
+        if(!is.na(col_index) && col_index >= 11) {
+          paste(.x, .y, sep = "-")
+        } else {
+          .x
+        }
+      }
+    )
+  ) %>% 
+  dplyr::slice(-1) %>% 
+  janitor::clean_names()
+```
+
+
+```{r}
+mod_4_web_
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+
+## All Football three letter team names
+team_names <- c("crd","atl","rav","buf","car","chi","cin","cle","dal","den","det","gnb","htx","clt","jax","kan","sdg","ram","mia","min","nwe","nor","nyg","nyj","rai","phi","pit","sfo","sea","tam","oti","was")
+
+years <- 2013:2023
+
+generic_url <- paste0("https://www.pro-football-reference.com/teams/",team_names[1],"/",years[1],".htm#all_games")
+
+```
+
+```{r}
+# Get data from URL
+get_pfr_table <- function(url) {
+  response <- GET(url,
++                 user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
++                 timeout(20))
+  webpage <- read_html(url)
+  table <- webpage %>% 
+    html_table() %>% 
+    .[[1]]  # Usually the main stats table is the first one
+  return(table)
+}
+tmp_df <- get_pfr_table(generic_url)
+
+```
+
+
