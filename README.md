@@ -7,7 +7,7 @@
 ### **ETV Process I - Critical Thinking Session 1**
 **Total Project Duration Goal**: 2 hours  
 **Time Spent So Far**: 50 minutes  
-11/26/2024 - 125 miutes on extraction format
+11/26/2024 - 145 miutes on extraction format
    - **10 mins**: Writing initial thoughts and project details.
    - **10 mins**: Refining approach and organization with AI assistance.
    - **05 mins**: Set up GitHub repo & R project for the project.
@@ -18,24 +18,29 @@
    - Make sure each outcome is a row (remove likelihood of duplicate games)
    - Make sure each feature is a column
 
-Let Audience see all tables they have access to
-Find the URL for one years outcome: 15 minutes and you have to think hard
-Note that #tablename after .htm is important
-Really explain what is going on regarding the table your extracting (emphasize offense and defense aspects of table and how the play a role in labeling, offense is referring to the team you searched info)
-Bringing the html page of URL 
-Extracting the appropriate table from the html page, show you need to know which number the table you want to extract, this will be very important
-Understanding teams change location and names so, we have to prepare for that
-Focus on 1 team and recent year to make sure code works well
-WHen we bring in a table notice how every thing is in quotes
 
-Transitioning into Tranformation Phase (This is just to get it into tidy format not to answer any question and it is important to note this, these skills sometime when these exact skills are not brought up into class)
+
+## Extraction
+- Find the URL for one year outcome and 1 team: 15 minutes and you have to think hard
+- Note that #tablename after .htm is important (not that important when I went deeper into this)
+- Extracting the appropriate table from the html page, show you need to know which number the table you want to extract, this will be very important
+- Let Audience see all tables so they have access to granted we are focused on [[2]] or pluck 2
+- Really explain what is going on regarding the table your extracting (emphasize offense and defense aspects of table and how the play a role in labeling, offense is referring to the team you searched info)
+- Bringing the html page of URL 
+- Understanding teams change location and names so, we have to prepare for that
+- Discuss the code to bring URL into R
+- When we bring in a table notice how every thing is in quotes
+
+
+
+Transitioning into Tidy Data Phase of Extraction (This is just to get it into tidy format not to answer any question and it is important to note this, these skills sometime when these exact skills are not brought up into class)
 
 
 Clean columns names, reminds me that data is messy and the effort here might break for another year if different information is stored by the website
 
 
 
-1. Notes columsn 4-6 and 9 do not have column names, and some columns have row 1 names while others have both, we can shy from this or we can approach this and use AI to enhance our understanding. No, all columns have issues and we need to address them accordingly
+1. Notes columns 4-6 and 9 do not have column names, and some columns have row 1 names while others have both, we can shy from this or we can approach this and use AI to enhance our understanding. No, all columns have issues and we need to address them accordingly
 
 I think a big issue will be having to explain the nuanced details of each steps AND PROVIDING QUESTIONS TO FOSTER DEEPER UNDERSTANDING OF MATERIAL, 
 
@@ -46,26 +51,30 @@ THIS MAKES THIS NOT STATISTICS AND NOT CS
 
 
 
-Cleaning table for jsut 1
-
-Turn entire process into a function
 
 
 
 
 
+## Transformation 
+Turn entire process into a function, get multiple years across multiple teams
 
 
 
-Resources:
+
+
+## Resources:
 https://rvest.tidyverse.org/
 dplyr
 ggplot2
+janitor
+purrr
 
-Philosophy:
+## Philosophy
 - We need to know already existing paths (this teaching demonstration) not only to learn from but to explore what can be done 
 - We sometimes want our code to fix every single issue possible and never experience errors, but that is not reality, we have to gain skills to be handle this data edge cases 
-
+- We try o make it general as much as we can handle for the next time we have to run an analysis
+- Cleaning data can be redefine to be bringing data into its 1st phase of Tidy Data, in which I subjectively want to define this within E phase, this includes tidying the column names, making numeric data and levels for factors
 
 
 

@@ -140,35 +140,77 @@ mod_2_web_table <- mod_1_web_table %>%
 
 - Processes columns 11-25 which have both header names and first row values
 - match() finds the position of each column name
-- For columns 11 and beyond, combines the column name with first row value using hyphen
-- Keeps other column names unchanged
+- For columns 11 and beyond:
+
+1. Clean the original column name by removing any existing numbers and underscores
+2. Clean the first row value by removing any existing numbers and underscores
+3. Combine cleaned column name with cleaned first row value using underscore
+4. Result example: "Score" + "Tm" = "score_tm" (instead of "score_1_tm")
+
+- Keeps other column names unchanged (columns 1-10)
 - slice(-1) removes the first row since its values are now part of column names
-- These were columns that already had names but needed to be combined with first row values
+- Uses janitor::clean_names() for consistent naming format
+- These columns require both pieces of information but need to avoid duplicate handling artifacts
+- Prevents the creation of numbered suffixes that appear when R handles duplicate names
 
 
 ```{r}
-mod_3_web_table <- mod_2_web_table %>% 
+mod_3_web_table <- mod_2_web_table |>
   setNames(
     purrr::map2_chr(
       names(mod_2_web_table),
       first_row,
       ~{
         col_index <- match(.x, names(mod_2_web_table))
+        # For columns 11 onwards, combine names without creating duplicates
         if(!is.na(col_index) && col_index >= 11) {
-          paste(.x, .y, sep = "-")
+          orig_name <- stringr::str_remove_all(.x, "[0-9_]") # Remove existing numbers/underscores
+          new_value <- stringr::str_remove_all(.y, "[0-9_]") # Clean the value too
+          paste(orig_name, new_value, sep = "_")
         } else {
           .x
         }
       }
     )
-  ) %>% 
-  dplyr::slice(-1) %>% 
+  ) |>
+  dplyr::slice(-1) |>
   janitor::clean_names()
 ```
 
 
+
+We Should be Proud
 ```{r}
-mod_4_web_
+colnames(mod_3_web_table)
+```
+
+
+```{r}
+mod_4_web_table <- mod_3_web_table %>% 
+  mutate(
+    # Convert numeric columns
+    across(c(week, score_tm, score_opp, 
+             starts_with("offense_"), 
+             starts_with("defense_"),
+             starts_with("expected_points_")), 
+           as.numeric))
+```
+
+
+```{r}
+
+mod_5_web_table <- mod_4_web_table  %>% 
+
+  mutate(
+    game_outcome = as.factor(game_outcome),
+    game_location = case_when(
+      game_location == "@" ~ "away",
+      game_location == "" ~ "home",
+      TRUE ~ game_location
+    ) %>% 
+      as.factor()
+  ) %>% 
+  filter(day != "")
 ```
 
 
