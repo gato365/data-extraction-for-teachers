@@ -7,7 +7,7 @@
 ### **ETV Process I - Critical Thinking Session 1**
 **Total Project Duration Goal**: 2 hours  
 **Time Spent So Far**: 50 minutes  
-11/26/2024 - 145 miutes on extraction format
+11/26/2024 - 250 minutes on extraction format
    - **10 mins**: Writing initial thoughts and project details.
    - **10 mins**: Refining approach and organization with AI assistance.
    - **05 mins**: Set up GitHub repo & R project for the project.
@@ -58,7 +58,8 @@ THIS MAKES THIS NOT STATISTICS AND NOT CS
 
 ## Transformation 
 Turn entire process into a function, get multiple years across multiple teams
-
+Used Purrr functionality to run multiple years witihin a function, I had to change most variables to be characters so that they can bind rows
+STart with a small range of years 
 
 
 
@@ -75,7 +76,11 @@ purrr
 - We sometimes want our code to fix every single issue possible and never experience errors, but that is not reality, we have to gain skills to be handle this data edge cases 
 - We try o make it general as much as we can handle for the next time we have to run an analysis
 - Cleaning data can be redefine to be bringing data into its 1st phase of Tidy Data, in which I subjectively want to define this within E phase, this includes tidying the column names, making numeric data and levels for factors
-
+- Select variables before making visualizations to enhance understanding of what is going on
+- Look at the data frame while cleaning, transforming and visualizing of data 
+- draw out and/or explain what you are going to do to the data before doing it ( I do not always do this)
+- Progressively create Plot, 1 variable then 2 then 3
+- Understand there are many opportunities to ask questions and emphasize the many aspects of the learning objectives of the class, it just depends on the class that you are teaching
 
 
 #### **1. Introduction & Purpose (5 mins)**
