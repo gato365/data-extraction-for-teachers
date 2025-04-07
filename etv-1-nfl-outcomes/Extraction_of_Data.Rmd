@@ -172,8 +172,8 @@ mod_3_web_table <- mod_2_web_table |>
         }
       }
     )
-  ) |>
-  dplyr::slice(-1) |>
+  )  |>
+   # dplyr::slice(-1) |>
   janitor::clean_names()
 ```
 
