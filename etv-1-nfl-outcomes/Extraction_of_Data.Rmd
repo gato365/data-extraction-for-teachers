@@ -52,22 +52,25 @@ Warning messages:
 <pointer: 0x0000022584da4070>
 > 
 
-
+From the webpage, grab the HTML tables using rvest html_table()
 ```{r}
 web_tables <- webpage %>% 
   rvest::html_table()
 ```
+The result is a list containing HTML table elements.
 
-
+Select the desired table, the 2023 Regular Season Table, which is the second table on the webpage. Use purr pluck() to select the table.
+[Visit webpage to see available tables]
 ```{r}
 int_web_table <- web_tables %>% 
   purrr::pluck(2)
 ```
 
-
+With our HTML table, use stats setNames to set the names of blank columns to "col". Using make.unique inside this function makes the names unique to avoid conflict, and the if_else function only applies this function to columns with the name "", or blank columns.
+The "names()" function pulls the columns names into the function.
 ```{r}
 web_table <- int_web_table %>% 
-  setNames(make.unique(if_else(names(.) == "", "col", names(.))))
+  stats::setNames(make.unique(if_else(names(.) == "", "col", names(.))))
 ```
 
 
@@ -127,6 +130,7 @@ Why One Size Doesn't Fit All:
 - Otherwise keep the original column name
 - This affects columns 1-3, 7, 8, 10 which had empty names but values in first row
 
+Use dplyr slice() to pull out the first row from our table, which contains headers for our table. Look at the table on the actual webpage to understand how this interacts with our current columns.
 ```{r}
 first_row <- web_table %>% 
   dplyr::slice(1)
@@ -134,7 +138,7 @@ first_row <- web_table %>%
 
 
 
-
+Use setNames again to integrate the "first row" column names with the current column headers. This will fill in names for columns titled with "col" that we established in the previous steps. To do this, we will also use purr map2_chr(), which maps ()
 ```{r}
 mod_1_web_table <- web_table %>% 
   setNames(
@@ -147,14 +151,14 @@ mod_1_web_table <- web_table %>%
 ```
 
 
-### Modificaiton 2 (Web Table):  Type 2 Handling
+### Modification 2 (Web Table):  Type 2 Handling
 
 - Handles the special case columns that need custom names
 - Uses direct column position referencing with rename()
 - Assigns custom names to columns 4 (Time), 5 (Boxoffice), 6 (Game Outcome), 9 (Game Location)
 - These columns had empty names AND empty first row values
 
-
+Now, we create a new modification to our table where we use dplyr rename() to set the name of certain columns. This is an instance of hard coding, where you code certain specific values instead of dynamic data like variables.  
 ```{r}
 mod_2_web_table <- mod_1_web_table %>% 
   rename(
@@ -179,92 +183,53 @@ mod_2_web_table <- mod_1_web_table %>%
 
 - Keeps other column names unchanged (columns 1-10)
 - slice(-1) removes the first row since its values are now part of column names
-- Uses janitor::clean_names() for consistent naming format
+- Uses janitor::make_clean_names() for consistent naming format
 - These columns require both pieces of information but need to avoid duplicate handling artifacts
 - Prevents the creation of numbered suffixes that appear when R handles duplicate names
 
-Non-Working Version
+In this step, we will be incorporating the information in the first row to the current header.
 ```{r}
 mod_3_web_table <- mod_2_web_table |>
-  setNames(
-    purrr::map2_chr(
-      names(mod_2_web_table),
-      first_row,
-      ~{
-        col_index <- match(.x, names(mod_2_web_table))
-        # For columns 11 onwards, combine names without creating duplicates
-        if(!is.na(col_index) && col_index >= 11) {
-          orig_name <- stringr::str_remove_all(.x, "[0-9_]") # Remove existing numbers/underscores
-          new_value <- stringr::str_remove_all(.y, "[0-9_]") # Clean the value too
-          paste(orig_name, new_value, sep = "_")
-        } else {
-          .x
-        }
-      }
-    )
-  )  |>
-    dplyr::slice_head() |>
-  janitor::clean_names()
-```
-Fixed Version
-```{r}
-mod_3_web_table <- mod_2_web_table |>
+  # Creating a new variable for our 3rd modification.
   setNames(
     janitor::make_clean_names(
-      purrr::map2_chr(
+      #wrap the code within this function to make names snakecase.
+      purrr::map2_chr( # Map names to their correct columns
         names(mod_2_web_table),
-        first_row,
+        first_row, 
+        # Pull out the names from the table, as well as the columns names of the first row.
         ~{
           col_index <- match(.x, names(mod_2_web_table))
+          # loops through columns names and the corresponding values
           if(!is.na(col_index) && col_index >= 11) {
+            #if the column index is 11 or higher 
             orig_name <- stringr::str_remove_all(.x, "[0-9_]")
             new_value <- stringr::str_remove_all(.y, "[0-9_]")
+             #remove numbers and underscores
             paste(orig_name, new_value, sep = "_")
+            #add underscore back, new name
           } else {
             .x
+            #keep as is if not meeting the if condition
           }
         }
       )
     )
   ) |>
   dplyr::slice(-1)
+#remove the first row, as we have now extracted all of the useful information from it.
 
 ```
 
-Other version 
-
-```{r}
-mod_3_web_table <- mod_2_web_table |>
-  setNames(
-    make.names(
-      purrr::map2_chr(
-        names(mod_2_web_table),
-        first_row,
-        ~{
-          col_index <- match(.x, names(mod_2_web_table))
-          if(!is.na(col_index) && col_index >= 11) {
-            orig_name <- stringr::str_remove_all(.x, "[0-9_]")
-            new_value <- stringr::str_remove_all(.y, "[0-9_]")
-            paste(orig_name, new_value, sep = "_")
-          } else {
-            .x
-          }
-        }
-      ),
-      unique = TRUE
-    )
-  ) |>
-  dplyr::slice(-1) |>
-  janitor::clean_names()
-
-```
 
 We Should be Proud
+
+Here we can use colnames() to see the resulting column names from this operation to ensure they are adequate.
 ```{r}
 colnames(mod_3_web_table)
 ```
 
-
+Next, we will use mutate() to convert some columns to numeric type. Using across(), we can apply the transformation to multiple columns at the same time
 ```{r}
 mod_4_web_table <- mod_3_web_table %>% 
   mutate(
@@ -276,7 +241,7 @@ mod_4_web_table <- mod_3_web_table %>%
            as.numeric))
 ```
 
-
+Now, we will use mutate() again to change the game_outcome type to a factor, and use case_when() to make more sense of the game_location column. By identifying when '@' appears, we can change it to away, and the opposite '' as home. We also change this to a factor. Lastly, we filter out the last column which is an aggregate column by filtering out games with no date.
 ```{r}
 
 mod_5_web_table <- mod_4_web_table  %>% 
