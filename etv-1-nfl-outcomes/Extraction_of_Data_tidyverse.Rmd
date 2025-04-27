@@ -1,6 +1,6 @@
 ---
 title: "Extraction of Data"
-author: "Immanuel Williams PhD"
+author: "Immanuel Williams, PhD"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -19,11 +19,12 @@ library(rlang)
 library(purrr)
 ```
 
+## Solutions
 
 
 ## Simplistic Call
 ```{r}
-## Createtion of URL
+## Creation of URL
 team_name <- "was"
 year <- 2023
 generic_url <- paste0("https://www.pro-football-reference.com/teams/",team_name,"/",year,".htm#all_games")
@@ -66,76 +67,184 @@ Select the desired table, the 2023 Regular Season Table, which is the second tab
 ```{r}
 int_web_table <- web_tables %>% 
   purrr::pluck(2)
+
 ```
-
+Now with our table selected, we need to find a way to include information from the header as well as the first row, as our first row contains our column names and the header contains the column categories. In order to preserve this information, we will combine the names of the header and first row. To do this, we will create 2 vectors with the names, and then paste them together with a separator of _. Next, using str_trim and str_to_lower, we convert the names to snake case, or lower case with spaces represented as underscore.
 ```{r}
-
 inital_col_names <- colnames(int_web_table)
 
 first_row_names <- int_web_table[1,]
 
 new_colnames <- paste(inital_col_names,first_row_names,sep="_") %>% 
   str_trim() %>% 
-  str_to_lower() 
-
-new_colnames[6] <- "game_location"
-
+  str_to_lower()
 ```
 
 
+We have 2 issues with this process, one being that column 6 does not contain any values in the first row or the header. As such, we will assign a name to this column. Additionally, column 21 and column 15 have a duplicate name, but one refers to passing yards and the other to passing yards sacked. We will manually assign both of these to names to avoid future issue, but this is not the preferred method of addressing these issues.
+```{r}
+new_colnames[6] <- "game_location"
+new_colnames[21] <- "passing_yds_sk"
+
+```
+
+Now we will take our new column names vector and assign it using colnames() as the column names for the data frame.
 ```{r}
 colnames(int_web_table) <- new_colnames
 ```
 
-
-
-
-
-
+Here we will use the slice() function from dplyr to clip off the first and last rows, as they do not contain useful information. We will do this by selecting all of the content between those rows.
 ```{r}
-mod_4_web_table <- mod_3_web_table %>% 
-  mutate(
-    # Convert numeric columns
-    across(c(week, score_2, score_3, #changed from tm, opp
-             starts_with("offense_"), 
-             starts_with("defense_"),
-             starts_with("expected_points_")), 
-           as.numeric))
+web_table1 <- int_web_table %>% 
+ slice(2:18)
 ```
 
-Now, we will use mutate() again to change the game_outcome type to a factor, and use case_when() to make more sense of the game_location column. By identifying when '@' appears, we can change it to away, and the opposite '' as home. We also change this to a factor. Lastly, we filter out the last column which is an aggregate column by filtering out games with no date.
+
+```{r}
+web_table2 <- web_table1 %>% 
+ mutate(
+    across(where(~ all(grepl("^\\s*-?\\d*\\.?\\d+\\s*$", .x))), ~ as.numeric(.)))
+```
+
+Now, we will use mutate() again to change the score_rslt type to a factor, and use case_when() to make more sense of the game_location column. By identifying when '@' appears, we can change it to away, and the opposite '' as home. We also change this to a factor. Lastly, we filter out the last column which is an aggregate column by filtering out games with no date.
 ```{r}
 
-mod_5_web_table <- mod_4_web_table  %>% 
+web_table3 <- web_table2  %>% 
 
   mutate(
-    game_outcome = as.factor(game_outcome),
+    score_rslt = as.factor(score_rslt),
     game_location = case_when(
       game_location == "@" ~ "away",
       game_location == "" ~ "home",
       TRUE ~ game_location
     ) %>% 
       as.factor()
-  ) %>% 
-  filter(day != "")
+  )
 ```
 
 
-Finish CLeanign code and Data Frame
+Finish Cleaning code and Data Frame
+
+Lets clean up the column names again, by removing the underscore (_) from the front of the columns.
+
+```{r}
+web_table4 <- web_table3 |> 
+  rename_with(~ str_replace(., "^_", ""), .cols = starts_with("_"))
+```
+
+Function with Year
 
 
-Function with Year 
 
 
 Functions with Year and Team
 
 
 
+# Activity 3: Pick your own team and year and complete this process.
+
+# Your Turn:
 
 
+## Simplistic Call
+```{r}
+## Creation of URL
+team_name <- "[insert]"
+year <- [insert]
+generic_url <- paste0("https://www.pro-football-reference.com/teams/",team_name,"/",year,".htm#all_games")
+```
 
 
+```{r}
+## Special Note 1: Maybe Optional (Further Research is needed on its relevance)
+# request_details <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+# response <- GET(url, user_agent(request_details),timeout(20))
+```
 
+
+```{r}
+webpage <- generic_url %>% 
+  rvest::read_html()
+```
+
+From the webpage, grab the HTML tables using rvest html_table()
+```{r}
+web_tables <- webpage %>% 
+  rvest::html_table()
+```
+The result is a list containing HTML table elements.
+
+Select the desired table, use purr pluck() to select the table.
+[Visit webpage to see available tables]
+```{r}
+int_web_table <- web_tables %>% 
+  purrr::pluck()
+
+```
+Now with our table selected, we need to find a way to include information from the header as well as the first row, as our first row contains our column names and the header contains the column categories. In order to preserve this information, we will combine the names of the header and first row. To do this, we will create 2 vectors with the names, and then paste them together with a separator of _. Next, using str_trim and str_to_lower, we convert the names to snake case, or lower case with spaces represented as underscore.
+```{r}
+inital_col_names <- colnames([])
+
+first_row_names <- int_web_table[1,]
+
+new_colnames <- paste([insert],[insert],sep="[insert]") %>% 
+  [insert]
+  [insert]
+```
+
+
+Investigate the result. Check for duplicates or blank values.
+```{r}
+#new_colnames[6] <- "game_location"
+#new_colnames[21] <- "passing_yds_sk"
+
+```
+
+Now we will take our new column names vector.
+```{r}
+colnames(int_web_table) <- new_colnames
+```
+
+Here we will clip off the first and last rows, as they do not contain useful information. We will do this by selecting all of the content between those rows.
+```{r}
+web_table1 <- int_web_table %>% 
+ [insert]
+```
+
+Given
+```{r}
+web_table2 <- web_table1 %>% 
+ mutate(
+    across(where(~ all(grepl("^\\s*-?\\d*\\.?\\d+\\s*$", .x))), ~ as.numeric(.)))
+```
+
+Decide how much of this to give
+
+Now, we will use mutate() again to change the score_rslt type to a factor, and use case_when() to make more sense of the game_location column. By identifying when '@' appears, we can change it to away, and the opposite '' as home. We also change this to a factor. Lastly, we filter out the last column which is an aggregate column by filtering out games with no date.
+```{r}
+
+web_table3 <- web_table2  %>% 
+
+  mutate(
+    score_rslt = as.factor(score_rslt),
+    game_location = case_when(
+      game_location == "@" ~ "away",
+      game_location == "" ~ "home",
+      TRUE ~ game_location
+    ) %>% 
+      as.factor()
+  )
+```
+
+
+Finish Cleaning code and Data Frame
+
+Lets clean up the column names again, by removing the underscore (_) from the front of the columns.
+
+```{r}
+web_table4 <- web_table3 |> 
+  rename_with(~ str_replace(., "^_", ""), .cols = starts_with("_"))
+```
 
 
 
