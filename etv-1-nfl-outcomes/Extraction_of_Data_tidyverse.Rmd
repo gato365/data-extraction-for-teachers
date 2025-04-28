@@ -134,11 +134,129 @@ web_table4 <- web_table3 |>
 
 Function with Year
 
+Layout:
 
+Input parameters: 
+Year
+
+1. Create URL with year variable specified 
+2. Use rvest, grab HTML tables and pick a specific one (2)
+3. Start pulling out column names from row 0, row 1, and paste them together into a new vector of column names
+4. Fix any columns that did not undergo this successfully
+5. Take out incomplete or aggregate columns using slice*
+6. Classify columns as numeric
+7. Apply factor to game_location
+8. Remove unnecessary underscores.
+
+```{r}
+fn_year <- function(year){
+  team_name <- "was"
+  generic_url <- paste0("https://www.pro-football-reference.com/teams/",team_name,"/",year,".htm#all_games")
+  
+  webpage <- generic_url %>% 
+  rvest::read_html()
+  
+  web_tables <- webpage %>% 
+  rvest::html_table()
+  
+  int_web_table <- web_tables %>% 
+  purrr::pluck(2)
+  
+  inital_col_names <- colnames(int_web_table)
+
+first_row_names <- int_web_table[1,]
+
+new_colnames <- paste(inital_col_names,first_row_names,sep="_") %>% 
+  str_trim() %>% 
+  str_to_lower()
+
+new_colnames[6] <- "game_location"
+new_colnames[21] <- "passing_yds_sk"
+
+colnames(int_web_table) <- new_colnames
+
+web_table1 <- int_web_table %>% 
+ slice(2:18) |> 
+ mutate(
+    across(where(~ all(grepl("^\\s*-?\\d*\\.?\\d+\\s*$", .x))), ~ as.numeric(.)))
+
+web_table2 <- web_table1 |> 
+  mutate(
+    score_rslt = as.factor(score_rslt),
+    game_location = case_when(
+      game_location == "@" ~ "away",
+      game_location == "" ~ "home",
+      TRUE ~ game_location
+    ) %>% 
+      as.factor()
+  )
+web_table_3 <- web_table2 |> 
+rename_with(~ str_replace(., "^_", ""), .cols = starts_with("_"))
+
+return(web_table_3)
+}
+```
+
+
+```{r}
+head(fn_year(2022))
+```
 
 
 Functions with Year and Team
 
+```{r}
+fn_team_year <- function(team_name, year){
+  generic_url <- paste0("https://www.pro-football-reference.com/teams/",team_name,"/",year,".htm#all_games")
+  
+  webpage <- generic_url %>% 
+  rvest::read_html()
+  
+  web_tables <- webpage %>% 
+  rvest::html_table()
+  
+  int_web_table <- web_tables %>% 
+  purrr::pluck(2)
+  
+  inital_col_names <- colnames(int_web_table)
+
+first_row_names <- int_web_table[1,]
+
+new_colnames <- paste(inital_col_names,first_row_names,sep="_") %>% 
+  str_trim() %>% 
+  str_to_lower()
+
+new_colnames[6] <- "game_location"
+new_colnames[21] <- "passing_yds_sk"
+
+colnames(int_web_table) <- new_colnames
+
+web_table1 <- int_web_table %>% 
+ slice(2:18) |> 
+ mutate(
+    across(where(~ all(grepl("^\\s*-?\\d*\\.?\\d+\\s*$", .x))), ~ as.numeric(.)))
+
+web_table2 <- web_table1 |> 
+  mutate(
+    score_rslt = as.factor(score_rslt),
+    game_location = case_when(
+      game_location == "@" ~ "away",
+      game_location == "" ~ "home",
+      TRUE ~ game_location
+    ) %>% 
+      as.factor()
+  )
+web_table_3 <- web_table2 |> 
+rename_with(~ str_replace(., "^_", ""), .cols = starts_with("_"))
+
+
+return(web_table_3)
+}
+```
+
+```{r}
+head(fn_team_year("sfo", 2024))
+```
 
 
 # Activity 3: Pick your own team and year and complete this process.
