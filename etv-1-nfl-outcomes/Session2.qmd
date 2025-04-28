@@ -1,0 +1,220 @@
+---
+title: "Session 2"
+author: ""
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+
+
+```{r}
+library(httr2)
+library(tibble)
+```
+
+##
+
+Session 2: API Use
+```{r}
+api_key <- "535c5f77ac8d68d441227811cd74308e"
+```
+
+
+Weather
+
+```{r}
+city_name <- "San Luis Obispo"
+```
+
+
+
+# Working Query
+
+```{r}
+current_weather_url <- "https://api.openweathermap.org/data/2.5/weather"
+
+current_query <- list(q = city_name, appid = api_key, units = "metric")
+
+response <- GET(current_weather_url, query = current_query)
+
+http_type(response)
+
+json_result <- content(response, as = "parsed")
+class(json_result)
+```
+
+```{r}
+name <- c()
+weather <- c()
+visibility <- c()
+temp <- c()
+temp_min <- c()
+temp_max <- c()
+pressure <- c()
+humidity <- c()
+wind_speed <- c()
+wind_deg <- c()
+
+name <- c(name, json_result$name)
+weather <- c(weather, json_result$weather[[1]]$main)
+# Get Visibility
+visibility <- c(visibility, json_result$visibility)
+# Get current temperature
+temp <- c(temp, json_result$main$temp)
+# Get min temperature
+temp_min <- c(temp_min, json_result$main$temp_min)
+# Get max temperature
+temp_max <- c(temp_max, json_result$main$temp_max)
+# Get pressure
+pressure <- c(pressure, json_result$main$pressure)
+# Get humidity
+humidity <- c(humidity, json_result$main$humidity)
+# Get wind speed
+wind_speed <- c(wind_speed, json_result$wind$speed)
+# Get wind direction
+wind_deg <- c(wind_deg, json_result$wind$deg)
+
+weather_data_frame <- data.frame(
+  name = name,
+  weather = weather,
+  visibility = visibility,
+  temp = temp,
+  temp_min = temp_min,
+  temp_max = temp_max,
+  pressure = pressure,
+  humidity = humidity,
+  wind_speed = wind_speed,
+  wind_deg = wind_deg
+)
+```
+
+
+Function Version (Pick Any City by Name)
+
+```{r}
+
+curr_weather <- function(city){
+current_weather_url <- "https://api.openweathermap.org/data/2.5/weather"
+
+current_query <- list(q = city, appid = api_key, units = "imperial")
+
+response <- GET(current_weather_url, query = current_query)
+
+http_type(response)
+
+json_result <- content(response, as = "parsed")
+class(json_result)
+
+name <- c()
+weather <- c()
+visibility <- c()
+temp <- c()
+temp_min <- c()
+temp_max <- c()
+pressure <- c()
+humidity <- c()
+wind_speed <- c()
+wind_deg <- c()
+
+name <- c(name, json_result$name)
+weather <- c(weather, json_result$weather[[1]]$main)
+# Get Visibility
+visibility <- c(visibility, json_result$visibility)
+# Get current temperature
+temp <- c(temp, json_result$main$temp)
+# Get min temperature
+temp_min <- c(temp_min, json_result$main$temp_min)
+# Get max temperature
+temp_max <- c(temp_max, json_result$main$temp_max)
+# Get pressure
+pressure <- c(pressure, json_result$main$pressure)
+# Get humidity
+humidity <- c(humidity, json_result$main$humidity)
+# Get wind speed
+wind_speed <- c(wind_speed, json_result$wind$speed)
+# Get wind direction
+wind_deg <- c(wind_deg, json_result$wind$deg)
+
+weather_data_frame <- data.frame(
+  name = name,
+  weather = weather,
+  visibility = visibility,
+  temp = temp,
+  temp_min = temp_min,
+  temp_max = temp_max,
+  pressure = pressure,
+  humidity = humidity,
+  wind_speed = wind_speed,
+  wind_deg = wind_deg
+)
+
+return(weather_data_frame)}
+```
+
+```{r}
+str(curr_weather("San Francisco"))
+```
+
+# Thoughts:
+
+1. More ideal way to approach this, need to learn/explore more with API.
+2. What should be a result of this extraction process, i.e. what insights can this provide / should be emphasized?
+3. Provide understanding of intial results, JSON, lists, HTML elements, url construction.
+4. Evaulate tidyverse approach and implement wherever possible.
+
+
+
+
+
+## Not in use code 
+
+```{r}
+response <- request("http://api.openweathermap.org/geo/1.0/direct") %>%
+  req_url_query(
+    q = city_name,
+    limit = 5,
+    appid = api_key
+  ) %>%
+  req_perform()
+```
+
+
+```{r}
+url <- paste0(
+  "http://api.openweathermap.org/geo/1.0/direct?q=", 
+  URLencode(city_name),
+  "&limit=5&appid=", 
+  api_key
+)
+
+
+response <- GET(url)
+
+
+if (status_code(response) == 200) {
+  # Parse content
+  content_list <- content(response, as = "parsed", type = "application/json")
+  
+  # Convert to dataframe
+  geo_df <- as.data.frame(do.call(rbind, lapply(content_list, as.data.frame)))
+  
+  print(geo_df)
+} else {
+  print(paste("Error:", status_code(response)))
+}
+```
+```{r}
+lat <- geo_df$lat
+lon <- geo_df$lon
+
+url2 <- paste0(
+  "https://api.openweathermap.org/data/2.5/weather", 
+  URLencode(city_name),
+  "appid=", 
+  api_key
+)
+
+response2 <- GET(url2)
+
+```
+
