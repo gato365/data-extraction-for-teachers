@@ -16,6 +16,7 @@ library(lubridate)
 library(ggplot2)
 library(dplyr)
 library(dotenv)
+library(sf)
 ```
 
 ##
@@ -175,6 +176,13 @@ if (status_code(geo_response) == 200) {
 
 ```
 
+development thing is another branch
+
+
+turn into function
+
+add detail
+
 
 # Create a Visualization for the High and Low temperatures
 
@@ -194,6 +202,99 @@ ggplot(df4, aes(x = date)) +
   ) +
   theme_minimal(base_size = 14)
 ```
+
+```{r}
+
+cities <- c("San Luis Obispo", "Santa Barbara", "San Francisco")
+
+# Function to get coordinates + weather summary
+get_city_weather <- function(city, date = Sys.Date()) {
+  geo_url <- paste0(
+    "http://api.openweathermap.org/geo/1.0/direct?",
+    "q=", URLencode(city),
+    "&limit=1&appid=", api_key
+  )
+  
+  geo_response <- GET(geo_url)
+  
+  if (status_code(geo_response) == 200) {
+    geo_data <- fromJSON(content(geo_response, as = "text"), flatten = TRUE)
+    
+    if (length(geo_data) == 0) return(NULL)
+    
+    lat <- geo_data$lat
+    lon <- geo_data$lon
+    
+    weather_url <- paste0(
+      "https://api.openweathermap.org/data/3.0/onecall/day_summary?",
+      "lat=", lat,
+      "&lon=", lon,
+      "&date=", format(date, "%Y-%m-%d"),
+      "&appid=", api_key,
+      "&units=imperial"
+    )
+    
+    weather_response <- GET(weather_url)
+    
+    if (status_code(weather_response) == 200) {
+      weather_data <- fromJSON(content(weather_response, as = "text"), flatten = TRUE)
+      
+      tibble(
+        city = city,
+        date = date,
+        lat = lat,
+        lon = lon,
+        temp_max = weather_data$temperature$max,
+        temp_min = weather_data$temperature$min
+      )
+    } else return(NULL)
+  } else return(NULL)
+}
+
+# Fetch for all cities
+weather_df <- bind_rows(lapply(cities, get_city_weather))
+
+```
+
+```{r}
+weather_sf <- weather_df %>%
+  st_as_sf(coords = c("lon", "lat"), crs = 4326)
+```
+
+
+```{r}
+ggplot() +
+  geom_sf(data = weather_sf, aes(color = temp_max), size = 6) +
+  geom_sf_label(data = weather_sf, aes(label = city), nudge_y = 0.5, size = 4) +
+  scale_color_viridis_c(option = "plasma", name = "High Temp (°F)") +
+  labs(
+    title = "California City Temperatures",
+    subtitle = paste("Date:", Sys.Date())
+  ) +
+  theme_minimal()
+
+```
+```{r}
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+ca <- ne_states(country = "United States of America", returnclass = "sf") %>%
+  filter(name == "California")
+
+ggplot() +
+  geom_sf(data = ca, fill = "gray95", color = "gray60") +
+  geom_sf(data = weather_sf, aes(color = temp_max), size = 6) +
+  geom_sf_label(data = weather_sf, aes(label = city), nudge_y = 0.5, size = 4) +
+  scale_color_viridis_c(option = "plasma", name = "High Temp (°F)") +
+  labs(
+    title = "California City Temperatures",
+    subtitle = paste("Date:", Sys.Date())
+  ) +
+  theme_minimal()
+
+```
+
+
 
 Table Representing
 
