@@ -22,11 +22,10 @@ library(dotenv)
 
 Session 2: OpenWeatherAPI Use
 ```{r}
+getwd()
 
-#load_dot_env(file = ".env")
-
-api_key <- "c3511200cde7b3702ac398e6a49d370e"
-
+dotenv::load_dot_env(file = ".Renviron.txt")
+api_key <- Sys.getenv("API_KEY")
 ```
 
 
@@ -90,6 +89,17 @@ geo_url <- paste0(
 # Step 1b: Use GET to call the API and assign it to a variable geo_response. Use logic (if) to proceed if the status code is 200, and use fromJSON package jsonlite to get content from our API an use 'flatten = TRUE' to unnest the data.
 
 The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being "nested."
+
+* Define API, onecall, explain different endpoints
+Benefits one vs others
+Why to use a certain 
+
+
+* Define numdays, include in function version
+```{r}
+numdays <- 5
+```
+
 ```{r}
 geo_response <- GET(geo_url)
 
@@ -115,7 +125,7 @@ if (status_code(geo_response) == 200) {
   
 # Step 2a: Define the date range (modify this as needed)
 
-  date_range <- as.character(lubridate::today() - days(1:5)) # past 5 days
+  date_range <- as.character(lubridate::today() - days(1:numdays)) # past 5 days turn into argumen to pass into function
   
 # Step 2b: Initialize data frame to hold the outputs. "p5weather" for past 5 weather.
   p5weather <- data.frame()
@@ -144,12 +154,12 @@ if (status_code(geo_response) == 200) {
 # Step 2f: Use the output for each day and assign it into a data frame.
       daily_df <- as.data.frame(weather_parsed)
       
-# Step 2g: Add date and city name columns
+# Step 2g: Add date and city name columns ## USE MUTATE
       daily_df$city <- city_name
       daily_df$date <- date
       
-# Step 2h: Use rbind() to add all the rows to the p5weather data frame.
-      p5weather <- rbind(p5weather, daily_df)
+# Step 2h: Use bind_rows to add all the rows to the p5weather data frame.
+      p5weather <- bind_rows(p5weather, daily_df)
       
     } else {
 # Step 2i: Use logic (else) to print an error message for when weather data is not obtained.
