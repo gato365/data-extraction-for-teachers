@@ -78,7 +78,8 @@ print(currweather)
 
 # Step 1: Use Geocoding API to get lattitude and longitude
 
-# Step 1a: Construct URL query using city name and API key
+# Step 1a: 
+Construct URL query using city name and API key
 ```{r}
 geo_url <- paste0(
   "http://api.openweathermap.org/geo/1.0/direct?",
@@ -87,7 +88,8 @@ geo_url <- paste0(
 )
 ```
 
-# Step 1b: Use GET to call the API and assign it to a variable geo_response. Use logic (if) to proceed if the status code is 200, and use fromJSON package jsonlite to get content from our API an use 'flatten = TRUE' to unnest the data.
+# Step 1b: 
+Use GET to call the API and assign it to a variable geo_response. Use logic (if) to proceed if the status code is 200, and use fromJSON package jsonlite to get content from our API an use 'flatten = TRUE' to unnest the data.
 
 The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being "nested."
 
@@ -176,19 +178,111 @@ if (status_code(geo_response) == 200) {
 
 ```
 
-development thing is another branch
+Function: 5 Days Weather
+
+```{r}
+prev_weather <- function(city, numdays){
+
+geo_url <- paste0(
+  "http://api.openweathermap.org/geo/1.0/direct?",
+  "q=", URLencode(city),
+  "&limit=1&appid=", api_key
+)
+geo_response <- GET(geo_url)
+
+if (status_code(geo_response) == 200) {
+  geo_data <- fromJSON(content(geo_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
+  
+  
+# Step 1c: Assess if the output has 0 length, meaning no result. If so, stop and display an error message.  
+  if (length(geo_data) == 0) {
+    stop("City not found. Please check the city name.")
+  }
+  
+# Step 1d: Assign latitude and longitude to variables, and use round() to clip it down to 2 decimal places.
+  
+  lat <- round(geo_data$lat, digits = 2)
+  lon <- round(geo_data$lon, digits = 2)
+  
+# Optional: Print a string displaying the city name and latitude / longitude.  
+  cat("Coordinates for", city, "-> Latitude:", lat, "Longitude:", lon, "\n")
+  
+  
+# Step 2: Use the One Call API to get the past 5 days of weather data  
+  
+# Step 2a: Define the date range (modify this as needed)
+
+  date_range <- as.character(lubridate::today() - days(1:numdays)) # past 5 days turn into argumen to pass into function
+  
+# Step 2b: Initialize data frame to hold the outputs. "p5weather" for past 5 weather.
+  p5weather <- data.frame()
+  
+# Step 2c: Loop over dates and make an API call for each day. For every date in the date vector, supply latitude, longitude, the different date, API key, and provide unit preference.
+  for (date in date_range) {
+    
+    weather_url <- paste0(
+      "https://api.openweathermap.org/data/3.0/onecall/day_summary?",
+      "lat=", lat,
+      "&lon=", lon,
+      "&date=", date,
+      "&appid=", api_key,
+      "&units=imperial"
+    )
+    
+# Step 2d: Make the API call using the different weather_url queries for each date. Store these in weather_response    
+    
+    weather_response <- GET(weather_url)
+    
+# Step 2e: Use logic to evaluate the response and use fromJSON() to get the content from the JSON output and use "flatten = TRUE" to unnest the data.
+    
+    if (status_code(weather_response) == 200) {
+      weather_parsed <- jsonlite::fromJSON(content(weather_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
+      
+# Step 2f: Use the output for each day and assign it into a data frame.
+      daily_df <- as.data.frame(weather_parsed)
+      
+# Step 2g: Add date and city name columns ## USE MUTATE
+      daily_df$city <- city
+      daily_df$date <- date
+      
+# Step 2h: Use bind_rows to add all the rows to the p5weather data frame.
+      p5weather <- bind_rows(p5weather, daily_df)
+      
+    } else {
+# Step 2i: Use logic (else) to print an error message for when weather data is not obtained.
+      warning(paste("Failed to get weather for", date, "-", status_code(weather_response)))
+    }
+  }
+  
+  return(p5weather)
+  
+} else {
+  stop("Geocoding failed. Check your API key or city name.")
+}
+}
+```
 
 
-turn into function
+```{r}
+prev_weather("Ames, IA, USA", 4)
+```
+
+
+turn into function 
 
 add detail
+
+Finish blank version of NFL 
+Added Visuals
+
+
 
 
 # Create a Visualization for the High and Low temperatures
 
 ```{r}
 
-df4 <- p5weather |>  mutate(date = as.Date(date))
+df4 <- prev_weather("Ames, IA, USA", 4) |>  mutate(date = as.Date(date))
 
 ggplot(df4, aes(x = date)) +
   geom_line(aes(y = temperature.max, color = "High"), size = 1.2) +
@@ -204,7 +298,7 @@ ggplot(df4, aes(x = date)) +
 ```
 
 ```{r}
-
+#sf_map <- function(cities)
 cities <- c("San Luis Obispo", "Santa Barbara", "San Francisco")
 
 # Function to get coordinates + weather summary
@@ -261,19 +355,6 @@ weather_sf <- weather_df %>%
   st_as_sf(coords = c("lon", "lat"), crs = 4326)
 ```
 
-
-```{r}
-ggplot() +
-  geom_sf(data = weather_sf, aes(color = temp_max), size = 6) +
-  geom_sf_label(data = weather_sf, aes(label = city), nudge_y = 0.5, size = 4) +
-  scale_color_viridis_c(option = "plasma", name = "High Temp (°F)") +
-  labs(
-    title = "California City Temperatures",
-    subtitle = paste("Date:", Sys.Date())
-  ) +
-  theme_minimal()
-
-```
 ```{r}
 library(rnaturalearth)
 library(rnaturalearthdata)
@@ -284,7 +365,7 @@ ca <- ne_states(country = "United States of America", returnclass = "sf") %>%
 ggplot() +
   geom_sf(data = ca, fill = "gray95", color = "gray60") +
   geom_sf(data = weather_sf, aes(color = temp_max), size = 6) +
-  geom_sf_label(data = weather_sf, aes(label = city), nudge_y = 0.5, size = 4) +
+  geom_sf_label(data = weather_sf, aes(label = city), nudge_y = 0.5, size = 2.5) +
   scale_color_viridis_c(option = "plasma", name = "High Temp (°F)") +
   labs(
     title = "California City Temperatures",
@@ -395,8 +476,16 @@ if (status_code(geo_response) == 200) {
 
 
 ```{r}
-geocode("San Francisco")
+geocode("Ames, IA, USA")
 ```
+
+
+
+
+
+
+
+
 
 
 Function Version (Pick Any City by Name)
@@ -467,3 +556,20 @@ return(weather_data_frame)}
 
 
 
+
+** Code with less dependecies
+
+
+
+```{r}
+ggplot() +
+  geom_sf(data = weather_sf, aes(color = temp_max), size = 6) +
+  geom_sf_label(data = weather_sf, aes(label = city), nudge_y = 0.5, size = 4) +
+  scale_color_viridis_c(option = "plasma", name = "High Temp (°F)") +
+  labs(
+    title = "California City Temperatures",
+    subtitle = paste("Date:", Sys.Date())
+  ) +
+  theme_minimal()
+
+```
