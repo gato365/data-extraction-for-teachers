@@ -1,0 +1,20 @@
+---
+title: "Extraction_Introduction"
+author: ""
+format: html
+---
+
+## HTML and APIs in the Classroom
+
+# What
+
+
+
+
+# Why
+
+
+
+
+
+# How: What We're Doing Today

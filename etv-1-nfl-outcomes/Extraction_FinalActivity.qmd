@@ -1,0 +1,25 @@
+---
+title: "Extraction_FinalActivity"
+author: ""
+format: html
+---
+
+## Session 4 : Final Activity
+
+Now that we have worked with HTML elements and API calls, lets put these skills together to investigate the impact of weather on crop production in Iowa.
+
+# Load Libraries
+
+```{r}
+library()
+```
+
+
+# Extract HTML Table
+
+
+# Integrate Weather API
+
+# Combine
+
+# Visualize
