@@ -9,17 +9,27 @@ output: html_document
 
 Overview of different offering from OpenWeather
 
+\[Image of API Call\]
+
+\[Add places for questions, comments, discussions\]
+
+\[Use string glue instead, investigate\]
+
+\[use \_lst, \_df\]
+
 | Feature | **Geocoding API** | **Current Weather API** | **One Call API** |
-|-----------------|-----------------|-----------------|---------------------|
+|-----------------|-----------------|-----------------|--------------------|
 | **Purpose** | Convert city names to coordinates | Get current weather for a city or location | Get full weather data for a coordinate |
 | **Input** | City name or zip code | City name, city ID, coordinates, or zip | Latitude & Longitude |
 | **Output** | Location info (lat/lon, country, etc.) | Temperature, conditions, wind, etc. | Current, hourly, daily, alerts (optionally filtered) |
-| **Coordinates needed?** | No | No |  Yes |
+| **Coordinates needed?** | No | No | Yes |
 | **Units supported** | N/A | standard, metric, imperial | standard, metric, imperial |
 | **Endpoint URL** | `/geo/1.0/direct` | `/data/2.5/weather` | `/data/3.0/onecall` |
 | **Use case** | Finding lat/lon of cities | Lightweight current conditions | Complete weather view |
 
 ## Load Libraries
+
+\[What Each Library Is use for\]
 
 ```{r}
 #| output: false
@@ -27,7 +37,7 @@ library(httr2)
 library(tibble)
 library(jsonlite)
 library(httr)
-library(lubridate)
+library(lubridate) ## Time and date handling
 library(ggplot2)
 library(dplyr)
 library(dotenv)
@@ -54,6 +64,8 @@ city_name <- "San Luis Obispo"
 ## Step 2: Create API Request URL
 
 Using paste0() to attach the base URL, the city name, the API Key, and units together and assign it to "current_weather_url"
+
+\[Actual URL vs Query format, learn more about URL HTML format\]
 
 ```{r}
 current_weather_url <- paste0("https://api.openweathermap.org/data/2.5/weather?",
@@ -98,6 +110,8 @@ if (status_code(response) == 200) {
   cat("Failed. Status code:", status_code(response), "\n")
 }
 ```
+
+\[Pipe, select only a couple variables\]
 
 # Geocoding API
 
@@ -227,7 +241,7 @@ if (status_code(geo_response) == 200) {
 # Step 2f: Use the output for each day and assign it into a data frame.
       daily_df <- as.data.frame(weather_parsed)
       
-# Step 2g: Add date and city name columns ## USE MUTATE**
+# Step 2g: Add date and city name columns [USE MUTATE] * mutate(city = city_name)
       daily_df$city <- city_name
       daily_df$date <- date
       

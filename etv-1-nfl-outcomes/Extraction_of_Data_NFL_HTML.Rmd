@@ -12,6 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Session 3: HTML Web Scraping: NFL Data Extraction
 
+[Try Bullet Points]
+
+[Find places to ask questions, comments, discussions]
 
 ```{r}
 #| message: false
@@ -90,6 +93,7 @@ Now with our table selected, we need to find a way to include information from t
 inital_col_names <- colnames(int_web_table)
 
 first_row_names <- int_web_table[1,]
+# SLICE
 
 new_colnames <- paste(inital_col_names,first_row_names,sep="_") %>% 
   str_trim() %>% 
@@ -100,6 +104,8 @@ new_colnames <- paste(inital_col_names,first_row_names,sep="_") %>%
 We have 2 issues with this process, one being that column 6 does not contain any values in the first row or the header. As such, we will assign a name to this column. Additionally, column 21 and column 15 have a duplicate name, but one refers to passing yards and the other to passing yards sacked. We will manually assign both of these to names to avoid future issue, but this is not the preferred method of addressing these issues.
 
 ## Step 6: Fix Problem Columns
+
+[Add Text, See above]
 
 ```{r}
 new_colnames[6] <- "game_location"
