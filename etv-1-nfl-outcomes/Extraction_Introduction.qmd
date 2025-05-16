@@ -1,20 +1,48 @@
 ---
-title: "Extraction_Introduction"
-author: ""
+title: "Introduction To Extraction Workshop - HTML & APIs"
+author: "Ciera Millard"
 format: html
 ---
-
-## HTML and APIs in the Classroom
-
-# What
+# Session 1: Introduction
 
 
+# HTML and APIs in the Classroom
 
 
-# Why
+The availability of continuously changing data and the use of web APIs have grown exponentially in recent years. Dynamic data is published online in formats designed for both human readability (HTML) and machine access (APIs). However, this not always reflected in introductory statistics or data science classes. Many times, instruction relies on pre-cleaned, static datasets, which are not realistic to the current data landscape.
 
+To bridge this gap, it is essential that we prepare students to meet real-world data challenges by equipping them with the skills to independently extract, process, and analyze data. While it is often sufficient to provide static datasets for demonstrations and exercises, careers in modern data science will demand the ability to find and retrieve data from live sources, not simply rely on what’s been prepackaged.
 
+## APIs
 
+APIs (Application Programming Interfaces) allow programs to request data directly from external servers in a structured format (most often JSON). Learning to work with web APIs teaches students not just to observe data, but to understand how to:
 
+Locate relevant APIs (e.g., weather data from OpenWeatherMap)
 
-# How: What We're Doing Today
+Construct their own API requests (instead of relying on pre-built packages)
+
+Interpret the response structure (e.g., nested JSON)
+
+Transform the returned data into usable formats for analysis
+
+This pushes students to explore data fully, recognize potential limitations, biases, or technical issues in the data structure, and move beyond canned examples.
+
+## HTML Web Scraping
+
+Much like APIs, lots of relevant and useful information is available directly on webpages, which are readable by humans rather than APIs which are designed for machine access. By learning this skill, students are able to:
+
+Locate relevant sources (e.g., sports data from Pro Football Reference)
+
+Understand how websites deliver and organize content
+
+Transform and clean data for analysis and visualization
+
+# Workshop Agenda
+
+## Session 1: Introduction
+
+## Session 2: Getting Weather Data via OpenWeather API
+
+## Session 3: Scraping NFL Sports Data
+
+## Session 4: Putting it All Together (Project)

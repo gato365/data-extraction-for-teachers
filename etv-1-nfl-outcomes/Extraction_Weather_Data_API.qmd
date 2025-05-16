@@ -1,6 +1,6 @@
 ---
-title: "Weather Data API"
-author: ""
+title: "Weather Data  - OpenWeatherAPI"
+author: "Ciera Millard"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -9,15 +9,15 @@ output: html_document
 
 Overview of different offering from OpenWeather
 
-| Feature | **Geocoding API** | **Current Weather API (v2.5)** | **One Call API (v3.0)** |
-|----------------|----------------|------------------|----------------------|
+| Feature | **Geocoding API** | **Current Weather API** | **One Call API** |
+|-----------------|-----------------|-----------------|---------------------|
 | **Purpose** | Convert city names to coordinates | Get current weather for a city or location | Get full weather data for a coordinate |
 | **Input** | City name or zip code | City name, city ID, coordinates, or zip | Latitude & Longitude |
 | **Output** | Location info (lat/lon, country, etc.) | Temperature, conditions, wind, etc. | Current, hourly, daily, alerts (optionally filtered) |
-| **Coordinates needed?** | ❌ | ❌ | ✅ Required |
+| **Coordinates needed?** | No | No |  Yes |
 | **Units supported** | N/A | standard, metric, imperial | standard, metric, imperial |
 | **Endpoint URL** | `/geo/1.0/direct` | `/data/2.5/weather` | `/data/3.0/onecall` |
-| **Use case** | Finding lat/lon of cities | Lightweight current conditions | Complete weather view (e.g., dashboards/apps) |
+| **Use case** | Finding lat/lon of cities | Lightweight current conditions | Complete weather view |
 
 ## Load Libraries
 
@@ -288,7 +288,6 @@ direction: numeric (degrees from North)
 
 In R: wind.max, wind.direction
 
-
 These all flatten into column names like precipitation.total, dew_point.afternoon.
 
 | temperature.min | temperature.max | humidity.morning | wind.max | wind.direction | precipitation.total | date | city |
@@ -415,7 +414,6 @@ library(rnaturalearth)
 library(rnaturalearthdata)
 ```
 
-
 ```{r}
 #sf_map <- function(cities)
 cities <- c("San Luis Obispo", "Santa Barbara", "San Francisco")
@@ -491,7 +489,7 @@ ggplot() +
 
 ```
 
-** Code with less dependencies
+\*\* Code with less dependencies
 
 ```{r}
 #| eval: false

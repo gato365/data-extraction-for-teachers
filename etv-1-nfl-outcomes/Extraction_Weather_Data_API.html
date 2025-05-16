@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="">
-<meta name="dcterms.date" content="2025-05-15">
+<meta name="dcterms.date" content="2025-05-16">
 
-<title>Weather Data API</title>
+<title>Weather Data - OpenWeatherAPI</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Weather Data API</h1>
+<h1 class="title">Weather Data - OpenWeatherAPI</h1>
 </div>
 
 
@@ -92,7 +92,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 15, 2025</p>
+      <p class="date">May 16, 2025</p>
     </div>
   </div>
   
@@ -107,17 +107,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Overview of different offering from OpenWeather</p>
 <table class="table">
 <colgroup>
-<col style="width: 22%">
-<col style="width: 22%">
-<col style="width: 25%">
-<col style="width: 30%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 29%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Feature</th>
 <th><strong>Geocoding API</strong></th>
-<th><strong>Current Weather API (v2.5)</strong></th>
-<th><strong>One Call API (v3.0)</strong></th>
+<th><strong>Current Weather API</strong></th>
+<th><strong>One Call API</strong></th>
 </tr>
 </thead>
 <tbody>
@@ -141,9 +141,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td><strong>Coordinates needed?</strong></td>
-<td>❌</td>
-<td>❌</td>
-<td>✅ Required</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
 </tr>
 <tr class="odd">
 <td><strong>Units supported</strong></td>
@@ -161,7 +161,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><strong>Use case</strong></td>
 <td>Finding lat/lon of cities</td>
 <td>Lightweight current conditions</td>
-<td>Complete weather view (e.g., dashboards/apps)</td>
+<td>Complete weather view</td>
 </tr>
 </tbody>
 </table>
@@ -240,13 +240,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  coord.lon coord.lat weather.id weather.main weather.description weather.icon
-1 -120.5343   35.3666        800        Clear           clear sky          01d
+1 -120.5343   35.3666        803       Clouds       broken clouds          04n
       base main.temp main.feels_like main.temp_min main.temp_max main.pressure
-1 stations     61.63           60.26         55.11         66.56          1014
+1 stations      49.3            49.3         45.99         51.94          1014
   main.humidity main.sea_level main.grnd_level visibility wind.speed wind.deg
-1            59           1014             968      10000       5.61      212
+1            78           1014             969      10000       2.37      122
   wind.gust all         dt sys.type  sys.id sys.country sys.sunrise sys.sunset
-1      6.02   2 1747360307        2 2020326          US  1747313855 1747364375
+1      2.44  69 1747379092        2 2010057          US  1747400211 1747450823
   timezone      id            name cod
 1   -25200 5392329 San Luis Obispo 200</code></pre>
 </div>
@@ -403,29 +403,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinates for San Luis Obispo -&gt; Latitude: 35.28 Longitude: -120.66 
     lat     lon     tz       date    units afternoon afternoon.1 total
-1 35.28 -120.66 -07:00 2025-05-14 imperial         5          60     0
-2 35.28 -120.66 -07:00 2025-05-13 imperial         5          54     0
-3 35.28 -120.66 -07:00 2025-05-12 imperial         4          56     0
-4 35.28 -120.66 -07:00 2025-05-11 imperial         0          49     0
-5 35.28 -120.66 -07:00 2025-05-10 imperial         0          45     0
+1 35.28 -120.66 -07:00 2025-05-15 imperial         0          49     0
+2 35.28 -120.66 -07:00 2025-05-14 imperial         5          60     0
+3 35.28 -120.66 -07:00 2025-05-13 imperial         5          54     0
+4 35.28 -120.66 -07:00 2025-05-12 imperial         4          56     0
+5 35.28 -120.66 -07:00 2025-05-11 imperial         0          49     0
   temperature.min temperature.max temperature.afternoon temperature.night
-1           44.98           69.10                 66.43             50.92
-2           48.04           67.30                 64.90             51.12
-3           44.01           66.56                 66.56             52.57
-4           52.54           76.62                 74.21             53.22
-5           53.44           85.39                 81.68             64.06
+1           47.95           75.69                 75.69             52.20
+2           44.98           69.10                 66.43             50.92
+3           48.04           67.30                 64.90             51.12
+4           44.01           66.56                 66.56             52.57
+5           52.54           76.62                 74.21             53.22
   temperature.evening temperature.morning afternoon.2 wind.max.speed
-1               63.16               47.52        1017           8.01
-2               62.76               49.80        1017           9.71
-3               60.19               44.01        1014          13.56
-4               65.59               53.71        1013          23.02
-5               67.69               53.44        1013          13.80
+1               64.06               48.83        1014           9.78
+2               63.16               47.52        1017           8.01
+3               62.76               49.80        1017           9.71
+4               60.19               44.01        1014          13.56
+5               65.59               53.71        1013          23.02
   wind.max.direction            city
 1                275 San Luis Obispo
-2                294 San Luis Obispo
-3                273 San Luis Obispo
-4                320 San Luis Obispo
-5                310 San Luis Obispo</code></pre>
+2                275 San Luis Obispo
+3                294 San Luis Obispo
+4                273 San Luis Obispo
+5                320 San Luis Obispo</code></pre>
 </div>
 </div>
 <table class="table">
@@ -622,25 +622,25 @@ direction: numeric (degrees from North)</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    lat     lon     tz       date    units afternoon afternoon.1 total
-1 35.28 -120.66 -07:00 2025-05-14 imperial         5          60     0
-2 35.28 -120.66 -07:00 2025-05-13 imperial         5          54     0
-3 35.28 -120.66 -07:00 2025-05-12 imperial         4          56     0
-4 35.28 -120.66 -07:00 2025-05-11 imperial         0          49     0
+1 35.28 -120.66 -07:00 2025-05-15 imperial         0          49     0
+2 35.28 -120.66 -07:00 2025-05-14 imperial         5          60     0
+3 35.28 -120.66 -07:00 2025-05-13 imperial         5          54     0
+4 35.28 -120.66 -07:00 2025-05-12 imperial         4          56     0
   temperature.min temperature.max temperature.afternoon temperature.night
-1           44.98           69.10                 66.43             50.92
-2           48.04           67.30                 64.90             51.12
-3           44.01           66.56                 66.56             52.57
-4           52.54           76.62                 74.21             53.22
+1           47.95           75.69                 75.69             52.20
+2           44.98           69.10                 66.43             50.92
+3           48.04           67.30                 64.90             51.12
+4           44.01           66.56                 66.56             52.57
   temperature.evening temperature.morning afternoon.2 wind.max.speed
-1               63.16               47.52        1017           8.01
-2               62.76               49.80        1017           9.71
-3               60.19               44.01        1014          13.56
-4               65.59               53.71        1013          23.02
+1               64.06               48.83        1014           9.78
+2               63.16               47.52        1017           8.01
+3               62.76               49.80        1017           9.71
+4               60.19               44.01        1014          13.56
   wind.max.direction            city
 1                275 San Luis Obispo
-2                294 San Luis Obispo
-3                273 San Luis Obispo
-4                320 San Luis Obispo</code></pre>
+2                275 San Luis Obispo
+3                294 San Luis Obispo
+4                273 San Luis Obispo</code></pre>
 </div>
 </div>
 </section>
