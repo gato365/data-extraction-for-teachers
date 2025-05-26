@@ -7,18 +7,16 @@ output: html_document
 
 # Session 2: Using OpenWeatherAPI
 
-Overview of different offering from OpenWeather
+![API Call (PhoenixNap.com)](https://phoenixnap.com/kb/wp-content/uploads/2022/11/cloud-api-request-and-response.png)
 
-\[Image of API Call\]
+\[use \_lst, \_df\] (need clarity)
 
-\[Add places for questions, comments, discussions\]
+NOTE: \[it seems like httr2 has A LOT of functionality that could reduce code and use of things like jsonlite, etc. worth investigating\]
 
-\[Use string glue instead, investigate\]
-
-\[use \_lst, \_df\]
+Overview of different offerings from OpenWeather:
 
 | Feature | **Geocoding API** | **Current Weather API** | **One Call API** |
-|-----------------|-----------------|-----------------|--------------------|
+|------------------|------------------|------------------|-------------------|
 | **Purpose** | Convert city names to coordinates | Get current weather for a city or location | Get full weather data for a coordinate |
 | **Input** | City name or zip code | City name, city ID, coordinates, or zip | Latitude & Longitude |
 | **Output** | Location info (lat/lon, country, etc.) | Temperature, conditions, wind, etc. | Current, hourly, daily, alerts (optionally filtered) |
@@ -33,14 +31,13 @@ Overview of different offering from OpenWeather
 
 ```{r}
 #| output: false
-library(httr2)
-library(tibble)
-library(jsonlite)
-library(httr)
+library(httr2) ## Updated version of httr, makes https requests
+library(tibble) ## Tidyverse version of data.frame
 library(lubridate) ## Time and date handling
-library(ggplot2)
-library(dplyr)
-library(dotenv)
+library(ggplot2) ## Visualizations
+library(dplyr) ## Data manipulation
+library(dotenv) ## Load environment variables
+library(glue) ## Attach strings together
 ```
 
 ## Load API Key from Environment
@@ -63,12 +60,14 @@ city_name <- "San Luis Obispo"
 
 ## Step 2: Create API Request URL
 
-Using paste0() to attach the base URL, the city name, the API Key, and units together and assign it to "current_weather_url"
+Using glue() to attach the base URL, the city name, the API Key, and units together and assign it to "current_weather_url"
 
-\[Actual URL vs Query format, learn more about URL HTML format\]
+\[Actual URL vs Query format, learn more about URL HTML format\] (need clarity on this)
+
+{Question: What is the 'query' format vs the URL glue form? }
 
 ```{r}
-current_weather_url <- paste0("https://api.openweathermap.org/data/2.5/weather?",
+current_weather_url <- glue("https://api.openweathermap.org/data/2.5/weather?",
                               "q=", URLencode(city_name),
                               "&appid=", Sys.getenv("API_KEY"),
                               "&units=", "imperial")
@@ -78,40 +77,42 @@ current_weather_url <- paste0("https://api.openweathermap.org/data/2.5/weather?"
 
 ## Step 3: Call API
 
-Using httr::GET() to call the OpenWeather API and assign the response to a variable. We then use httr:http_type() to see what our result looks like.
+First, we assign the URL we created to an httr2:: request object, called req. Then, we use httr2::req_perform() to call the OpenWeather API and assign the response to a variable. We then use httr2::resp_content_type() to see what our result looks like.
 
 ```{r}
-response <- GET(current_weather_url)
+req <- request(current_weather_url)
+response <- req_perform(req)
 
-http_type(response)
+httr2::resp_content_type(response)
 ```
+
+{Question: What does application mean? What is JSON?}
 
 ## Step 4: Parse Response
 
-Using logic, if the status code is 200 (meaning OK, successful) we use httr::content to interpret our response. The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being "nested."
+Using logic, we execute the below code if the status code is 200 (meaning OK, successful). We use httr2::resp_status() to identify the status code. The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being "nested."
 
-We then pass it into jsonlite::fromJSON to convert our JSON into a list, specifically nested lists. Using flatten = TRUE unnests the lists in the response.
+Then, using httr2::resp_body_json(), we get our list of nested lists.
 
 as.data.frame() converts this list into a data.frame object, and then we print the data frame.
 
 If the status code is not 200, we print a message stating that the process has failed.
 
+{Question: What are other status codes we know? What about 404?}
+
 ```{r}
-if (status_code(response) == 200) {
-  # Parse and flatten JSON
-  content_json <- content(response, as = "text", encoding = "UTF-8")
-  parsed <- fromJSON(content_json, flatten = TRUE)
+if (resp_status(response) == 200) {
+  # Parse JSON
+  result <- resp_body_json(response)
   
   # Convert to data frame directly
-  currweather <- as.data.frame(parsed)
+  currweather <- as.data.frame(result)
   
-  print(currweather)
+  print(select(currweather,name, coord.lon, coord.lat, weather.main, main.temp))
 } else {
-  cat("Failed. Status code:", status_code(response), "\n")
+  cat("Failed. Status code:", resp_status(response), "\n")
 }
 ```
-
-\[Pipe, select only a couple variables\]
 
 # Geocoding API
 
@@ -126,19 +127,21 @@ geocode <- function(city){
   
 # Step 2: Create API request URL
   
-  geo_url <- paste0(
+  geo_url <- glue(
   "http://api.openweathermap.org/geo/1.0/direct?",
   "q=", URLencode(city),
   "&limit=1&appid=", Sys.getenv("API_KEY")
 )
- # Step 3: Use GET to call the API with the URL request 
+ # Step 3: Use req_perform() and request() to call the API with the URL request 
+
+geo_response <- req_perform(request(geo_url))
   
-geo_response <- GET(geo_url)
 
- # Step 4: If the status code is 200 (OK), use fromJSON() and content() to parse and convert our response data and assign to a variable.
+ # Step 4: If the status code is 200 (OK), use resp_body_json() to parse our response and as.data.frame to coerce it to data.frame.
 
-if (status_code(geo_response) == 200) {
-  geo_data <- fromJSON(content(geo_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
+if (resp_status(geo_response) == 200) {
+  geo_data <- resp_body_json(geo_response) |> 
+    as.data.frame()
   
   
 # Step 5: Assess if the output has 0 length, meaning no result. If so, stop and display an error message.  
@@ -159,6 +162,8 @@ if (status_code(geo_response) == 200) {
 }
 ```
 
+{Question: What else could be added here? Subtracted? Why the output string?}
+
 ## Test Geocode Function
 
 ```{r}
@@ -170,7 +175,7 @@ geocode("Ames, IA, USA")
 ```{r}
 # Step 1: Use Geocoding API to get lattitude and longitude
 # Step 1a: Construct URL query using city name and API key
-geo_url <- paste0(
+geo_url <- glue(
   "http://api.openweathermap.org/geo/1.0/direct?",
   "q=", URLencode(city_name),
   "&limit=1&appid=", Sys.getenv("API_KEY")
@@ -185,14 +190,15 @@ numdays <- 5
 
 ```{r}
 # Step 1c: 
-# Use GET to call the API and assign it to a variable geo_response. 
+# Use req_perform() and request() to call the API with the URL request 
 
-geo_response <- GET(geo_url)
-# Step 1d:
-# Use logic (if) to proceed #if the status code is 200, and use fromJSON package jsonlite to  get content from our API an #use 'flatten = TRUE' to unnest the data.
-if (status_code(geo_response) == 200) {
-  geo_data <- fromJSON(content(geo_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
-  
+geo_response <- req_perform(request(geo_url))
+
+# Step 1d: If the status code is 200 (OK), use resp_body_json() to parse our response and as.data.frame to coerce it to data.frame.
+
+if (resp_status(geo_response) == 200) {
+  geo_data <- resp_body_json(geo_response) |> 
+    as.data.frame()
   
 # Step 1e: Assess if the output has 0 length, meaning no result. If so, stop and display an error message.  
   if (length(geo_data) == 0) {
@@ -220,7 +226,7 @@ if (status_code(geo_response) == 200) {
 # Step 2c: Loop over dates and make an API call for each day. For every date in the date vector, supply latitude, longitude, the different date, API key, and provide unit preference.
   for (date in date_range) {
     
-    weather_url <- paste0(
+    weather_url <- glue(
       "https://api.openweathermap.org/data/3.0/onecall/day_summary?",
       "lat=", lat,
       "&lon=", lon,
@@ -231,26 +237,27 @@ if (status_code(geo_response) == 200) {
     
 # Step 2d: Make the API call using the different weather_url queries for each date. Store these in weather_response.    
     
-    weather_response <- GET(weather_url)
+    weather_response <- req_perform(request(weather_url))
     
-# Step 2e: Use logic to evaluate the response and use fromJSON() to get the content from the JSON output and use "flatten = TRUE" to unnest the data.
+# Step 2e: Use logic to evaluate the response and use resp_body_JSON() and as.data.frame. to parse our response and coerce to data.frame.
     
-    if (status_code(weather_response) == 200) {
-      weather_parsed <- jsonlite::fromJSON(content(weather_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
+    if (resp_status(weather_response) == 200) {
+      daily_weather_parsed <- resp_body_json(weather_response) |> 
+        as.data.frame()
       
-# Step 2f: Use the output for each day and assign it into a data frame.
-      daily_df <- as.data.frame(weather_parsed)
+# Step 2f: Add date and city name columns using mutate()
+      daily_weather_parsed <- daily_weather_parsed |> 
+        mutate(
+      city =city_name,
+      date = date)
       
-# Step 2g: Add date and city name columns [USE MUTATE] * mutate(city = city_name)
-      daily_df$city <- city_name
-      daily_df$date <- date
       
-# Step 2h: Use bind_rows to add all the rows to the hist_weather data frame.
-      hist_weather <- bind_rows(hist_weather, daily_df)
+# Step 2g: Use bind_rows to add all the rows to the hist_weather data frame.
+      hist_weather <- bind_rows(hist_weather, daily_weather_parsed)
       
     } else {
 # Step 2i: Use logic (else) to print an error message for when weather data is not obtained.
-      warning(paste("Failed to get weather for", date, "-", status_code(weather_response)))
+      warning(paste("Failed to get weather for", date, "-", resp_status(weather_response)))
     }
   }
   
@@ -262,6 +269,8 @@ if (status_code(geo_response) == 200) {
 
 ```
 
+{Question: Why wrap as.character() around the date range?}
+
 | JSON Key              | R Type    | Notes                      |
 |-----------------------|-----------|----------------------------|
 | `temperature.min`     | numeric   | Minimum temp for the day   |
@@ -272,41 +281,17 @@ if (status_code(geo_response) == 200) {
 | `date` (added)        | Date      | From loop date             |
 | `city` (added)        | character | City name from geocoding   |
 
-The API returns a JSON object representing summary statistics for a specific location and date. The root of the JSON is a named listc(this becomes a named list or a single-row data.frame after fromJSON()).
+The API returns a JSON object representing summary statistics for a specific location and date. The root of the JSON is a named list.
 
-temperature → Nested List → Becomes nested data.frame or named columns
+The list contains other lists such as temperature, which have multiple items related to temperature.
 
-```         
-min: numeric (e.g., 50.1) → Low temp
-
-max: numeric (e.g., 75.6) → High temp
-
-afternoon, morning, evening, night: numeric
-```
-
-These become temperature.min, temperature.max, etc. if you use flatten = TRUE with jsonlite::fromJSON().
-
-humidity → Similar structure as temperature
-
-```         
-Each time-of-day (morning, evening...) → integer (%) → becomes humidity.morning, humidity.evening, etc.
-```
-
-wind → List of stats
-
-```         
-max: numeric → max wind speed
-
-direction: numeric (degrees from North)
-```
-
-In R: wind.max, wind.direction
-
-These all flatten into column names like precipitation.total, dew_point.afternoon.
+These all flatten into column names like precipitation.total, dew_point.afternoon when as.data.frame() is used to coerce.
 
 | temperature.min | temperature.max | humidity.morning | wind.max | wind.direction | precipitation.total | date | city |
 |---------|---------|---------|---------|---------|---------|---------|---------|
 | 50.1 | 75.6 | 80 | 12.3 | 270 | 0.5 | 2025-04-23 | San Luis Obispo |
+
+{Any thoughts at this point? What benefits do we get from inspecting the data structure?}
 
 ## Function: Previous Weather
 
@@ -315,20 +300,19 @@ prev_weather <- function(city, numdays){
 
 # Step 1: Use Geocoding API to get lattitude and longitude
 # Step 1a: Construct URL query using city name and API key
-geo_url <- paste0(
+geo_url <- glue(
   "http://api.openweathermap.org/geo/1.0/direct?",
   "q=", URLencode(city_name),
   "&limit=1&appid=", Sys.getenv("API_KEY")
 )
 # Step 1c: 
-# Use GET to call the API and assign it to a variable geo_response. 
+geo_response <- req_perform(request(geo_url))
 
-geo_response <- GET(geo_url)
-# Step 1d:
-# Use logic (if) to proceed #if the status code is 200, and use fromJSON package jsonlite to  get content from our API an #use 'flatten = TRUE' to unnest the data.
-if (status_code(geo_response) == 200) {
-  geo_data <- fromJSON(content(geo_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
-  
+# Step 1d: If the status code is 200 (OK), use resp_body_json() to parse our response and as.data.frame to coerce it to data.frame.
+
+if (resp_status(geo_response) == 200) {
+  geo_data <- resp_body_json(geo_response) |> 
+    as.data.frame()
   
 # Step 1e: Assess if the output has 0 length, meaning no result. If so, stop and display an error message.  
   if (length(geo_data) == 0) {
@@ -341,7 +325,7 @@ if (status_code(geo_response) == 200) {
   lon <- round(geo_data$lon, digits = 2)
   
 # Optional: Print a string displaying the city name and latitude / longitude.  
-  cat("Coordinates for", city, "-> Latitude:", lat, "Longitude:", lon, "\n")
+  cat("Coordinates for", city_name, "-> Latitude:", lat, "Longitude:", lon, "\n")
   
   
 # Step 2: Use the One Call API to get the past 5 days of weather data  
@@ -356,7 +340,7 @@ if (status_code(geo_response) == 200) {
 # Step 2c: Loop over dates and make an API call for each day. For every date in the date vector, supply latitude, longitude, the different date, API key, and provide unit preference.
   for (date in date_range) {
     
-    weather_url <- paste0(
+    weather_url <- glue(
       "https://api.openweathermap.org/data/3.0/onecall/day_summary?",
       "lat=", lat,
       "&lon=", lon,
@@ -367,36 +351,39 @@ if (status_code(geo_response) == 200) {
     
 # Step 2d: Make the API call using the different weather_url queries for each date. Store these in weather_response.    
     
-    weather_response <- GET(weather_url)
+    weather_response <- req_perform(request(weather_url))
     
 # Step 2e: Use logic to evaluate the response and use fromJSON() to get the content from the JSON output and use "flatten = TRUE" to unnest the data.
     
-    if (status_code(weather_response) == 200) {
-      weather_parsed <- jsonlite::fromJSON(content(weather_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
+    if (resp_status(weather_response) == 200) {
+      daily_weather_parsed <- resp_body_json(weather_response) |> 
+        as.data.frame()
       
-# Step 2f: Use the output for each day and assign it into a data frame.
-      daily_df <- as.data.frame(weather_parsed)
+# Step 2f: Add date and city name columns using mutate()
+      daily_weather_parsed <- daily_weather_parsed |> 
+        mutate(
+      city =city_name,
+      date = date)
       
-# Step 2g: Add date and city name columns ## USE MUTATE
-      daily_df$city <- city
-      daily_df$date <- date
       
-# Step 2h: Use bind_rows to add all the rows to the hist_weather data frame.
-      hist_weather <- bind_rows(hist_weather, daily_df)
+# Step 2g: Use bind_rows to add all the rows to the hist_weather data frame.
+      hist_weather <- bind_rows(hist_weather, daily_weather_parsed)
       
     } else {
 # Step 2i: Use logic (else) to print an error message for when weather data is not obtained.
-      warning(paste("Failed to get weather for", date, "-", status_code(weather_response)))
+      warning(paste("Failed to get weather for", date, "-", resp_status(weather_response)))
     }
   }
-  
   return(hist_weather)
-  
+ 
 } else {
   stop("Geocoding failed. Check your API key or city name.")
 }
+
 }
 ```
+
+{Question: What is UTF-8 encoding?}
 
 ```{r}
 prev_weather("San Luis Obispo", 4)
@@ -434,23 +421,23 @@ cities <- c("San Luis Obispo", "Santa Barbara", "San Francisco")
 
 # Function to get coordinates + weather summary
 get_city_weather <- function(city, date = Sys.Date()) {
-  geo_url <- paste0(
+  geo_url <- glue(
     "http://api.openweathermap.org/geo/1.0/direct?",
     "q=", URLencode(city),
     "&limit=1&appid=", Sys.getenv("API_KEY")
   )
   
-  geo_response <- GET(geo_url)
+  geo_response <- req_perform(request((geo_url)))
   
-  if (status_code(geo_response) == 200) {
-    geo_data <- fromJSON(content(geo_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
+  if (resp_status(geo_response) == 200) {
+    geo_data <- as.data.frame(resp_body_json(geo_response))
     
     if (length(geo_data) == 0) return(NULL)
     
     lat <- geo_data$lat
     lon <- geo_data$lon
     
-    weather_url <- paste0(
+    weather_url <- glue(
       "https://api.openweathermap.org/data/3.0/onecall/day_summary?",
       "lat=", lat,
       "&lon=", lon,
@@ -459,10 +446,10 @@ get_city_weather <- function(city, date = Sys.Date()) {
       "&units=imperial"
     )
     
-    weather_response <- GET(weather_url)
+    weather_response <- req_perform(request((weather_url)))
     
-    if (status_code(weather_response) == 200) {
-      weather_data <- fromJSON(content(weather_response, as = "text", encoding = "UTF-8"), flatten = TRUE)
+    if (resp_status(weather_response) == 200) {
+      weather_data <- (resp_body_json(weather_response))
       
       tibble(
         city = city,
@@ -515,6 +502,6 @@ ggplot() +
     title = "California City Temperatures",
     subtitle = paste("Date:", Sys.Date())
   ) +
-  theme_minimal()
+theme_minimal()
 
 ```
