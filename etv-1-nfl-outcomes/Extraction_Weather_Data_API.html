@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ciera Millard">
-<meta name="dcterms.date" content="2025-05-26">
+<meta name="dcterms.date" content="2025-06-02">
 
 <title>Weather Data - OpenWeatherAPI</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 26, 2025</p>
+      <p class="date">June 2, 2025</p>
     </div>
   </div>
   
@@ -181,23 +181,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <section id="load-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="load-libraries">Load Libraries</h2>
-<p>[What Each Library Is use for]</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2) <span class="do">## Updated version of httr, makes https requests</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble) <span class="do">## Tidyverse version of data.frame</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate) <span class="do">## Time and date handling</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="do">## Visualizations</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="do">## Data manipulation</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dotenv) <span class="do">## Load environment variables</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue) <span class="do">## Attach strings together</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)       <span class="co"># Makes web requests</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)      <span class="co"># Tidyverse version of data.frame</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)   <span class="co"># Time and date handling</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)     <span class="co"># Visualizations</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)       <span class="co"># Data manipulation</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dotenv)      <span class="co"># Load environment variables</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)        <span class="co"># Attach strings together</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="load-api-key-from-environment" class="level2">
 <h2 class="anchored" data-anchor-id="load-api-key-from-environment">Load API Key from Environment</h2>
-<p>Using dotenv::load_dot_env() we will load our .Renviron.txt that contains our API Key. Using Sys.getenv(“API_KEY”) we can supply our API Key whenever needed.</p>
+<p>Using <code>dotenv::load_dot_env()</code> we will load our <code>.Renviron.txt</code> that contains our API Key. Using <code>Sys.getenv("API_KEY")</code> we can supply our API Key whenever needed.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dotenv<span class="sc">::</span><span class="fu">load_dot_env</span>(<span class="at">file =</span> <span class="st">".Renviron.txt"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.getenv("API_KEY")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -211,9 +210,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="step-2-create-api-request-url" class="level2">
 <h2 class="anchored" data-anchor-id="step-2-create-api-request-url">Step 2: Create API Request URL</h2>
-<p>Using glue() to attach the base URL, the city name, the API Key, and units together and assign it to “current_weather_url”</p>
+<p>Using <code>glue()</code> to attach the base URL, the city name, the API Key, and units together and assign it to <code>current_weather_url</code></p>
 <p>[Actual URL vs Query format, learn more about URL HTML format] (need clarity on this)</p>
-<p>{Question: What is the ‘query’ format vs the URL glue form? }</p>
+<p><em>Discussion: What is the ‘query’ format vs the URL glue form?</em></p>
+<p>A: Query format can specify parameters in a more human and modular way, but URL format fosters understanding of HTML and web addresses.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>current_weather_url <span class="ot">&lt;-</span> <span class="fu">glue</span>(<span class="st">"https://api.openweathermap.org/data/2.5/weather?"</span>,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"q="</span>, <span class="fu">URLencode</span>(city_name),</span>
@@ -225,7 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="step-3-call-api" class="level2">
 <h2 class="anchored" data-anchor-id="step-3-call-api">Step 3: Call API</h2>
-<p>First, we assign the URL we created to an httr2:: request object, called req. Then, we use httr2::req_perform() to call the OpenWeather API and assign the response to a variable. We then use httr2::resp_content_type() to see what our result looks like.</p>
+<p>First, we assign the URL we created to a request object, called <code>req</code>. Then, we use <code>httr2::req_perform()</code> to call the OpenWeather API and assign the response to a variable. We then use <code>httr2::resp_content_type()</code> to see what our result looks like.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>req <span class="ot">&lt;-</span> <span class="fu">request</span>(current_weather_url)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">req_perform</span>(req)</span>
@@ -235,15 +235,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] "application/json"</code></pre>
 </div>
 </div>
-<p>{Question: What does application mean? What is JSON?}</p>
+<p><em>Discussion: What does application mean? What is JSON?</em></p>
 </section>
 <section id="step-4-parse-response" class="level2">
 <h2 class="anchored" data-anchor-id="step-4-parse-response">Step 4: Parse Response</h2>
-<p>Using logic, we execute the below code if the status code is 200 (meaning OK, successful). We use httr2::resp_status() to identify the status code. The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being “nested.”</p>
-<p>Then, using httr2::resp_body_json(), we get our list of nested lists.</p>
-<p>as.data.frame() converts this list into a data.frame object, and then we print the data frame.</p>
+<p>Using logic, we execute the below code if the status code is 200 (meaning OK, successful). We use <code>httr2::resp_status()</code> to identify the status code. The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being “nested.”</p>
+<p>Then, using <code>httr2::resp_body_json()</code>, we get our list of nested lists.</p>
+<p><code>as.data.frame()</code> converts this list into a data.frame object, and then we print the data frame.</p>
 <p>If the status code is not 200, we print a message stating that the process has failed.</p>
-<p>{Question: What are other status codes we know? What about 404?}</p>
+<p><em>Discussion: What are other status codes we know? What about 404?</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">resp_status</span>(response) <span class="sc">==</span> <span class="dv">200</span>) {</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parse JSON</span></span>
@@ -258,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             name coord.lon coord.lat weather.main main.temp
-1 San Luis Obispo -120.5343   35.3666        Clear     45.97</code></pre>
+1 San Luis Obispo -120.5343   35.3666       Clouds     64.33</code></pre>
 </div>
 </div>
 </section>
@@ -309,7 +309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>   }</span>
 <span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>{Question: What else could be added here? Subtracted? Why the output string?}</p>
+<p><em>Discussion: What else could be added here? Subtracted? Why the output string?</em></p>
 </section>
 <section id="test-geocode-function" class="level2">
 <h2 class="anchored" data-anchor-id="test-geocode-function">Test Geocode Function</h2>
@@ -418,32 +418,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinates for San Luis Obispo -&gt; Latitude: 35.28 Longitude: -120.66 
     lat     lon     tz       date    units afternoon afternoon.1 total
-1 35.28 -120.66 -07:00 2025-05-25 imperial         0          55     0
-2 35.28 -120.66 -07:00 2025-05-24 imperial        40          64     0
-3 35.28 -120.66 -07:00 2025-05-23 imperial        78          53     0
-4 35.28 -120.66 -07:00 2025-05-22 imperial         7          39     0
-5 35.28 -120.66 -07:00 2025-05-21 imperial         0          40     0
+1 35.28 -120.66 -07:00 2025-06-01 imperial         0          57     0
+2 35.28 -120.66 -07:00 2025-05-31 imperial        24          47     0
+3 35.28 -120.66 -07:00 2025-05-30 imperial         0          43     0
+4 35.28 -120.66 -07:00 2025-05-29 imperial         0          41     0
+5 35.28 -120.66 -07:00 2025-05-28 imperial         0          62     0
   temperature.min temperature.max temperature.afternoon temperature.night
-1           50.90           69.73                 69.48             52.12
-2           49.57           67.28                 64.13             49.64
-3           47.26           69.31                 68.47             53.06
-4           46.24           81.54                 81.36             59.04
-5           46.24           84.42                 82.58             56.03
+1           52.83           76.75                 74.57             58.57
+2           53.44           92.48                 84.72             61.66
+3           48.04           87.98                 85.86             56.21
+4           49.98           79.79                 76.91             52.09
+5           52.02           67.96                 67.96             53.26
   temperature.evening temperature.morning afternoon.2 wind.max.speed
-1               63.01               50.90        1015          23.02
-2               62.65               50.18        1015          19.57
-3               60.87               47.26        1013          19.57
-4               69.73               46.24        1013          14.97
-5               71.92               46.24        1012          21.85
+1               61.18               53.47        1011          16.11
+2               74.77               55.60        1012          12.66
+3               73.62               48.04        1013           8.05
+4               70.25               51.64        1013          19.57
+5               61.74               52.45        1013          17.27
   wind.max.direction            city
-1                300 San Luis Obispo
+1                310 San Luis Obispo
 2                310 San Luis Obispo
-3                300 San Luis Obispo
-4                340 San Luis Obispo
-5                310 San Luis Obispo</code></pre>
+3                220 San Luis Obispo
+4                300 San Luis Obispo
+5                300 San Luis Obispo</code></pre>
 </div>
 </div>
-<p>{Question: Why wrap as.character() around the date range?}</p>
+<p><em>Discussion: Why wrap as.character() around the date range?</em></p>
+<p>A: If not, dates will mathematically evaluate and become integers.</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -492,7 +493,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 <p>The API returns a JSON object representing summary statistics for a specific location and date. The root of the JSON is a named list.</p>
 <p>The list contains other lists such as temperature, which have multiple items related to temperature.</p>
-<p>These all flatten into column names like precipitation.total, dew_point.afternoon when as.data.frame() is used to coerce.</p>
+<p>These all flatten into column names like <code>precipitation.total</code>, <code>dew_point.afternoon</code> when <code>as.data.frame()</code> is used to coerce.</p>
 <table class="table">
 <colgroup>
 <col style="width: 12%">
@@ -529,7 +530,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>{Any thoughts at this point? What benefits do we get from inspecting the data structure?}</p>
+<p><em>Discussion: Any thoughts at this point? What benefits do we get from inspecting the data structure?</em></p>
 <section id="function-previous-weather" class="level2">
 <h2 class="anchored" data-anchor-id="function-previous-weather">Function: Previous Weather</h2>
 <div class="cell">
@@ -619,7 +620,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-84"><a href="#cb16-84" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>{Question: What is UTF-8 encoding?}</p>
+<p><em>Discussion: What is UTF-8 encoding?</em></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prev_weather</span>(<span class="st">"San Luis Obispo"</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -627,25 +628,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    lat     lon     tz       date    units afternoon afternoon.1 total
-1 35.28 -120.66 -07:00 2025-05-25 imperial         0          55     0
-2 35.28 -120.66 -07:00 2025-05-24 imperial        40          64     0
-3 35.28 -120.66 -07:00 2025-05-23 imperial        78          53     0
-4 35.28 -120.66 -07:00 2025-05-22 imperial         7          39     0
+1 35.28 -120.66 -07:00 2025-06-01 imperial         0          57     0
+2 35.28 -120.66 -07:00 2025-05-31 imperial        24          47     0
+3 35.28 -120.66 -07:00 2025-05-30 imperial         0          43     0
+4 35.28 -120.66 -07:00 2025-05-29 imperial         0          41     0
   temperature.min temperature.max temperature.afternoon temperature.night
-1           50.90           69.73                 69.48             52.12
-2           49.57           67.28                 64.13             49.64
-3           47.26           69.31                 68.47             53.06
-4           46.24           81.54                 81.36             59.04
+1           52.83           76.75                 74.57             58.57
+2           53.44           92.48                 84.72             61.66
+3           48.04           87.98                 85.86             56.21
+4           49.98           79.79                 76.91             52.09
   temperature.evening temperature.morning afternoon.2 wind.max.speed
-1               63.01               50.90        1015          23.02
-2               62.65               50.18        1015          19.57
-3               60.87               47.26        1013          19.57
-4               69.73               46.24        1013          14.97
+1               61.18               53.47        1011          16.11
+2               74.77               55.60        1012          12.66
+3               73.62               48.04        1013           8.05
+4               70.25               51.64        1013          19.57
   wind.max.direction            city
-1                300 San Luis Obispo
+1                310 San Luis Obispo
 2                310 San Luis Obispo
-3                300 San Luis Obispo
-4                340 San Luis Obispo</code></pre>
+3                220 San Luis Obispo
+4                300 San Luis Obispo</code></pre>
 </div>
 </div>
 </section>
@@ -678,55 +679,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearthdata)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sf_map &lt;- function(cities)</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>cities <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"San Luis Obispo"</span>, <span class="st">"Santa Barbara"</span>, <span class="st">"San Francisco"</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to get coordinates + weather summary</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>get_city_weather <span class="ot">&lt;-</span> <span class="cf">function</span>(city, <span class="at">date =</span> <span class="fu">Sys.Date</span>()) {</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  geo_url <span class="ot">&lt;-</span> <span class="fu">glue</span>(</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"http://api.openweathermap.org/geo/1.0/direct?"</span>,</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"q="</span>, <span class="fu">URLencode</span>(city),</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"&amp;limit=1&amp;appid="</span>, <span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  geo_response <span class="ot">&lt;-</span> <span class="fu">req_perform</span>(<span class="fu">request</span>((geo_url)))</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">resp_status</span>(geo_response) <span class="sc">==</span> <span class="dv">200</span>) {</span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    geo_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">resp_body_json</span>(geo_response))</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(geo_data) <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    lat <span class="ot">&lt;-</span> geo_data<span class="sc">$</span>lat</span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    lon <span class="ot">&lt;-</span> geo_data<span class="sc">$</span>lon</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    weather_url <span class="ot">&lt;-</span> <span class="fu">glue</span>(</span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">"https://api.openweathermap.org/data/3.0/onecall/day_summary?"</span>,</span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"lat="</span>, lat,</span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&amp;lon="</span>, lon,</span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&amp;date="</span>, <span class="fu">format</span>(date, <span class="st">"%Y-%m-%d"</span>),</span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&amp;appid="</span>, <span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>),</span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&amp;units=imperial"</span></span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>    weather_response <span class="ot">&lt;-</span> <span class="fu">req_perform</span>(<span class="fu">request</span>((weather_url)))</span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">resp_status</span>(weather_response) <span class="sc">==</span> <span class="dv">200</span>) {</span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>      weather_data <span class="ot">&lt;-</span> (<span class="fu">resp_body_json</span>(weather_response))</span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>      </span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tibble</span>(</span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">city =</span> city,</span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">date =</span> date,</span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>        <span class="at">lat =</span> lat,</span>
-<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">lon =</span> lon,</span>
-<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_max =</span> weather_data<span class="sc">$</span>temperature<span class="sc">$</span>max,</span>
-<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_min =</span> weather_data<span class="sc">$</span>temperature<span class="sc">$</span>min</span>
-<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
-<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
-<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch for all cities</span></span>
-<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>weather_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">lapply</span>(cities, get_city_weather))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>cities <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"San Luis Obispo"</span>, <span class="st">"Santa Barbara"</span>, <span class="st">"San Francisco"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to get coordinates + weather summary</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>get_city_weather <span class="ot">&lt;-</span> <span class="cf">function</span>(city, <span class="at">date =</span> <span class="fu">Sys.Date</span>()) {</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  geo_url <span class="ot">&lt;-</span> <span class="fu">glue</span>(</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"http://api.openweathermap.org/geo/1.0/direct?"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"q="</span>, <span class="fu">URLencode</span>(city),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"&amp;limit=1&amp;appid="</span>, <span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  geo_response <span class="ot">&lt;-</span> <span class="fu">req_perform</span>(<span class="fu">request</span>((geo_url)))</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">resp_status</span>(geo_response) <span class="sc">==</span> <span class="dv">200</span>) {</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    geo_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">resp_body_json</span>(geo_response))</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(geo_data) <span class="sc">==</span> <span class="dv">0</span>) <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    lat <span class="ot">&lt;-</span> geo_data<span class="sc">$</span>lat</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    lon <span class="ot">&lt;-</span> geo_data<span class="sc">$</span>lon</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    weather_url <span class="ot">&lt;-</span> <span class="fu">glue</span>(</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">"https://api.openweathermap.org/data/3.0/onecall/day_summary?"</span>,</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>      <span class="st">"lat="</span>, lat,</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&amp;lon="</span>, lon,</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&amp;date="</span>, <span class="fu">format</span>(date, <span class="st">"%Y-%m-%d"</span>),</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&amp;appid="</span>, <span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>),</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&amp;units=imperial"</span></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    weather_response <span class="ot">&lt;-</span> <span class="fu">req_perform</span>(<span class="fu">request</span>((weather_url)))</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">resp_status</span>(weather_response) <span class="sc">==</span> <span class="dv">200</span>) {</span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>      weather_data <span class="ot">&lt;-</span> (<span class="fu">resp_body_json</span>(weather_response))</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tibble</span>(</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">city =</span> city,</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">date =</span> date,</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">lat =</span> lat,</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a>        <span class="at">lon =</span> lon,</span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_max =</span> weather_data<span class="sc">$</span>temperature<span class="sc">$</span>max,</span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_min =</span> weather_data<span class="sc">$</span>temperature<span class="sc">$</span>min</span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="fu">return</span>(<span class="cn">NULL</span>)</span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetch for all cities</span></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>weather_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">lapply</span>(cities, get_city_weather))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>weather_sf <span class="ot">&lt;-</span> weather_df <span class="sc">%&gt;%</span></span>
@@ -753,18 +753,6 @@ give correct results for longitude/latitude data</code></pre>
 <div class="cell-output-display">
 <p><img src="Extraction_Weather_Data_API_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
-</div>
-<p>** Code with less dependencies</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> weather_sf, <span class="fu">aes</span>(<span class="at">color =</span> temp_max), <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_label</span>(<span class="at">data =</span> weather_sf, <span class="fu">aes</span>(<span class="at">label =</span> city), <span class="at">nudge_y =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>(<span class="at">option =</span> <span class="st">"plasma"</span>, <span class="at">name =</span> <span class="st">"High Temp (°F)"</span>) <span class="sc">+</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"California City Temperatures"</span>,</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">"Date:"</span>, <span class="fu">Sys.Date</span>())</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 

@@ -16,7 +16,7 @@ NOTE: \[it seems like httr2 has A LOT of functionality that could reduce code an
 Overview of different offerings from OpenWeather:
 
 | Feature | **Geocoding API** | **Current Weather API** | **One Call API** |
-|------------------|------------------|------------------|-------------------|
+|----|----|----|----|
 | **Purpose** | Convert city names to coordinates | Get current weather for a city or location | Get full weather data for a coordinate |
 | **Input** | City name or zip code | City name, city ID, coordinates, or zip | Latitude & Longitude |
 | **Output** | Location info (lat/lon, country, etc.) | Temperature, conditions, wind, etc. | Current, hourly, daily, alerts (optionally filtered) |
@@ -27,27 +27,25 @@ Overview of different offerings from OpenWeather:
 
 ## Load Libraries
 
-\[What Each Library Is use for\]
-
 ```{r}
 #| output: false
-library(httr2) ## Updated version of httr, makes https requests
-library(tibble) ## Tidyverse version of data.frame
-library(lubridate) ## Time and date handling
-library(ggplot2) ## Visualizations
-library(dplyr) ## Data manipulation
-library(dotenv) ## Load environment variables
-library(glue) ## Attach strings together
+library(httr2)       # Makes web requests
+library(tibble)      # Tidyverse version of data.frame
+library(lubridate)   # Time and date handling
+library(ggplot2)     # Visualizations
+library(dplyr)       # Data manipulation
+library(dotenv)      # Load environment variables
+library(glue)        # Attach strings together
 ```
 
 ## Load API Key from Environment
 
-Using dotenv::load_dot_env() we will load our .Renviron.txt that contains our API Key. Using Sys.getenv("API_KEY") we can supply our API Key whenever needed.
+Using `dotenv::load_dot_env()` we will load our `.Renviron.txt` that contains our API Key. Using `Sys.getenv("API_KEY")` we can supply our API Key whenever needed.
 
 ```{r}
 #| results: hide
 dotenv::load_dot_env(file = ".Renviron.txt")
-Sys.getenv("API_KEY")
+# Sys.getenv("API_KEY")
 ```
 
 # Get Current Weather for a Given City
@@ -60,11 +58,13 @@ city_name <- "San Luis Obispo"
 
 ## Step 2: Create API Request URL
 
-Using glue() to attach the base URL, the city name, the API Key, and units together and assign it to "current_weather_url"
+Using `glue()` to attach the base URL, the city name, the API Key, and units together and assign it to `current_weather_url`
 
 \[Actual URL vs Query format, learn more about URL HTML format\] (need clarity on this)
 
-{Question: What is the 'query' format vs the URL glue form? }
+*Discussion: What is the 'query' format vs the URL glue form?*
+
+A: Query format can specify parameters in a more human and modular way, but URL format fosters understanding of HTML and web addresses.
 
 ```{r}
 current_weather_url <- glue("https://api.openweathermap.org/data/2.5/weather?",
@@ -77,7 +77,7 @@ current_weather_url <- glue("https://api.openweathermap.org/data/2.5/weather?",
 
 ## Step 3: Call API
 
-First, we assign the URL we created to an httr2:: request object, called req. Then, we use httr2::req_perform() to call the OpenWeather API and assign the response to a variable. We then use httr2::resp_content_type() to see what our result looks like.
+First, we assign the URL we created to a request object, called `req`. Then, we use `httr2::req_perform()` to call the OpenWeather API and assign the response to a variable. We then use `httr2::resp_content_type()` to see what our result looks like.
 
 ```{r}
 req <- request(current_weather_url)
@@ -86,19 +86,19 @@ response <- req_perform(req)
 httr2::resp_content_type(response)
 ```
 
-{Question: What does application mean? What is JSON?}
+*Discussion: What does application mean? What is JSON?*
 
 ## Step 4: Parse Response
 
-Using logic, we execute the below code if the status code is 200 (meaning OK, successful). We use httr2::resp_status() to identify the status code. The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being "nested."
+Using logic, we execute the below code if the status code is 200 (meaning OK, successful). We use `httr2::resp_status()` to identify the status code. The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being "nested."
 
-Then, using httr2::resp_body_json(), we get our list of nested lists.
+Then, using `httr2::resp_body_json()`, we get our list of nested lists.
 
-as.data.frame() converts this list into a data.frame object, and then we print the data frame.
+`as.data.frame()` converts this list into a data.frame object, and then we print the data frame.
 
 If the status code is not 200, we print a message stating that the process has failed.
 
-{Question: What are other status codes we know? What about 404?}
+*Discussion: What are other status codes we know? What about 404?*
 
 ```{r}
 if (resp_status(response) == 200) {
@@ -162,7 +162,7 @@ if (resp_status(geo_response) == 200) {
 }
 ```
 
-{Question: What else could be added here? Subtracted? Why the output string?}
+*Discussion: What else could be added here? Subtracted? Why the output string?*
 
 ## Test Geocode Function
 
@@ -269,7 +269,9 @@ if (resp_status(geo_response) == 200) {
 
 ```
 
-{Question: Why wrap as.character() around the date range?}
+*Discussion: Why wrap as.character() around the date range?*
+
+A: If not, dates will mathematically evaluate and become integers.
 
 | JSON Key              | R Type    | Notes                      |
 |-----------------------|-----------|----------------------------|
@@ -285,13 +287,13 @@ The API returns a JSON object representing summary statistics for a specific loc
 
 The list contains other lists such as temperature, which have multiple items related to temperature.
 
-These all flatten into column names like precipitation.total, dew_point.afternoon when as.data.frame() is used to coerce.
+These all flatten into column names like `precipitation.total`, `dew_point.afternoon` when `as.data.frame()` is used to coerce.
 
 | temperature.min | temperature.max | humidity.morning | wind.max | wind.direction | precipitation.total | date | city |
-|---------|---------|---------|---------|---------|---------|---------|---------|
+|----|----|----|----|----|----|----|----|
 | 50.1 | 75.6 | 80 | 12.3 | 270 | 0.5 | 2025-04-23 | San Luis Obispo |
 
-{Any thoughts at this point? What benefits do we get from inspecting the data structure?}
+*Discussion: Any thoughts at this point? What benefits do we get from inspecting the data structure?*
 
 ## Function: Previous Weather
 
@@ -383,7 +385,7 @@ if (resp_status(geo_response) == 200) {
 }
 ```
 
-{Question: What is UTF-8 encoding?}
+*Discussion: What is UTF-8 encoding?*
 
 ```{r}
 prev_weather("San Luis Obispo", 4)
@@ -416,7 +418,6 @@ library(rnaturalearthdata)
 ```
 
 ```{r}
-#sf_map <- function(cities)
 cities <- c("San Luis Obispo", "Santa Barbara", "San Francisco")
 
 # Function to get coordinates + weather summary
@@ -487,21 +488,4 @@ ggplot() +
     subtitle = paste("Date:", Sys.Date())
   ) +
   theme_minimal()
-
-```
-
-\*\* Code with less dependencies
-
-```{r}
-#| eval: false
-ggplot() +
-  geom_sf(data = weather_sf, aes(color = temp_max), size = 6) +
-  geom_sf_label(data = weather_sf, aes(label = city), nudge_y = 0.5, size = 4) +
-  scale_color_viridis_c(option = "plasma", name = "High Temp (°F)") +
-  labs(
-    title = "California City Temperatures",
-    subtitle = paste("Date:", Sys.Date())
-  ) +
-theme_minimal()
-
 ```
