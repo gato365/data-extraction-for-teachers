@@ -1,5 +1,5 @@
 ---
-title: "Session 3: Extraction of NFL Data - HTML Scraping"
+title: "Extraction of NFL Data - HTML"
 author: "Ciera Millard"
 date: "`r Sys.Date()`"
 output: html_document
@@ -68,26 +68,41 @@ webpage <- generic_url |> rvest::read_html()
 
 -   When you run `read_html(url)`, it returns an HTML node pointer, not
     human-readable content.
--   This pointer references the structure of the web page in memory, but
-    doesn't display actual text or data.
--   If you try to print this object directly, you'll see something such
-    as:\
-    `webpage[[1]] <pointer: 0x00000225...>`
 
 <!-- -->
 
+-    This pointer references the structure of the web page in memory,
+    but doesn't display actual text or data in R.
+
+<!-- -->
+
+-    If you try to print this object directly, you'll see something such
+    as:\
+    `webpage[[1]] <pointer: 0x00000225...>`
+
 -   R is showing **memory addresses** of HTML elements, not the content.
 
--   This is because the HTML content must still be **parsed** or
+<!-- -->
+
+-    This is because the HTML content must still be **parsed** or
     **extracted**.
 
 Use `rvest`!
 
 -   `html_table()` : extracts data from `<table>` elements.
--   `html_text()` : extracts plain text from HTML nodes.
--   `html_nodes()` or `html_elements()` : selects multiple nodes using
+
+<!-- -->
+
+-    `html_text()` : extracts plain text from HTML nodes.
+
+<!-- -->
+
+-    `html_nodes()` or `html_elements()` : selects multiple nodes using
     CSS or XPath.
--   `html_element()` : selects a single node.
+
+<!-- -->
+
+-    `html_element()` : selects a single node.
 
 *Discussion*: *Why do you think web scraping tools separate “structure”
 from “content”? What are the pros and cons of working with HTML nodes

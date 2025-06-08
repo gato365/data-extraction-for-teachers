@@ -1,6 +1,7 @@
 ---
-title: "Extraction_FinalActivity"
+title: "Session 4: Final Activity"
 author: "Ciera Millard"
+date: "`r Sys.Date()`"
 format: html
 ---
 
@@ -181,7 +182,7 @@ ggplot(iowa_map_filled) +
   theme_minimal(base_size = 14)
 ```
 
-*Ideas improvement:*
+*Ideas to expand this visualization:*
 
 \- Add interactivity with `plotly`
 

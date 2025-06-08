@@ -1,5 +1,5 @@
 ---
-title: "Session 2: Weather Data  - OpenWeatherAPI"
+title: "Weather Data  - OpenWeatherAPI"
 author: "Ciera Millard"
 date: "`r Sys.Date()`"
 output: html_document
@@ -141,20 +141,20 @@ geo_response <- req_perform(request(geo_url))
  # Step 4: If the status code is 200 (OK), use resp_body_json() to parse our response and as.data.frame to coerce it to data.frame.
 
 if (resp_status(geo_response) == 200) {
-  geo_data_df <- resp_body_json(geo_response) |> 
+  geo_data <- resp_body_json(geo_response) |> 
     as.data.frame()
   
   
 # Step 5: Assess if the output has 0 length, meaning no result. If so, stop and display an error message.  
   
-  if (length(geo_data_df) == 0) {
+  if (length(geo_data) == 0) {
     stop("City not found. Please check the city name.")
   }
   
 # Step 6: Assign latitude and longitude to variables, and use round() to clip it down to 2 decimal places.
   
-  lat <- round(geo_data_df$lat, digits = 2)
-  lon <- round(geo_data_df$lon, digits = 2)
+  lat <- round(geo_data$lat, digits = 2)
+  lon <- round(geo_data$lon, digits = 2)
   
 # Step 7: Print a string displaying the city name and latitude / longitude.  
   
@@ -170,10 +170,6 @@ if (resp_status(geo_response) == 200) {
 ```{r}
 geocode("Ames, IA, USA")
 ```
-
-Get Coordinates for this City:
-
-![Hint: This is Central Park (cuddlynest.com)](images/clipboard-2634591783.jpeg)
 
 # Obtain Past 5 Days Weather Given City
 
@@ -295,7 +291,7 @@ The list contains other lists such as temperature, which have multiple items rel
 These all flatten into column names like `precipitation.total`, `dew_point.afternoon` when `as.data.frame()` is used to coerce.
 
 | temperature.min | temperature.max | wind.max.speed | date       | city            |
-|---------------|---------------|---------------|---------------|---------------|
+|----------|----------|----------|----------|----------|
 | 50.1            | 75.6            | 12.3           | 2025-04-23 | San Luis Obispo |
 
 *Discussion: Any thoughts at this point? What benefits do we get from inspecting the data structure?*
@@ -303,13 +299,13 @@ These all flatten into column names like `precipitation.total`, `dew_point.after
 ## Function: Previous Weather
 
 ```{r}
-prev_weather <- function(city, days){
+prev_weather <- function(city, numdays){
 
 # Step 1: Use Geocoding API to get lattitude and longitude
 # Step 1a: Construct URL query using city name and API key
 geo_url <- glue(
   "http://api.openweathermap.org/geo/1.0/direct?",
-  "q=", URLencode(city),
+  "q=", URLencode(city_name),
   "&limit=1&appid=", Sys.getenv("API_KEY")
 )
 # Step 1c: 
@@ -318,31 +314,31 @@ geo_response <- req_perform(request(geo_url))
 # Step 1d: If the status code is 200 (OK), use resp_body_json() to parse our response and as.data.frame to coerce it to data.frame.
 
 if (resp_status(geo_response) == 200) {
-  geo_data_df<- resp_body_json(geo_response) |> 
+  geo_data <- resp_body_json(geo_response) |> 
     as.data.frame()
   
 # Step 1e: Assess if the output has 0 length, meaning no result. If so, stop and display an error message.  
-  if (length(geo_data_df) == 0) {
+  if (length(geo_data) == 0) {
     stop("City not found. Please check the city name.")
   }
   
 # Step 1f: Assign latitude and longitude to variables, and use round() to clip it down to 2 decimal places.
   
-  lat <- round(geo_data_df$lat, digits = 2)
-  lon <- round(geo_data_df$lon, digits = 2)
+  lat <- round(geo_data$lat, digits = 2)
+  lon <- round(geo_data$lon, digits = 2)
   
 # Optional: Print a string displaying the city name and latitude / longitude.  
-  cat("Coordinates for", city, "-> Latitude:", lat, "Longitude:", lon, "\n")
+  cat("Coordinates for", city_name, "-> Latitude:", lat, "Longitude:", lon, "\n")
   
   
 # Step 2: Use the One Call API to get the past 5 days of weather data  
   
 # Step 2a: Define the date range using variable 'numdays'
 
-  date_range <- as.character(lubridate::today() - days(1:days))
+  date_range <- as.character(lubridate::today() - days(1:numdays))
   
 # Step 2b: Initialize data frame to hold the outputs. "hist_weather" for historical weather data.
-  hist_weather_df <- data.frame()
+  hist_weather <- data.frame()
   
 # Step 2c: Loop over dates and make an API call for each day. For every date in the date vector, supply latitude, longitude, the different date, API key, and provide unit preference.
   for (date in date_range) {
@@ -363,25 +359,25 @@ if (resp_status(geo_response) == 200) {
 # Step 2e: Use logic to evaluate the response and use fromJSON() to get the content from the JSON output and use "flatten = TRUE" to unnest the data.
     
     if (resp_status(weather_response) == 200) {
-      daily_weather_df <- resp_body_json(weather_response) |> 
+      daily_weather_parsed <- resp_body_json(weather_response) |> 
         as.data.frame()
       
 # Step 2f: Add date and city name columns using mutate()
-      daily_weather_df <- daily_weather_df |> 
+      daily_weather_parsed <- daily_weather_parsed |> 
         mutate(
-      city =city,
+      city =city_name,
       date = date)
       
       
 # Step 2g: Use bind_rows to add all the rows to the hist_weather data frame.
-      hist_weather_df <- bind_rows(hist_weather_df, daily_weather_df)
+      hist_weather <- bind_rows(hist_weather, daily_weather_parsed)
       
     } else {
 # Step 2i: Use logic (else) to print an error message for when weather data is not obtained.
       warning(paste("Failed to get weather for", date, "-", resp_status(weather_response)))
     }
   }
-  return(hist_weather_df)
+  return(hist_weather)
  
 } else {
   stop("Geocoding failed. Check your API key or city name.")
@@ -438,12 +434,12 @@ get_city_weather <- function(city, date = Sys.Date()) {
   geo_response <- req_perform(request((geo_url)))
   
   if (resp_status(geo_response) == 200) {
-    geo_data_df<- as.data.frame(resp_body_json(geo_response))
+    geo_data <- as.data.frame(resp_body_json(geo_response))
     
-    if (length(geo_data_df) == 0) return(NULL)
+    if (length(geo_data) == 0) return(NULL)
     
-    lat <- geo_data_df$lat
-    lon <- geo_data_df$lon
+    lat <- geo_data$lat
+    lon <- geo_data$lon
     
     weather_url <- glue(
       "https://api.openweathermap.org/data/3.0/onecall/day_summary?",
