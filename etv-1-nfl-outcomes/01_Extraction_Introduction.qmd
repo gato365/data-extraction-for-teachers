@@ -68,17 +68,25 @@ While analyzing data is comprised of many steps and processes, one of the first 
 
 This session serves as a discussion of the principles and reasoning behind learning these concepts and how they can benefit the classroom.
 
+\[Add Images\]
+
 ## Session 2: Getting Weather Data via OpenWeather API
 
 In this session, we dive into OpenWeather API and learn to use packages like httr2 to execute API calls. We will also discuss URLs, queries, data structures, and more.
+
+\[Add Images\]
 
 ## Session 3: Scraping NFL Sports Data
 
 In this session, we will use Pro-Football Reference to learn how to extract and clean HTML table data for use in statistical analysis and visualizations.
 
+\[Add Images\]
+
 ## Session 4: Putting it All Together (Project)
 
 In this project, we will use HTML scraping joined with the OpenWeather API to create our own cloropleth map of Iowa.
+
+\[Add Images\]
 
 ------------------------------------------------------------------------
 
