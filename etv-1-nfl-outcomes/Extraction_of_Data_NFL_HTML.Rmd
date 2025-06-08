@@ -122,6 +122,8 @@ The result is a list containing HTML table elements.
 Select the desired table, the 2023 Regular Season Table, which is the
 second table on the webpage. Use `purrr::pluck()` to select the table.
 
+![This is the table we are after](images/clipboard-2159826445.png)
+
 ```{r}
 # Step 3b: Pick the regular season game table (check structure visually)
 int_web_table <- web_tables |> purrr::pluck(2)
@@ -144,6 +146,8 @@ useful information.
 firstrow_names <- int_web_table[1, ] |> unlist() |> as.character()
 ```
 
+*Discussion: Why can't we use `dplyr slice()`?*
+
 ```{r}
 # Step 4b: Assign as column names
 colnames(int_web_table) <- firstrow_names
@@ -158,6 +162,11 @@ table_1 <- int_web_table[-1, ]
 # Step 4d: Clean the column names with janitor
 table_2 <- janitor::clean_names(table_1)
 ```
+
+Because these columns are neither labeled in the first row or the
+header, we must manually assign them names.
+
+![Notice the unlabeled columns?](images/clipboard-3625444988.png)
 
 ```{r}
 # Step 4e: Fix problem cases with no useful data within the header or first rows
@@ -174,6 +183,10 @@ table_3 <- table_2 |>
 ------------------------------------------------------------------------
 
 ## Step 5: Clean Table and Convert Data Types
+
+Here we will use `dplyr` `select` and `filter` to drop columns that are
+not relevant, as well as the Bye Week where the team does not play a
+game.
 
 ```{r}
 # Step 5: Drop irrelevant columns and rows, keep only valid games
@@ -216,9 +229,12 @@ plotting?*
 
 ## Step 6: Wrap Process in a Function (Year Only)
 
+By putting it all together, we can input a year for the Washington
+Commanders and get an extracted and cleaned table out.
+
 ```{r}
 # Step 6: Year-only function
-fn_year <- function(year) {
+was_year <- function(year) {
   # Step 1: Define team and year
 team_name <- "was"
 
@@ -282,10 +298,13 @@ table_7 <- table_6 |>
 Test Year Only Function
 
 ```{r}
-head(fn_year(2022))
+head(was_year(2022))
 ```
 
 ## Step 7: Wrap Process in Full Function (Team + Year)
+
+Now we will do the same task but while supplying `team_name` as a
+parameter as well as `year`.
 
 ```{r}
 # Step 7: Generalized function
@@ -348,7 +367,7 @@ table_7 <- table_6 |>
 }
 ```
 
-Test Function
+Test Function (Team + Year)
 
 ```{r}
 head(fn_team_year("sfo", 2024))
@@ -385,162 +404,5 @@ ggplot(fn_team_year("sfo", 2024), aes(x = game_location, y = tm, fill = game_loc
   theme_minimal()
 ```
 
-*Bonus: How might you visualize win/loss trends over the season? Could
-you include opponent information or passing yards?*
-
-# Session 3: HTML Web Scraping: NFL Data Extraction
-
-[Pro Football Reference Changed the format of the HTML table... yay!
-(maybe httr2 tools can be used?)]
-
-[Find places to ask questions, comments, discussions]
-
-```{r}
-#| eval: false
-
-library(rvest)      # Web scraping
-library(dplyr)      # Data manipulation
-library(stringr)    # String modification
-library(rlang)      # Support / evaluation
-library(purrr)      # Enchanced iteration
-library(ggplot2)    # Visualizations
-```
-
-## Step 1: Simplistic Call
-
-Construct the URL by using the URL and filling in the team name and
-year.
-
-```{r}
-#| eval: false
-## Creation of URL
-team_name <- "was"
-year <- 2023
-generic_url <- paste0("https://www.pro-football-reference.com/teams/",team_name,"/",year,".htm#all_games")
-```
-
-```{r}
-## Special Note 1: Maybe Optional (Further Research is needed on its relevance)
-# request_details <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-# response <- GET(url, user_agent(request_details),timeout(20))
-```
-
-## Step 3: Get HTML Tables
-
-## Step 5: Consolidate Column Information
-
-Now with our table selected, we need to find a way to include
-information from the header as well as the first row.
-
-Our first row contains our column names and the header contains the
-column categories. In order to preserve this information, we will
-combine the names of the header and first row. To do this, we will
-create 2 vectors with the names, and then paste them together with a
-separator of `_`. Next, using `str_trim()` and `str_to_lower()`, we
-convert the names to snake case, or lower case with spaces represented
-as underscore.
-
-```{r}
-#| eval: false
-inital_col_names <- colnames(int_web_table)
-
-first_row_names <- slice_head(int_web_table)
-# CANNOT USE SLICE: CANNOT TRANSFORM A DATA FRAME WITH NA OR "" NAMES
-
-new_colnames <- paste(inital_col_names,first_row_names,sep="_") %>% 
-  str_trim() %>% 
-  str_to_lower()
-```
-
-## Step 6: Fix Problem Columns
-
-We have 2 issues with this process, one being that column 6 does not
-contain any values in the first row or the header. As such, we will
-assign a name to this column. Additionally, column 21 and column 15 have
-a duplicate name, but one refers to passing yards and the other to
-passing yards sacked. We will manually assign both of these to names to
-avoid future issue, but this is not the preferred method of addressing
-these issues.
-
-{Question: What limitations does this pose?}
-
-```{r}
-#| eval: false
-new_colnames[6] <- "game_location"
-new_colnames[21] <- "passing_yds_sk"
-
-```
-
-## Step 7: Assign names to the data frame
-
-Now we will take our new column names vector and assign it using
-colnames() as the column names for the data frame.
-
-```{r}
-#| eval: false
-colnames(int_web_table) <- new_colnames
-```
-
-## Step 8: Remove extraneous rows
-
-Here we will use the dplyr::slice() function from dplyr to clip off the
-first and last rows, as they do not contain useful information. We will
-do this by selecting all of the content between those rows.
-
-```{r}
-#| eval: false
-web_table1 <- int_web_table %>% 
- dplyr::slice(2:18)
-```
-
-## Step 9: Set Numeric Columns Correctly
-
-Here we will use dplyr mutate() and across() to modify multiple columns
-and use a Regex (regular expression) pattern to look for numeric-looking
-strings and turn them into numeric types using as.numeric.
-
-```{r}
-#| eval: false
-web_table2 <- web_table1 %>% 
- mutate(
-    across(where(~ all(grepl("^\\s*-?\\d*\\.?\\d+\\s*$", .x))), ~ as.numeric(.)))
-```
-
-## Step 10: Address Non-Numeric Columns
-
-Now, we will use mutate() again to change the score_rslt type to a
-factor, and use case_when() to make more sense of the game_location
-column. By identifying when '\@' appears, we can change it to away, and
-the opposite '' as home. We also change this to a factor. Lastly, we
-filter out the last column which is an aggregate column by filtering out
-games with no date.
-
-```{r}
-#| eval: false
-web_table3 <- web_table2  %>% 
-
-  mutate(
-    score_rslt = as.factor(score_rslt),
-    game_location = case_when(
-      game_location == "@" ~ "away",
-      game_location == "" ~ "home",
-      TRUE ~ game_location
-    ) %>% 
-      as.factor()
-  )
-```
-
-{Question: Why change to a factor? What benefits could that have?}
-
-## Step 11: Finish Cleaning Code and Data Frame
-
-Lets clean up the column names again, by removing the underscore (\_)
-from the front of the columns. Using dplyr::rename_with() and
-stringr::str_replace(), as well as dplyr::starts_with(), we can remove
-unnecessary underscores.
-
-```{r}
-#| eval: false
-web_table4 <- web_table3 |> 
-  dplyr::rename_with(~ str_replace(., "^_", ""), .cols = starts_with("_")
-```
+*Discussion: How might you visualize win/loss trends over the season?
+Could you include opponent information or passing yards?*

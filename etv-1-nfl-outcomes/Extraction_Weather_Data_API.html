@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ciera Millard">
-<meta name="dcterms.date" content="2025-06-02">
+<meta name="dcterms.date" content="2025-06-08">
 
 <title>Weather Data - OpenWeatherAPI</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 2, 2025</p>
+      <p class="date">June 8, 2025</p>
     </div>
   </div>
   
@@ -116,8 +116,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption class="figure-caption">API Call (PhoenixNap.com)</figcaption>
 </figure>
 </div>
-<p>[use _lst, _df] (need clarity)</p>
-<p>NOTE: [it seems like httr2 has A LOT of functionality that could reduce code and use of things like jsonlite, etc. worth investigating]</p>
 <p>Overview of different offerings from OpenWeather:</p>
 <table class="table">
 <colgroup>
@@ -129,28 +127,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <thead>
 <tr class="header">
 <th>Feature</th>
-<th><strong>Geocoding API</strong></th>
 <th><strong>Current Weather API</strong></th>
+<th><strong>Geocoding API</strong></th>
 <th><strong>One Call API</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><strong>Purpose</strong></td>
-<td>Convert city names to coordinates</td>
 <td>Get current weather for a city or location</td>
+<td>Convert city names to coordinates</td>
 <td>Get full weather data for a coordinate</td>
 </tr>
 <tr class="even">
 <td><strong>Input</strong></td>
-<td>City name or zip code</td>
 <td>City name, city ID, coordinates, or zip</td>
+<td>City name or zip code</td>
 <td>Latitude &amp; Longitude</td>
 </tr>
 <tr class="odd">
 <td><strong>Output</strong></td>
-<td>Location info (lat/lon, country, etc.)</td>
 <td>Temperature, conditions, wind, etc.</td>
+<td>Location info (lat/lon, country, etc.)</td>
 <td>Current, hourly, daily, alerts (optionally filtered)</td>
 </tr>
 <tr class="even">
@@ -161,20 +159,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td><strong>Units supported</strong></td>
-<td>N/A</td>
 <td>standard, metric, imperial</td>
+<td>N/A</td>
 <td>standard, metric, imperial</td>
 </tr>
 <tr class="even">
 <td><strong>Endpoint URL</strong></td>
-<td><code>/geo/1.0/direct</code></td>
 <td><code>/data/2.5/weather</code></td>
+<td><code>/geo/1.0/direct</code></td>
 <td><code>/data/3.0/onecall</code></td>
 </tr>
 <tr class="odd">
 <td><strong>Use case</strong></td>
-<td>Finding lat/lon of cities</td>
 <td>Lightweight current conditions</td>
+<td>Finding lat/lon of cities</td>
 <td>Complete weather view</td>
 </tr>
 </tbody>
@@ -211,16 +209,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="step-2-create-api-request-url" class="level2">
 <h2 class="anchored" data-anchor-id="step-2-create-api-request-url">Step 2: Create API Request URL</h2>
 <p>Using <code>glue()</code> to attach the base URL, the city name, the API Key, and units together and assign it to <code>current_weather_url</code></p>
-<p>[Actual URL vs Query format, learn more about URL HTML format] (need clarity on this)</p>
 <p><em>Discussion: What is the ‘query’ format vs the URL glue form?</em></p>
 <p>A: Query format can specify parameters in a more human and modular way, but URL format fosters understanding of HTML and web addresses.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-67401640.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">URL with Query breakdown shown (OneSEOCompany.com)</figcaption>
+</figure>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>current_weather_url <span class="ot">&lt;-</span> <span class="fu">glue</span>(<span class="st">"https://api.openweathermap.org/data/2.5/weather?"</span>,</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"q="</span>, <span class="fu">URLencode</span>(city_name),</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"&amp;appid="</span>, <span class="fu">Sys.getenv</span>(<span class="st">"API_KEY"</span>),</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"&amp;units="</span>, <span class="st">"imperial"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Other Method</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#current_query &lt;- list(q = city_name, appid = api_key, units = "imperial")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Query Method</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a> <span class="co"># req &lt;- request("https://api.openweathermap.org/data/2.5/weather") |&gt; </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>   <span class="co">#req_url_query(</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     <span class="co">#q = city_name,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>     <span class="co">#appid = Sys.getenv("API_KEY"),</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>     <span class="co">#units = "imperial"</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">#)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="step-3-call-api" class="level2">
@@ -241,7 +249,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="step-4-parse-response">Step 4: Parse Response</h2>
 <p>Using logic, we execute the below code if the status code is 200 (meaning OK, successful). We use <code>httr2::resp_status()</code> to identify the status code. The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being “nested.”</p>
 <p>Then, using <code>httr2::resp_body_json()</code>, we get our list of nested lists.</p>
-<p><code>as.data.frame()</code> converts this list into a data.frame object, and then we print the data frame.</p>
+<p><code>as.data.frame()</code> converts this list into a <code>data.frame</code> object, and then we print the data frame.</p>
 <p>If the status code is not 200, we print a message stating that the process has failed.</p>
 <p><em>Discussion: What are other status codes we know? What about 404?</em></p>
 <div class="cell">
@@ -250,15 +258,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">resp_body_json</span>(response)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data frame directly</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  currweather <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(result)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  currweather_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(result)</span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">select</span>(currweather,name, coord.lon, coord.lat, weather.main, main.temp))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">select</span>(currweather_df, name, coord.lon, coord.lat, weather.main, main.temp))</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Failed. Status code:"</span>, <span class="fu">resp_status</span>(response), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             name coord.lon coord.lat weather.main main.temp
-1 San Luis Obispo -120.5343   35.3666       Clouds     64.33</code></pre>
+1 San Luis Obispo -120.5343   35.3666        Clear     72.73</code></pre>
 </div>
 </div>
 </section>
@@ -323,6 +331,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="obtain-past-5-days-weather-given-city" class="level1">
 <h1>Obtain Past 5 Days Weather Given City</h1>
+<p>Now, using Geocoding API, as well as the OneCall 3.0 API, we will get the past 5 days of weather for a city of our choosing.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Use Geocoding API to get lattitude and longitude</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1a: Construct URL query using city name and API key</span></span>
@@ -346,18 +355,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1d: If the status code is 200 (OK), use resp_body_json() to parse our response and as.data.frame to coerce it to data.frame.</span></span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">resp_status</span>(geo_response) <span class="sc">==</span> <span class="dv">200</span>) {</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  geo_data <span class="ot">&lt;-</span> <span class="fu">resp_body_json</span>(geo_response) <span class="sc">|&gt;</span> </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  geo_data_df <span class="ot">&lt;-</span> <span class="fu">resp_body_json</span>(geo_response) <span class="sc">|&gt;</span> </span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.frame</span>()</span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1e: Assess if the output has 0 length, meaning no result. If so, stop and display an error message.  </span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(geo_data) <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(geo_data_df) <span class="sc">==</span> <span class="dv">0</span>) {</span>
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"City not found. Please check the city name."</span>)</span>
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1f: Assign latitude and longitude to variables, and use round() to clip it down to 2 decimal places.</span></span>
 <span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  lat <span class="ot">&lt;-</span> <span class="fu">round</span>(geo_data<span class="sc">$</span>lat, <span class="at">digits =</span> <span class="dv">2</span>)</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  lon <span class="ot">&lt;-</span> <span class="fu">round</span>(geo_data<span class="sc">$</span>lon, <span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  lat <span class="ot">&lt;-</span> <span class="fu">round</span>(geo_data_df<span class="sc">$</span>lat, <span class="at">digits =</span> <span class="dv">2</span>)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>  lon <span class="ot">&lt;-</span> <span class="fu">round</span>(geo_data_df<span class="sc">$</span>lon, <span class="at">digits =</span> <span class="dv">2</span>)</span>
 <span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: Print a string displaying the city name and latitude / longitude.  </span></span>
 <span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Coordinates for"</span>, city_name, <span class="st">"-&gt; Latitude:"</span>, lat, <span class="st">"Longitude:"</span>, lon, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
@@ -370,7 +379,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>  date_range <span class="ot">&lt;-</span> <span class="fu">as.character</span>(lubridate<span class="sc">::</span><span class="fu">today</span>() <span class="sc">-</span> <span class="fu">days</span>(<span class="dv">1</span><span class="sc">:</span>numdays))</span>
 <span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2b: Initialize data frame to hold the outputs. "hist_weather" for historical weather data.</span></span>
-<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  hist_weather <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  hist_weather_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2c: Loop over dates and make an API call for each day. For every date in the date vector, supply latitude, longitude, the different date, API key, and provide unit preference.</span></span>
 <span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (date <span class="cf">in</span> date_range) {</span>
@@ -391,18 +400,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2e: Use logic to evaluate the response and use resp_body_JSON() and as.data.frame. to parse our response and coerce to data.frame.</span></span>
 <span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">resp_status</span>(weather_response) <span class="sc">==</span> <span class="dv">200</span>) {</span>
-<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>      daily_weather_parsed <span class="ot">&lt;-</span> <span class="fu">resp_body_json</span>(weather_response) <span class="sc">|&gt;</span> </span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>      daily_weather_df <span class="ot">&lt;-</span> <span class="fu">resp_body_json</span>(weather_response) <span class="sc">|&gt;</span> </span>
 <span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>        <span class="fu">as.data.frame</span>()</span>
 <span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2f: Add date and city name columns using mutate()</span></span>
-<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>      daily_weather_parsed <span class="ot">&lt;-</span> daily_weather_parsed <span class="sc">|&gt;</span> </span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>      daily_weather_df <span class="ot">&lt;-</span> daily_weather_df <span class="sc">|&gt;</span> </span>
 <span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(</span>
 <span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>      <span class="at">city =</span>city_name,</span>
 <span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">date =</span> date)</span>
 <span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2g: Use bind_rows to add all the rows to the hist_weather data frame.</span></span>
-<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>      hist_weather <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(hist_weather, daily_weather_parsed)</span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>      hist_weather_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(hist_weather_df, daily_weather_df)</span>
 <span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>      </span>
 <span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
 <span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2i: Use logic (else) to print an error message for when weather data is not obtained.</span></span>
@@ -410,7 +419,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(hist_weather)</span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(hist_weather_df)</span>
 <span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
 <span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"Geocoding failed. Check your API key or city name."</span>)</span>
@@ -418,29 +427,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>Coordinates for San Luis Obispo -&gt; Latitude: 35.28 Longitude: -120.66 
     lat     lon     tz       date    units afternoon afternoon.1 total
-1 35.28 -120.66 -07:00 2025-06-01 imperial         0          57     0
-2 35.28 -120.66 -07:00 2025-05-31 imperial        24          47     0
-3 35.28 -120.66 -07:00 2025-05-30 imperial         0          43     0
-4 35.28 -120.66 -07:00 2025-05-29 imperial         0          41     0
-5 35.28 -120.66 -07:00 2025-05-28 imperial         0          62     0
+1 35.28 -120.66 -07:00 2025-06-07 imperial         0          69     0
+2 35.28 -120.66 -07:00 2025-06-06 imperial         0          72     0
+3 35.28 -120.66 -07:00 2025-06-05 imperial       100          72     0
+4 35.28 -120.66 -07:00 2025-06-04 imperial         0          67     0
+5 35.28 -120.66 -07:00 2025-06-03 imperial         0          58     0
   temperature.min temperature.max temperature.afternoon temperature.night
-1           52.83           76.75                 74.57             58.57
-2           53.44           92.48                 84.72             61.66
-3           48.04           87.98                 85.86             56.21
-4           49.98           79.79                 76.91             52.09
-5           52.02           67.96                 67.96             53.26
+1           50.68           75.72                 70.27             54.95
+2           54.68           71.51                 66.97             55.04
+3           54.39           69.15                 64.35             55.00
+4           54.10           70.09                 68.95             55.49
+5           54.91           72.57                 72.57             56.62
   temperature.evening temperature.morning afternoon.2 wind.max.speed
-1               61.18               53.47        1011          16.11
-2               74.77               55.60        1012          12.66
-3               73.62               48.04        1013           8.05
-4               70.25               51.64        1013          19.57
-5               61.74               52.45        1013          17.27
+1               64.04               50.68        1015          16.11
+2               66.13               55.11        1014          11.50
+3               64.47               54.45        1013          11.50
+4               62.67               54.23        1012          10.36
+5               62.74               54.93        1014          14.97
   wind.max.direction            city
 1                310 San Luis Obispo
-2                310 San Luis Obispo
+2                300 San Luis Obispo
 3                220 San Luis Obispo
-4                300 San Luis Obispo
-5                300 San Luis Obispo</code></pre>
+4                310 San Luis Obispo
+5                310 San Luis Obispo</code></pre>
 </div>
 </div>
 <p><em>Discussion: Why wrap as.character() around the date range?</em></p>
@@ -465,19 +474,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Maximum temp for the day</td>
 </tr>
 <tr class="odd">
-<td><code>humidity.morning</code></td>
-<td>integer</td>
-<td>Morning humidity %</td>
-</tr>
-<tr class="even">
-<td><code>wind.max</code></td>
+<td><code>wind.max.speed</code></td>
 <td>numeric</td>
 <td>Peak wind speed</td>
-</tr>
-<tr class="odd">
-<td><code>precipitation.total</code></td>
-<td>numeric</td>
-<td>Rain/snow total (mm or in)</td>
 </tr>
 <tr class="even">
 <td><code>date</code> (added)</td>
@@ -496,23 +495,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>These all flatten into column names like <code>precipitation.total</code>, <code>dew_point.afternoon</code> when <code>as.data.frame()</code> is used to coerce.</p>
 <table class="table">
 <colgroup>
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>temperature.min</th>
 <th>temperature.max</th>
-<th>humidity.morning</th>
-<th>wind.max</th>
-<th>wind.direction</th>
-<th>precipitation.total</th>
+<th>wind.max.speed</th>
 <th>date</th>
 <th>city</th>
 </tr>
@@ -521,10 +514,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td>50.1</td>
 <td>75.6</td>
-<td>80</td>
 <td>12.3</td>
-<td>270</td>
-<td>0.5</td>
 <td>2025-04-23</td>
 <td>San Luis Obispo</td>
 </tr>
@@ -621,6 +611,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><em>Discussion: What is UTF-8 encoding?</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-3984593292.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Comparing Unicode and UTF-8 (Hello-Algo.com)</figcaption>
+</figure>
+</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prev_weather</span>(<span class="st">"San Luis Obispo"</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -628,25 +624,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    lat     lon     tz       date    units afternoon afternoon.1 total
-1 35.28 -120.66 -07:00 2025-06-01 imperial         0          57     0
-2 35.28 -120.66 -07:00 2025-05-31 imperial        24          47     0
-3 35.28 -120.66 -07:00 2025-05-30 imperial         0          43     0
-4 35.28 -120.66 -07:00 2025-05-29 imperial         0          41     0
+1 35.28 -120.66 -07:00 2025-06-07 imperial         0          69     0
+2 35.28 -120.66 -07:00 2025-06-06 imperial         0          72     0
+3 35.28 -120.66 -07:00 2025-06-05 imperial       100          72     0
+4 35.28 -120.66 -07:00 2025-06-04 imperial         0          67     0
   temperature.min temperature.max temperature.afternoon temperature.night
-1           52.83           76.75                 74.57             58.57
-2           53.44           92.48                 84.72             61.66
-3           48.04           87.98                 85.86             56.21
-4           49.98           79.79                 76.91             52.09
+1           50.68           75.72                 70.27             54.95
+2           54.68           71.51                 66.97             55.04
+3           54.39           69.15                 64.35             55.00
+4           54.10           70.09                 68.95             55.49
   temperature.evening temperature.morning afternoon.2 wind.max.speed
-1               61.18               53.47        1011          16.11
-2               74.77               55.60        1012          12.66
-3               73.62               48.04        1013           8.05
-4               70.25               51.64        1013          19.57
+1               64.04               50.68        1015          16.11
+2               66.13               55.11        1014          11.50
+3               64.47               54.45        1013          11.50
+4               62.67               54.23        1012          10.36
   wind.max.direction            city
 1                310 San Luis Obispo
-2                310 San Luis Obispo
+2                300 San Luis Obispo
 3                220 San Luis Obispo
-4                300 San Luis Obispo</code></pre>
+4                310 San Luis Obispo</code></pre>
 </div>
 </div>
 </section>
@@ -753,6 +749,12 @@ give correct results for longitude/latitude data</code></pre>
 <div class="cell-output-display">
 <p><img src="Extraction_Weather_Data_API_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-2924865228.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Map of California With Cities</figcaption>
+</figure>
 </div>
 </section>
 

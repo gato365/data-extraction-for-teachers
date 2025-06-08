@@ -8,6 +8,8 @@ format: html
 
 Now that we have worked with HTML elements and API calls, let’s put these skills together to create a **weather map of Iowa counties** based on the maximum temperature at each county’s administrative seat (county seat).
 
+![Chloropleth Map (geoapify.com)](images/clipboard-3021085322.png)
+
 ------------------------------------------------------------------------
 
 ## Step 1: Load Libraries
@@ -73,6 +75,8 @@ county_seats_df <- table1 |>
 *What would happen if we do not?*
 
 A: This helps geocoding APIs return accurate coordinates. (Just "Ames" returns a rural town of 600 in Northern France)
+
+![Not Exactly Ames, IA, USA. Church of Ames, France (Wikipedia)](images/clipboard-3492188893.jpeg)
 
 ------------------------------------------------------------------------
 

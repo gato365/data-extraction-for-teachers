@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -76,34 +110,226 @@ ul.task-list li input[type="checkbox"] {
 <p>To bridge this gap, it is essential that we prepare students to meet real-world data challenges by equipping them with the skills to independently extract, process, and analyze data. While it is often sufficient to provide static datasets for demonstrations and exercises, careers in modern data science will demand the ability to find and retrieve data from live sources, not simply rely on what’s been prepackaged.</p>
 <section id="apis" class="level2">
 <h2 class="anchored" data-anchor-id="apis">APIs</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1951848651.jpeg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Flow of Data via API (vrogue.co)</figcaption>
+</figure>
+</div>
 <p>APIs (Application Programming Interfaces) allow programs to request data directly from external servers in a structured format (most often JSON). Learning to work with web APIs teaches students not just to observe data, but to understand how to:</p>
-<p>Locate relevant APIs (e.g., weather data from OpenWeatherMap)</p>
-<p>Construct their own API requests (instead of relying on pre-built packages)</p>
-<p>Interpret the response structure (e.g., nested JSON)</p>
-<p>Transform the returned data into usable formats for analysis</p>
+<ul>
+<li><p>Locate relevant APIs (e.g., weather data from OpenWeatherMap)</p></li>
+<li><p>Construct their own API requests (instead of relying on pre-built packages)</p></li>
+<li><p>Interpret the response structure (e.g., nested JSON)</p></li>
+<li><p>Transform the returned data into usable formats for analysis</p></li>
+</ul>
 <p>This pushes students to explore data fully, recognize potential limitations, biases, or technical issues in the data structure, and move beyond canned examples.</p>
+<p>Furthermore, as APIs often serve as the channel which to access and retrieve information from databases. In an evolving landscape where more and more data is created and captured with each passing day, being able to leverage the information stored in databases is more critical than ever.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://www.statista.com/statistics/871513/worldwide-data-created/"><img src="images/clipboard-272118191.png" class="img-fluid figure-img"></a></p>
+<figcaption class="figure-caption">Volume of Data Created (Statista)</figcaption>
+</figure>
+</div>
 </section>
 <section id="html-web-scraping" class="level2">
 <h2 class="anchored" data-anchor-id="html-web-scraping">HTML Web Scraping</h2>
 <p>Much like APIs, lots of relevant and useful information is available directly on webpages, which are readable by humans rather than APIs which are designed for machine access. By learning this skill, students are able to:</p>
-<p>Locate relevant sources (e.g., sports data from Pro Football Reference)</p>
-<p>Understand how websites deliver and organize content</p>
-<p>Transform and clean data for analysis and visualization</p>
+<ul>
+<li><p>Locate relevant sources (e.g., sports data from Pro Football Reference)</p></li>
+<li><p>Understand how websites deliver and organize content</p></li>
+<li><p>Transform and clean data for analysis and visualization</p></li>
+</ul>
+<hr>
 </section>
+</section>
+<section id="our-focus-extraction" class="level1">
+<h1>Our Focus: Extraction</h1>
+<p>While analyzing data is comprised of many steps and processes, one of the first and most foundational of these is <em>extracting the data</em>. Here are some common ways data can be extracted.</p>
+<ul>
+<li><p>CSV (comma-seperated values) files</p></li>
+<li><p>Excel files (.xlsx, .xlsb, .xlsm)</p></li>
+<li><p>Pre-loaded data frames in R (mtcars)</p></li>
+<li><p>URLs to GitHub repositories</p></li>
+<li><p><strong>HTML (Web Extraction/Scraping)</strong></p></li>
+<li><p><strong>API requests (Databases)</strong></p></li>
+</ul>
 </section>
 <section id="workshop-agenda" class="level1">
 <h1>Workshop Agenda</h1>
 <section id="session-1-introduction-1" class="level2">
 <h2 class="anchored" data-anchor-id="session-1-introduction-1">Session 1: Introduction</h2>
+<p>This session serves as a discussion of the principles and reasoning behind learning these concepts and how they can benefit the classroom.</p>
 </section>
 <section id="session-2-getting-weather-data-via-openweather-api" class="level2">
 <h2 class="anchored" data-anchor-id="session-2-getting-weather-data-via-openweather-api">Session 2: Getting Weather Data via OpenWeather API</h2>
+<p>In this session, we dive into OpenWeather API and learn to use packages like httr2 to execute API calls. We will also discuss URLs, queries, data structures, and more.</p>
 </section>
 <section id="session-3-scraping-nfl-sports-data" class="level2">
 <h2 class="anchored" data-anchor-id="session-3-scraping-nfl-sports-data">Session 3: Scraping NFL Sports Data</h2>
+<p>In this session, we will use Pro-Football Reference to learn how to extract and clean HTML table data for use in statistical analysis and visualizations.</p>
 </section>
 <section id="session-4-putting-it-all-together-project" class="level2">
 <h2 class="anchored" data-anchor-id="session-4-putting-it-all-together-project">Session 4: Putting it All Together (Project)</h2>
+<p>In this project, we will use HTML scraping joined with the OpenWeather API to create our own cloropleth map of Iowa.</p>
+<hr>
+</section>
+</section>
+<section id="introduction-to-libraries" class="level1">
+<h1>Introduction to Libraries</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)      <span class="co"># Web scraping</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)      <span class="co"># Data manipulation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)    <span class="co"># String cleaning</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rlang)      <span class="co"># Advanced evaluation</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)      <span class="co"># Functional tools</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'purrr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:rlang':
+
+    %@%, flatten, flatten_chr, flatten_dbl, flatten_int, flatten_lgl,
+    flatten_raw, invoke, splice</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)    <span class="co"># Visualizations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)      <span class="co"># Makes web requests</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'httr2' was built under R version 4.3.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)     <span class="co"># Easier and prettier data frames</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)  <span class="co"># Handles dates</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lubridate'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    date, intersect, setdiff, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dotenv)     <span class="co"># Loads environment variables from .Renviron</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)       <span class="co"># Easier string concatenation</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris)     <span class="co"># U.S. shapefiles for mapping</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>To enable caching of data, set `options(tigris_use_cache = TRUE)`
+in your R script or .Rprofile.</code></pre>
+</div>
+</div>
+<p>Below is a list of R packages used in this project, along with descriptions of what each package is used for.</p>
+<hr>
+<section id="rvest" class="level3">
+<h3 class="anchored" data-anchor-id="rvest"><code>rvest</code></h3>
+<ul>
+<li>Used for web scraping: parses HTML/XML documents into a navigable format.</li>
+<li>Extracts structured data using CSS selectors, XPath, or tag-based search (<code>html_table()</code>, <code>html_text()</code>, etc.).</li>
+</ul>
+<hr>
+</section>
+<section id="dplyr" class="level3">
+<h3 class="anchored" data-anchor-id="dplyr"><code>dplyr</code></h3>
+<ul>
+<li>Core package for tidyverse-style data manipulation (<code>filter()</code>, <code>mutate()</code>, <code>select()</code>, etc.).</li>
+<li>Supports chaining operations with <code>%&gt;%</code> / |<code>&gt;</code>, making data workflows readable and efficient.</li>
+</ul>
+<hr>
+</section>
+<section id="stringr" class="level3">
+<h3 class="anchored" data-anchor-id="stringr"><code>stringr</code></h3>
+<ul>
+<li>Provides a consistent set of functions for string manipulation.</li>
+<li>Handles pattern matching, replacement, splitting, and formatting.</li>
+</ul>
+<hr>
+</section>
+<section id="rlang" class="level3">
+<h3 class="anchored" data-anchor-id="rlang"><code>rlang</code></h3>
+<ul>
+<li>Supports advanced evaluation and programming with tidyverse tools.</li>
+<li>Useful when writing custom functions that dynamically reference or modify variables.</li>
+</ul>
+<hr>
+</section>
+<section id="purrr" class="level3">
+<h3 class="anchored" data-anchor-id="purrr"><code>purrr</code></h3>
+<ul>
+<li>Enables functional programming with mapping tools like <code>map()</code>, <code>map_df()</code>, <code>walk()</code>, etc.</li>
+<li>Replaces (many) for-loops and supports clean iteration over lists and vectors.</li>
+</ul>
+<hr>
+</section>
+<section id="ggplot2" class="level3">
+<h3 class="anchored" data-anchor-id="ggplot2"><code>ggplot2</code></h3>
+<ul>
+<li>Graphics package for building layered, flexible visualizations.</li>
+<li>Supports various plot types, themes, scales, and faceting for data storytelling.</li>
+</ul>
+<hr>
+</section>
+<section id="httr2" class="level3">
+<h3 class="anchored" data-anchor-id="httr2"><code>httr2</code></h3>
+<ul>
+<li>Modern HTTP client designed for tidyverse-like API interaction.</li>
+<li>Replaces <code>httr</code> with a more intuitive and pipeable interface (<code>request() |&gt; req_perform()</code>).</li>
+</ul>
+<hr>
+</section>
+<section id="tibble" class="level3">
+<h3 class="anchored" data-anchor-id="tibble"><code>tibble</code></h3>
+<ul>
+<li>A modern rethinking of the <code>data.frame</code> that prints cleaner and behaves more predictably.</li>
+<li>Default in tidyverse workflows; avoids surprises like string-to-factor conversion.</li>
+</ul>
+<hr>
+</section>
+<section id="lubridate" class="level3">
+<h3 class="anchored" data-anchor-id="lubridate"><code>lubridate</code></h3>
+<ul>
+<li>Simplifies working with dates and times: parsing, formatting, and arithmetic.</li>
+<li>Makes it easy to extract components (e.g., month, weekday) and perform date math.</li>
+</ul>
+<hr>
+</section>
+<section id="dotenv" class="level3">
+<h3 class="anchored" data-anchor-id="dotenv"><code>dotenv</code></h3>
+<ul>
+<li>Loads environment variables from a <code>.env</code> or <code>.Renviron</code> file into R.</li>
+<li>Keeps sensitive data like API keys out of your scripts and version control.</li>
+</ul>
+<hr>
+</section>
+<section id="glue" class="level3">
+<h3 class="anchored" data-anchor-id="glue"><code>glue</code></h3>
+<ul>
+<li>Provides string interpolation (e.g., <code>glue("Hello {name}")</code>).</li>
+<li>Cleaner and safer than <code>paste()</code> for building URLs, messages, or SQL queries.</li>
+</ul>
+<hr>
+</section>
+<section id="tigris" class="level3">
+<h3 class="anchored" data-anchor-id="tigris"><code>tigris</code></h3>
+<ul>
+<li>Downloads shapefiles and geographic boundary data (e.g., counties, states) from the U.S. Census Bureau.</li>
+<li>Returns spatial <code>sf</code> data frames, making it easy to map and visualize geographic data.</li>
+</ul>
 </section>
 </section>
 

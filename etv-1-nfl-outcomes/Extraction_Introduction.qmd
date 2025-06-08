@@ -14,6 +14,8 @@ To bridge this gap, it is essential that we prepare students to meet real-world 
 
 ## APIs
 
+![Flow of Data via API (vrogue.co)](images/clipboard-1951848651.jpeg)
+
 APIs (Application Programming Interfaces) allow programs to request data directly from external servers in a structured format (most often JSON). Learning to work with web APIs teaches students not just to observe data, but to understand how to:
 
 -   Locate relevant APIs (e.g., weather data from OpenWeatherMap)
@@ -26,6 +28,12 @@ APIs (Application Programming Interfaces) allow programs to request data directl
 
 This pushes students to explore data fully, recognize potential limitations, biases, or technical issues in the data structure, and move beyond canned examples.
 
+Furthermore, as APIs often serve as the channel which to access and retrieve information from databases. In an evolving landscape where more and more data is created and captured with each passing day, being able to leverage the information stored in databases is more critical than ever.
+
+[![Volume of Data Created (Statista)](images/clipboard-272118191.png)](https://www.statista.com/statistics/871513/worldwide-data-created/)
+
+------------------------------------------------------------------------
+
 ## HTML Web Scraping
 
 Much like APIs, lots of relevant and useful information is available directly on webpages, which are readable by humans rather than APIs which are designed for machine access. By learning this skill, students are able to:
@@ -35,6 +43,24 @@ Much like APIs, lots of relevant and useful information is available directly on
 -   Understand how websites deliver and organize content
 
 -   Transform and clean data for analysis and visualization
+
+------------------------------------------------------------------------
+
+# Our Focus: Extraction
+
+While analyzing data is comprised of many steps and processes, one of the first and most foundational of these is *extracting the data*. Here are some common ways data can be extracted.
+
+-   CSV (comma-seperated values) files
+
+-   Excel files (.xlsx, .xlsb, .xlsm)
+
+-   Pre-loaded data frames in R (mtcars)
+
+-   URLs to GitHub repositories
+
+-   **HTML (Web Extraction/Scraping)**
+
+-   **API requests (Databases)**
 
 # Workshop Agenda
 
@@ -59,6 +85,8 @@ In this project, we will use HTML scraping joined with the OpenWeather API to cr
 # Introduction to Libraries
 
 ```{r}
+#| output: false
+#| eval: false
 library(rvest)      # Web scraping
 library(dplyr)      # Data manipulation
 library(stringr)    # String cleaning
