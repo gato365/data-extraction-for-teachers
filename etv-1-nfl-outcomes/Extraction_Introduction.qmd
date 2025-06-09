@@ -32,6 +32,8 @@ Furthermore, as APIs often serve as the channel which to access and retrieve inf
 
 [![Volume of Data Created (Statista)](images/clipboard-272118191.png)](https://www.statista.com/statistics/871513/worldwide-data-created/)
 
+The use of APIs requires keys, which are unique and secret codes that are used to authorize your request and identify your user and billing information. Consequently, keeping these codes secret is imperative. To do so, store API keys in environment files which reside on your computer, and not coded into variables or available in plain text on your working files.
+
 ------------------------------------------------------------------------
 
 ## HTML Web Scraping
