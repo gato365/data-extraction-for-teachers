@@ -124,3 +124,8 @@ B) Patrons puchchase product
 11. Hvae prizes for raffle
 
 
+Have this paradigm within each session
+- Goals & Objectives
+- Theory (I do not know what should be here for the introduction & conclusion)
+- Practice (what we do with API & HTML extraction)
+- (I do not know what to put here)

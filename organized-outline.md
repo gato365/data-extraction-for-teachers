@@ -1,4 +1,3 @@
-Here is your organized outline in clean **markdown format** with rationale for combining sections where appropriate, placed at the end.
 
 ---
 
@@ -35,6 +34,38 @@ Here is your organized outline in clean **markdown format** with rationale for c
 9. Emphasize code flexibility — developers can change APIs overnight
 10. Activity: Scaffolding + Code review using example(s)
 
+
+### Goals & Objectives
+
+1. Identify the value of real-world data in statistics education
+2. Describe the distinction between extraction, transformation, and visualization (ETv)
+3. Recognize challenges associated with pulling live data from the web
+4. Apply tidy data principles to imported datasets
+
+### Conceptual Foundation
+
+* Why use live data?
+* What is extraction and why it matters for teaching modern statistics
+* ETv framework: introduction to the first stage (Extraction)
+* Importance of code flexibility and the fragility of external sources (e.g., Spotify anecdote)
+* Tidy data principles: naming conventions, structure, and data types
+
+### Hands-On Coding Activity
+
+* Extracting from accessible sources such as:
+
+  * A static `.csv` hosted online (warm-up)
+  * A Wikipedia table using `rvest` and `janitor`
+* Introduce `read_csv()` and `rvest::html_table()`
+* Add cleaning steps to enforce tidy principles (snake\_case, correct types)
+
+### Reflection
+
+* How can you introduce real-world messiness without overwhelming students?
+* How would you scaffold tidy principles at the intro-level?
+
+
+
 ---
 
 ## Session 2: API Fundamentals
@@ -50,6 +81,35 @@ Here is your organized outline in clean **markdown format** with rationale for c
    * Modify API request (e.g., hometown weather)
    * Scaffolded practice (fill-in-the-blank)
    * Optional take-home transformation/visualization
+
+
+### Goals & Objectives
+
+1. Explain what an API is and how it supports data extraction
+2. Make requests to a public API and interpret the JSON response
+3. Understand and apply HTTP status codes and API keys
+4. Write clean, readable code to extract and parse API data
+
+### Conceptual Foundation
+
+* RESTful APIs: endpoints, parameters, keys
+* Authentication: tokens, secrets, and environment variables
+* Status codes and error handling (focus on 200, 401, 403, 404)
+* JSON structure: nested data and tidy conversion
+
+### Hands-On Coding Activity
+
+* Weather API (e.g., OpenWeatherMap):
+
+  * Retrieve current weather for participant’s hometown
+  * Modify query parameters (e.g., units, location)
+  * Parse and visualize simple results (e.g., temperature, humidity)
+* Scaffold activity: prewritten functions + one blank section
+
+### Reflection
+
+* Where could API data naturally integrate in your curriculum?
+* What are the pitfalls (rate limits, authentication) students need to know?
 
 ---
 
@@ -71,6 +131,33 @@ Here is your organized outline in clean **markdown format** with rationale for c
    * Clean the data: name 3 needed transformations
    * Use visualization and interpretation
    * Discuss hardcoding and fragile selectors
+   
+### Goals & Objectives
+
+1. Identify basic HTML structure relevant for scraping
+2. Scrape tables and text from structured web pages
+3. Clean scraped data using tidyverse tools
+4. Compare different websites in terms of data accessibility
+
+### Conceptual Foundation
+
+* HTML basics: tags, attributes, structure of web tables
+* Using `rvest` to read web pages and extract data
+* The importance of inspecting elements with browser tools
+* Structured vs. unstructured sites: Wikipedia vs. ESPN
+
+### Hands-On Coding Activity
+
+* Scrape sports statistics from a reliable table:
+
+  * Example: Wikipedia table of Olympic medal counts or NBA season stats
+  * Clean using `janitor::clean_names()`
+  * Compare scraped data from 2 sites (optional pair task)
+
+### Reflection
+
+* How could students use scraped data in a final project?
+* What scaffolds would help students inspect and trust their source?
 
 ---
 
@@ -83,6 +170,35 @@ Here is your organized outline in clean **markdown format** with rationale for c
 2. Split class into two groups: API vs HTML, then reconvene
 3. Highlight pedagogical framing: how this can be implemented in class
 4. Build reflection and discussion time: What will you bring into your course?
+
+### Goals & Objectives
+
+1. Review key takeaways from API and HTML extraction
+2. Collaborate with peers on a structured mini-project
+3. Reflect on how to implement extraction in your own course
+4. Share classroom-ready ideas with other educators
+
+### Recap (Conceptual Foundation)
+
+* Extraction is not “just tech” — it's pedagogy
+* API vs. HTML: strengths, limitations, educational value
+* Designing learning activities around messy data: student engagement, real-world relevance
+
+### Hands-On Coding Activity
+
+* Participants are randomly assigned:
+
+  * **Group A**: Use an API (weather, Spotify, etc.)
+  * **Group B**: Scrape HTML data (sports, Wikipedia, etc.)
+* Work in small groups to clean, transform, and visualize
+* Prepare a brief “teaching demo” of how this could be used in class
+
+### Discussion & Reflection
+
+* What worked in your group?
+* What teaching goals does this type of project help support?
+* How would you modify it for your students’ level and context?
+
 
 ---
 
