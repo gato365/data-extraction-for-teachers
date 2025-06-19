@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ciera Millard">
-<meta name="dcterms.date" content="2025-06-16">
+<meta name="dcterms.date" content="2025-06-19">
 
 <title>Session 1: Introduction To Extraction Workshop - HTML &amp; APIs</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 16, 2025</p>
+      <p class="date">June 19, 2025</p>
     </div>
   </div>
   
@@ -110,15 +110,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="session-1-introduction" class="level1">
-<h1>Session 1: Introduction</h1>
+<section id="session-1-introduction-to-data-extraction" class="level2">
+<h2 class="anchored" data-anchor-id="session-1-introduction-to-data-extraction">Session 1: Introduction to Data Extraction</h2>
+<section id="goals-objectives" class="level3">
+<h3 class="anchored" data-anchor-id="goals-objectives">1. Goals &amp; Objectives</h3>
+<ol type="1">
+<li>Identify the value of real-world data in statistics education</li>
+<li>Describe the distinction between extraction, transformation, and visualization (ETv)</li>
+<li>Recognize challenges associated with pulling live data from the web</li>
+<li>Apply tidy data principles to imported datasets</li>
+</ol>
 </section>
-<section id="html-and-apis-in-the-classroom" class="level1">
-<h1>HTML and APIs in the Classroom</h1>
+<section id="conceptual-foundation" class="level3">
+<h3 class="anchored" data-anchor-id="conceptual-foundation">2. Conceptual Foundation</h3>
+<ul>
+<li>Why use live data?</li>
+<li>What is extraction and why it matters for teaching modern statistics</li>
+<li>ETv framework: introduction to the first stage (Extraction)</li>
+<li>Importance of code flexibility and the fragility of external sources (e.g., Spotify anecdote)</li>
+<li>Tidy data principles: naming conventions, structure, and data types</li>
+</ul>
+<section id="a.-html-and-apis-in-the-classroom" class="level4">
+<h4 class="anchored" data-anchor-id="a.-html-and-apis-in-the-classroom">2.a. HTML and APIs in the Classroom</h4>
 <p>The availability of continuously changing data and the use of web APIs have grown exponentially in recent years. Dynamic data is published online in formats designed for both human readability (HTML) and machine access (APIs). However, this not always reflected in introductory statistics or data science classes. Many times, instruction relies on pre-cleaned, static datasets, which are not realistic to the current data landscape.</p>
 <p>To bridge this gap, it is essential that we prepare students to meet real-world data challenges by equipping them with the skills to independently extract, process, and analyze data. While it is often sufficient to provide static datasets for demonstrations and exercises, careers in modern data science will demand the ability to find and retrieve data from live sources, not simply rely on what’s been prepackaged.</p>
-<section id="apis" class="level2">
-<h2 class="anchored" data-anchor-id="apis">APIs</h2>
+</section>
+<section id="b.-web-apis" class="level4">
+<h4 class="anchored" data-anchor-id="b.-web-apis">2.b. Web APIs</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/clipboard-1951848651.jpeg" class="img-fluid figure-img"></p>
@@ -143,8 +161,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The use of APIs requires keys, which are unique and secret codes that are used to authorize your request and identify your user and billing information. Consequently, keeping these codes secret is imperative. To do so, store API keys in environment files which reside on your computer, and not coded into variables or available in plain text on your working files.</p>
 <hr>
 </section>
-<section id="html-web-scraping" class="level2">
-<h2 class="anchored" data-anchor-id="html-web-scraping">HTML Web Scraping</h2>
+<section id="c.-html-web-scraping" class="level4">
+<h4 class="anchored" data-anchor-id="c.-html-web-scraping">2.c. HTML Web Scraping</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/clipboard-258030846.jpeg" class="img-fluid figure-img" width="722"></p>
@@ -160,9 +178,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Often times, HTML tables contain unexpected structures or data types (images, links, etc) and can present a challenge that develops not only data cleaning skills, but intention, planning, and adaptability when handling and analyzing difficult data.</p>
 <hr>
 </section>
-</section>
-<section id="our-focus-extraction" class="level1">
-<h1>Our Focus: Extraction</h1>
+<section id="d.-our-focus-extraction" class="level4">
+<h4 class="anchored" data-anchor-id="d.-our-focus-extraction">2.d. Our Focus: Extraction</h4>
 <p>While analyzing data is comprised of many steps and processes, one of the first and most foundational of these is <em>extracting the data</em>. Here are some common ways data can be extracted. In this workshop, the focus will be on the last two methods.</p>
 <ul>
 <li><p>CSV (comma-seperated values) files</p>
@@ -197,22 +214,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 </ul>
 </section>
-<section id="workshop-agenda" class="level1">
-<h1>Workshop Agenda</h1>
-<section id="session-1-introduction-1" class="level2">
-<h2 class="anchored" data-anchor-id="session-1-introduction-1">Session 1: Introduction</h2>
+<section id="e.-workshop-agenda" class="level4">
+<h4 class="anchored" data-anchor-id="e.-workshop-agenda">2.e. Workshop Agenda</h4>
+<p><strong>Session 1: Introduction</strong></p>
 <p>This session serves as a discussion of the principles and reasoning behind learning these concepts and how they can benefit the classroom.</p>
-</section>
-<section id="session-2-getting-weather-data-via-openweather-api" class="level2">
-<h2 class="anchored" data-anchor-id="session-2-getting-weather-data-via-openweather-api">Session 2: Getting Weather Data via OpenWeather API</h2>
+<p><strong>Session 2: Getting Weather Data via OpenWeather API</strong></p>
 <p>In this session, we dive into OpenWeather API and learn to use packages like httr2 to execute API calls. We will also discuss URLs, queries, data structures, and more.</p>
-</section>
-<section id="session-3-scraping-nfl-sports-data" class="level2">
-<h2 class="anchored" data-anchor-id="session-3-scraping-nfl-sports-data">Session 3: Scraping NFL Sports Data</h2>
+<p><strong>Session 3: Scraping NFL Sports Data</strong></p>
 <p>In this session, we will use Pro-Football Reference to learn how to extract and clean HTML table data for use in statistical analysis and visualizations.</p>
-</section>
-<section id="session-4-putting-it-all-together-project" class="level2">
-<h2 class="anchored" data-anchor-id="session-4-putting-it-all-together-project">Session 4: Putting it All Together (Project)</h2>
+<p><strong>Session 4: Putting it All Together (Project)</strong></p>
 <p>In this project, we will use HTML scraping joined with the OpenWeather API to create our own cloropleth map of Iowa.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -222,9 +232,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <hr>
 </section>
-</section>
-<section id="introduction-to-libraries" class="level1">
-<h1>Introduction to Libraries</h1>
+<section id="need-to-delete-place-somewhere-introduction-to-libraries-glossary" class="level4">
+<h4 class="anchored" data-anchor-id="need-to-delete-place-somewhere-introduction-to-libraries-glossary">(need to delete, place somewhere) Introduction to Libraries &amp; Glossary</h4>
 <p>This project, when possible, utilizes <code>tidyverse</code> packages. <code>tidyverse</code> is a collection of open-source packages that are well-integrated to tackle problems of data extraction, manipulation, transformation, exploration, and visualization.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -247,100 +256,112 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris)     <span class="co"># U.S. shapefiles for mapping</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is a list of R packages used in this project, accompanied by brief descriptions of what they do.</p>
-<section id="rvest" class="level3">
-<h3 class="anchored" data-anchor-id="rvest"><code>rvest</code></h3>
+<p><code>rvest</code></p>
 <ul>
 <li>Used for web scraping: parses HTML/XML documents into a navigable format.</li>
 <li>Extracts structured data using CSS selectors, XPath, or tag-based search (<code>html_table()</code>, <code>html_text()</code>, etc.).</li>
 </ul>
 <hr>
-</section>
-<section id="dplyr" class="level3">
-<h3 class="anchored" data-anchor-id="dplyr"><code>dplyr</code></h3>
+<p><code>dplyr</code></p>
 <ul>
 <li>Core package for tidyverse-style data manipulation (<code>filter()</code>, <code>mutate()</code>, <code>select()</code>, etc.).</li>
 <li>Supports chaining operations with <code>%&gt;%</code> / |<code>&gt;</code>, making data workflows readable and efficient.</li>
 </ul>
 <hr>
-</section>
-<section id="stringr" class="level3">
-<h3 class="anchored" data-anchor-id="stringr"><code>stringr</code></h3>
+<p><code>stringr</code></p>
 <ul>
 <li>Provides a consistent set of functions for string manipulation.</li>
 <li>Handles pattern matching, replacement, splitting, and formatting.</li>
 </ul>
 <hr>
-</section>
-<section id="rlang" class="level3">
-<h3 class="anchored" data-anchor-id="rlang"><code>rlang</code></h3>
+<p><code>rlang</code></p>
 <ul>
 <li>Supports advanced evaluation and programming with tidyverse tools.</li>
 <li>Useful when writing custom functions that dynamically reference or modify variables.</li>
 </ul>
 <hr>
-</section>
-<section id="purrr" class="level3">
-<h3 class="anchored" data-anchor-id="purrr"><code>purrr</code></h3>
+<p><code>purrr</code></p>
 <ul>
 <li>Enables functional programming with mapping tools like <code>map()</code>, <code>map_df()</code>, <code>walk()</code>, etc.</li>
 <li>Replaces (many) for-loops and supports clean iteration over lists and vectors.</li>
 </ul>
 <hr>
-</section>
-<section id="ggplot2" class="level3">
-<h3 class="anchored" data-anchor-id="ggplot2"><code>ggplot2</code></h3>
+<p><code>ggplot2</code></p>
 <ul>
 <li>Graphics package for building layered, flexible visualizations.</li>
 <li>Supports various plot types, themes, scales, and faceting for data storytelling.</li>
 </ul>
 <hr>
-</section>
-<section id="httr2" class="level3">
-<h3 class="anchored" data-anchor-id="httr2"><code>httr2</code></h3>
+<p><code>httr2</code></p>
 <ul>
 <li>Modern HTTP client designed for tidyverse-like API interaction.</li>
 <li>Replaces <code>httr</code> with a more intuitive and pipeable interface (<code>request() |&gt; req_perform()</code>).</li>
 </ul>
 <hr>
-</section>
-<section id="tibble" class="level3">
-<h3 class="anchored" data-anchor-id="tibble"><code>tibble</code></h3>
+<p><code>tibble</code></p>
 <ul>
 <li>A modern rethinking of the <code>data.frame</code> that prints cleaner and behaves more predictably.</li>
 <li>Default in tidyverse workflows; avoids surprises like string-to-factor conversion.</li>
 </ul>
 <hr>
-</section>
-<section id="lubridate" class="level3">
-<h3 class="anchored" data-anchor-id="lubridate"><code>lubridate</code></h3>
+<p><code>lubridate</code></p>
 <ul>
 <li>Simplifies working with dates and times: parsing, formatting, and arithmetic.</li>
 <li>Makes it easy to extract components (e.g., month, weekday) and perform date math.</li>
 </ul>
 <hr>
-</section>
-<section id="dotenv" class="level3">
-<h3 class="anchored" data-anchor-id="dotenv"><code>dotenv</code></h3>
+<p><code>dotenv</code></p>
 <ul>
 <li>Loads environment variables from a <code>.env</code> or <code>.Renviron</code> file into R.</li>
 <li>Keeps sensitive data like API keys out of your scripts and version control.</li>
 </ul>
 <hr>
-</section>
-<section id="glue" class="level3">
-<h3 class="anchored" data-anchor-id="glue"><code>glue</code></h3>
+<p><code>glue</code></p>
 <ul>
 <li>Provides string interpolation (e.g., <code>glue("Hello {name}")</code>).</li>
 <li>Cleaner and safer than <code>paste()</code> for building URLs, messages, or SQL queries.</li>
 </ul>
 <hr>
-</section>
-<section id="tigris" class="level3">
-<h3 class="anchored" data-anchor-id="tigris"><code>tigris</code></h3>
+<p><code>tigris</code></p>
 <ul>
 <li>Downloads shapefiles and geographic boundary data (e.g., counties, states) from the U.S. Census Bureau.</li>
 <li>Returns spatial <code>sf</code> data frames, making it easy to map and visualize geographic data.</li>
 </ul>
+</section>
+</section>
+<section id="hands-on-coding-activity" class="level3">
+<h3 class="anchored" data-anchor-id="hands-on-coding-activity">3. Hands-On Coding Activity</h3>
+<ul>
+<li><p>Extracting from accessible sources such as:</p>
+<ul>
+<li>A static <code>.csv</code> hosted online (warm-up)</li>
+<li>A Wikipedia table using <code>rvest</code> and <code>janitor</code></li>
+</ul></li>
+<li><p>Introduce <code>read_csv()</code> and <code>rvest::html_table()</code></p></li>
+<li><p>Add cleaning steps to enforce tidy principles (snake_case, correct types)</p></li>
+</ul>
+</section>
+<section id="reflection" class="level3">
+<h3 class="anchored" data-anchor-id="reflection">4. Reflection</h3>
+<ul>
+<li>How can you introduce real-world messiness without overwhelming students?</li>
+<li>How would you scaffold tidy principles at the intro-level?</li>
+</ul>
+</section>
+<section id="misc.-questionsideas" class="level3">
+<h3 class="anchored" data-anchor-id="misc.-questionsideas">5. Misc. Questions/Ideas</h3>
+<ol type="1">
+<li>Set expectations and workshop goals</li>
+<li>Why data extraction matters: relevance to real-world education</li>
+<li>Overview of the layout / table of contents</li>
+<li>Discuss libraries used (tidyverse, rvest, httr, etc.)</li>
+<li>Best practices (e.g., avoiding hardcoding, consistent comments)</li>
+<li>Adapting to changing APIs/websites</li>
+<li>Anecdote: Spotify example of lost API access</li>
+<li>Explain tidy data: snake_case column names, correct data types</li>
+<li>Emphasize code flexibility — developers can change APIs overnight</li>
+<li>Activity: Scaffolding + Code review using example(s)</li>
+</ol>
 </section>
 </section>
 

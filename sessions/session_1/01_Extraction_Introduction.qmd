@@ -5,15 +5,44 @@ date: "`r Sys.Date()`"
 format: html
 ---
 
-# Session 1: Introduction
 
-# HTML and APIs in the Classroom
+
+
+
+
+## Session 1: Introduction to Data Extraction
+
+
+
+
+
+### 1. Goals & Objectives
+
+1. Identify the value of real-world data in statistics education
+2. Describe the distinction between extraction, transformation, and visualization (ETv)
+3. Recognize challenges associated with pulling live data from the web
+4. Apply tidy data principles to imported datasets
+
+### 2. Conceptual Foundation
+
+* Why use live data?
+* What is extraction and why it matters for teaching modern statistics
+* ETv framework: introduction to the first stage (Extraction)
+* Importance of code flexibility and the fragility of external sources (e.g., Spotify anecdote)
+* Tidy data principles: naming conventions, structure, and data types
+
+
+
+
+
+
+#### 2.a. HTML and APIs in the Classroom
 
 The availability of continuously changing data and the use of web APIs have grown exponentially in recent years. Dynamic data is published online in formats designed for both human readability (HTML) and machine access (APIs). However, this not always reflected in introductory statistics or data science classes. Many times, instruction relies on pre-cleaned, static datasets, which are not realistic to the current data landscape.
 
 To bridge this gap, it is essential that we prepare students to meet real-world data challenges by equipping them with the skills to independently extract, process, and analyze data. While it is often sufficient to provide static datasets for demonstrations and exercises, careers in modern data science will demand the ability to find and retrieve data from live sources, not simply rely on what’s been prepackaged.
 
-## APIs
+#### 2.b. Web APIs
 
 ![Flow of Data via API (vrogue.co)](images/clipboard-1951848651.jpeg)
 
@@ -37,7 +66,7 @@ The use of APIs requires keys, which are unique and secret codes that are used t
 
 ------------------------------------------------------------------------
 
-## HTML Web Scraping
+#### 2.c. HTML Web Scraping
 
 ![Process of HTML Scraping (sstm2.com)](images/clipboard-258030846.jpeg){width="722"}
 
@@ -53,7 +82,7 @@ Often times, HTML tables contain unexpected structures or data types (images, li
 
 ------------------------------------------------------------------------
 
-# Our Focus: Extraction
+#### 2.d. Our Focus: Extraction
 
 While analyzing data is comprised of many steps and processes, one of the first and most foundational of these is *extracting the data*. Here are some common ways data can be extracted. In this workshop, the focus will be on the last two methods.
 
@@ -89,21 +118,22 @@ While analyzing data is comprised of many steps and processes, one of the first 
 
     -   `httr2`
 
-# Workshop Agenda
+#### 2.e. Workshop Agenda
 
-## Session 1: Introduction
+
+**Session 1: Introduction**
 
 This session serves as a discussion of the principles and reasoning behind learning these concepts and how they can benefit the classroom.
 
-## Session 2: Getting Weather Data via OpenWeather API
+**Session 2: Getting Weather Data via OpenWeather API**
 
 In this session, we dive into OpenWeather API and learn to use packages like httr2 to execute API calls. We will also discuss URLs, queries, data structures, and more.
 
-## Session 3: Scraping NFL Sports Data
+**Session 3: Scraping NFL Sports Data**
 
 In this session, we will use Pro-Football Reference to learn how to extract and clean HTML table data for use in statistical analysis and visualizations.
 
-## Session 4: Putting it All Together (Project)
+**Session 4: Putting it All Together (Project)**
 
 In this project, we will use HTML scraping joined with the OpenWeather API to create our own cloropleth map of Iowa.
 
@@ -111,7 +141,7 @@ In this project, we will use HTML scraping joined with the OpenWeather API to cr
 
 ------------------------------------------------------------------------
 
-# Introduction to Libraries
+#### (need to delete, place somewhere) Introduction to Libraries & Glossary
 
 This project, when possible, utilizes `tidyverse` packages. `tidyverse` is a collection of open-source packages that are well-integrated to tackle problems of data extraction, manipulation, transformation, exploration, and visualization.
 
@@ -136,84 +166,121 @@ library(tigris)     # U.S. shapefiles for mapping
 
 This is a list of R packages used in this project, accompanied by brief descriptions of what they do.
 
-### `rvest`
+
+`rvest`
 
 -   Used for web scraping: parses HTML/XML documents into a navigable format.
 -   Extracts structured data using CSS selectors, XPath, or tag-based search (`html_table()`, `html_text()`, etc.).
 
 ------------------------------------------------------------------------
 
-### `dplyr`
+`dplyr`
 
 -   Core package for tidyverse-style data manipulation (`filter()`, `mutate()`, `select()`, etc.).
 -   Supports chaining operations with `%>%` / \|`>`, making data workflows readable and efficient.
 
 ------------------------------------------------------------------------
 
-### `stringr`
+`stringr`
 
 -   Provides a consistent set of functions for string manipulation.
 -   Handles pattern matching, replacement, splitting, and formatting.
 
 ------------------------------------------------------------------------
 
-### `rlang`
+`rlang`
 
 -   Supports advanced evaluation and programming with tidyverse tools.
 -   Useful when writing custom functions that dynamically reference or modify variables.
 
 ------------------------------------------------------------------------
 
-### `purrr`
+`purrr`
 
 -   Enables functional programming with mapping tools like `map()`, `map_df()`, `walk()`, etc.
 -   Replaces (many) for-loops and supports clean iteration over lists and vectors.
 
 ------------------------------------------------------------------------
 
-### `ggplot2`
+`ggplot2`
 
 -   Graphics package for building layered, flexible visualizations.
 -   Supports various plot types, themes, scales, and faceting for data storytelling.
 
 ------------------------------------------------------------------------
 
-### `httr2`
+`httr2`
 
 -   Modern HTTP client designed for tidyverse-like API interaction.
 -   Replaces `httr` with a more intuitive and pipeable interface (`request() |> req_perform()`).
 
 ------------------------------------------------------------------------
 
-### `tibble`
+`tibble`
 
 -   A modern rethinking of the `data.frame` that prints cleaner and behaves more predictably.
 -   Default in tidyverse workflows; avoids surprises like string-to-factor conversion.
 
 ------------------------------------------------------------------------
 
-### `lubridate`
+`lubridate`
 
 -   Simplifies working with dates and times: parsing, formatting, and arithmetic.
 -   Makes it easy to extract components (e.g., month, weekday) and perform date math.
 
 ------------------------------------------------------------------------
 
-### `dotenv`
+`dotenv`
 
 -   Loads environment variables from a `.env` or `.Renviron` file into R.
 -   Keeps sensitive data like API keys out of your scripts and version control.
 
 ------------------------------------------------------------------------
 
-### `glue`
+`glue`
 
 -   Provides string interpolation (e.g., `glue("Hello {name}")`).
 -   Cleaner and safer than `paste()` for building URLs, messages, or SQL queries.
 
 ------------------------------------------------------------------------
 
-### `tigris`
+`tigris`
 
 -   Downloads shapefiles and geographic boundary data (e.g., counties, states) from the U.S. Census Bureau.
 -   Returns spatial `sf` data frames, making it easy to map and visualize geographic data.
+
+
+### 3. Hands-On Coding Activity
+
+* Extracting from accessible sources such as:
+
+  * A static `.csv` hosted online (warm-up)
+  * A Wikipedia table using `rvest` and `janitor`
+* Introduce `read_csv()` and `rvest::html_table()`
+* Add cleaning steps to enforce tidy principles (snake\_case, correct types)
+
+
+
+
+### 4. Reflection
+
+* How can you introduce real-world messiness without overwhelming students?
+* How would you scaffold tidy principles at the intro-level?
+
+
+
+
+### 5. Misc. Questions/Ideas
+
+1. Set expectations and workshop goals
+2. Why data extraction matters: relevance to real-world education
+3. Overview of the layout / table of contents
+4. Discuss libraries used (tidyverse, rvest, httr, etc.)
+5. Best practices (e.g., avoiding hardcoding, consistent comments)
+6. Adapting to changing APIs/websites
+7. Anecdote: Spotify example of lost API access
+8. Explain tidy data: snake\_case column names, correct data types
+9. Emphasize code flexibility — developers can change APIs overnight
+10. Activity: Scaffolding + Code review using example(s)
+
+
