@@ -1,6 +1,6 @@
 ---
 title: "Session 1: Introduction To Extraction Workshop - HTML & APIs"
-author: "Ciera Millard"
+author: "Immanuel Williams & Ciera Millard"
 date: "`r Sys.Date()`"
 format: html
 ---
@@ -11,8 +11,6 @@ format: html
 
 
 ## Session 1: Introduction to Data Extraction
-
-
 
 
 

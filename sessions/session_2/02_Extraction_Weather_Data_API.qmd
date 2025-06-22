@@ -1,11 +1,37 @@
 ---
 title: "Session 2: Weather Data  - OpenWeatherAPI"
-author: "Ciera Millard"
+author: "Immanuel Williams & Ciera Millard"
 date: "`r Sys.Date()`"
 output: html_document
 ---
 
-# Session 2: Using OpenWeatherAPI
+
+
+
+
+## Session 2: API Fundamentals
+
+
+
+
+
+### 1. Goals & Objectives
+
+1. Explain what an API is and how it supports data extraction
+2. Make requests to a public API and interpret the JSON response
+3. Understand and apply HTTP status codes and API keys
+4. Write clean, readable code to extract and parse API data
+
+### 2. Conceptual Foundation
+
+* RESTful APIs: endpoints, parameters, keys
+* Authentication: tokens, secrets, and environment variables
+* Status codes and error handling (focus on 200, 401, 403, 404)
+* JSON structure: nested data and tidy conversion
+
+
+
+---
 
 ![API Call (PhoenixNap.com)](https://phoenixnap.com/kb/wp-content/uploads/2022/11/cloud-api-request-and-response.png)
 
@@ -21,7 +47,7 @@ Overview of different offerings from OpenWeather:
 | **Endpoint URL** | `/data/2.5/weather` | `/geo/1.0/direct` | `/data/3.0/onecall` |
 | **Use case** | Lightweight current conditions | Finding lat/lon of cities | Complete weather view |
 
-## Load Libraries
+##### Load Libraries
 
 ```{r}
 #| output: false
@@ -34,7 +60,7 @@ library(dotenv)      # Load environment variables
 library(glue)        # Attach strings together
 ```
 
-## Load API Key from Environment
+##### Load API Key from Environment
 
 Using `dotenv::load_dot_env()` we will load our `.Renviron.txt` that contains our API Key. Using `Sys.getenv("API_KEY")` we can supply our API Key whenever needed.
 
@@ -44,15 +70,15 @@ dotenv::load_dot_env(file = ".Renviron.txt")
 # Sys.getenv("API_KEY")
 ```
 
-# Get Current Weather for a Given City
+#### 2a. Get Current Weather for a Given City
 
-## Step 1: Select a City
+##### Step 1: Select a City
 
 ```{r}
 city_name <- "San Luis Obispo"
 ```
 
-## Step 2: Create API Request URL
+##### Step 2: Create API Request URL
 
 Using `glue()` to attach the base URL, the city name, the API Key, and units together and assign it to `current_weather_url`
 
@@ -76,7 +102,7 @@ current_weather_url <- glue("https://api.openweathermap.org/data/2.5/weather?",
   #)
 ```
 
-## Step 3: Call API
+##### Step 3: Call API
 
 First, we assign the URL we created to a request object, called `req`. Then, we use `httr2::req_perform()` to call the OpenWeather API and assign the response to a variable. We then use `httr2::resp_content_type()` to see what our result looks like.
 
@@ -89,7 +115,7 @@ httr2::resp_content_type(response)
 
 *Discussion: What does application mean? What is JSON?*
 
-## Step 4: Parse Response
+##### Step 4: Parse Response
 
 Using logic, we execute the below code if the status code is 200 (meaning OK, successful). We use `httr2::resp_status()` to identify the status code. The resulting data is in the JSON form, which appears as a named list sometimes containing other lists within in it, these being "nested."
 
@@ -115,11 +141,11 @@ if (resp_status(response) == 200) {
 }
 ```
 
-# Geocoding API
+#### 2b. Geocoding API
 
 The Geocode API from OpenWeather retrieves the latitude and longitude for a given city.
 
-## Function: Geocode
+##### Function: Geocode
 
 ```{r}
 # Step 1: Define function "geocode" that accepts the parameter "city"
@@ -165,7 +191,7 @@ if (resp_status(geo_response) == 200) {
 
 *Discussion: What else could be added here? Subtracted? Why the output string?*
 
-## Test Geocode Function
+##### Test Geocode Function
 
 ```{r}
 geocode("Ames, IA, USA")
@@ -175,7 +201,7 @@ Get Coordinates for this City:
 
 ![Hint: This is Central Park (cuddlynest.com)](images/clipboard-2634591783.jpeg)
 
-# Obtain Past 5 Days Weather Given City
+##### Obtain Past 5 Days Weather Given City
 
 Now, using Geocoding API, as well as the OneCall 3.0 API, we will get the past 5 days of weather for a city of our choosing.
 
@@ -300,7 +326,7 @@ These all flatten into column names like `precipitation.total`, `dew_point.after
 
 *Discussion: Any thoughts at this point? What benefits do we get from inspecting the data structure?*
 
-## Function: Previous Weather
+##### Function: Previous Weather
 
 ```{r}
 prev_weather <- function(city, days){
@@ -398,7 +424,7 @@ if (resp_status(geo_response) == 200) {
 prev_weather("San Luis Obispo", 4)
 ```
 
-# Create Visualizations
+##### Create Visualizations
 
 ```{r}
 #| message: false
@@ -498,3 +524,33 @@ ggplot() +
 ```
 
 ![Map of California With Cities](images/clipboard-2924865228.png)
+
+
+### 3.  Hands-On Coding Activity
+
+* Weather API (e.g., OpenWeatherMap):
+
+  * Retrieve current weather for participant’s hometown
+  * Modify query parameters (e.g., units, location)
+  * Parse and visualize simple results (e.g., temperature, humidity)
+* Scaffold activity: prewritten functions + one blank section
+
+### 4. Reflection
+
+* Where could API data naturally integrate in your curriculum?
+* What are the pitfalls (rate limits, authentication) students need to know?
+
+
+### 5. Misc. Questions/Ideas
+
+1. What is an API? Examples (Spotify, Weather, one bonus example)
+2. Basic API structure: request URLs, endpoints, tokens
+3. HTTP protocols and status codes
+4. CRUD operations (Create, Read, Update, Delete)
+5. API best practices (e.g., pagination, authentication, caching)
+6. Tidyverse-friendly workflows (avoid deep nesting, use readable steps)
+7. Activity:
+
+   * Modify API request (e.g., hometown weather)
+   * Scaffolded practice (fill-in-the-blank)
+   * Optional take-home transformation/visualization

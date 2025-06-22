@@ -1,11 +1,15 @@
 ---
 title: "Session 4: Final Activity"
-author: "Ciera Millard"
+author: "Immanuel Williams & Ciera Millard"
 date: "`r Sys.Date()`"
 format: html
 ---
 
 ## Session 4: Final Activity
+
+
+
+###  1. Weather Activity 
 
 Now that we have worked with HTML elements and API calls, let’s put these skills together to create a **weather map of Iowa counties** based on the maximum temperature at each county’s administrative seat (county seat).
 
@@ -13,7 +17,7 @@ Now that we have worked with HTML elements and API calls, let’s put these skil
 
 ------------------------------------------------------------------------
 
-## Step 1: Load Libraries
+#### Step 1: Load Libraries
 
 We’ll begin by loading the libraries necessary for data manipulation, API calls, and visualization.
 
@@ -41,7 +45,7 @@ dotenv::load_dot_env(file = ".Renviron.txt")
 
 ------------------------------------------------------------------------
 
-## Step 2: Extract County and Seat Information from Wikipedia
+#### Step 2: Extract County and Seat Information from Wikipedia
 
 Here we extract a table from Wikipedia listing all Iowa counties and their corresponding county seats.
 
@@ -81,7 +85,7 @@ A: This helps geocoding APIs return accurate coordinates. (Just "Ames" returns a
 
 ------------------------------------------------------------------------
 
-## Step 3: Pull Weather Data for Each County Seat
+#### Step 3: Pull Weather Data for Each County Seat
 
 We now define a function to call the OpenWeather Geocoding and One Call APIs. Then we use it to retrieve temperature data for each city.
 
@@ -139,7 +143,7 @@ weather_df <- bind_rows(lapply(cities, get_city_weather))
 
 ------------------------------------------------------------------------
 
-## Step 4: Merge Weather with Spatial County Boundaries
+#### Step 4: Merge Weather with Spatial County Boundaries
 
 Now we join our temperature data with spatial geometries (map pieces) from the `tigris` package so we can map it.
 
@@ -163,7 +167,7 @@ iowa_map_filled <- iowa_counties |>
 
 ------------------------------------------------------------------------
 
-## Step 5: Visualize the Map
+#### Step 5: Visualize the Map
 
 Finally, we use `ggplot2` and `geom_sf()` to create a choropleth map of Iowa counties filled by temperature.
 
@@ -191,3 +195,12 @@ ggplot(iowa_map_filled) +
 \- Compare actual temps to historical averages
 
 \- Add city point labels or icons
+
+
+
+
+###  2. Sports Activity 
+
+
+
+### 3. Wrap & Homework
