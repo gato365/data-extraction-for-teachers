@@ -23,3 +23,5 @@ TestResults.xml
 .Rproj.user
 # .env file
 etv-1-nfl-outcomes/.Renviron.txt
+
+registered_attendants/
