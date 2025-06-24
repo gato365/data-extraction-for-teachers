@@ -5,37 +5,170 @@ date: "`r Sys.Date()`"
 format: html
 ---
 
-
-
-
-
-
 ## Session 1: Introduction to Data Extraction
 
+### 0. Logisitcs
+
+- COurseKata
 
 
-### 1. Goals & Objectives
+### 1. Goals & Objectives (Presentation)
 
-1. Identify the value of real-world data in statistics education
-2. Describe the distinction between extraction, transformation, and visualization (ETv)
-3. Recognize challenges associated with pulling live data from the web
-4. Apply tidy data principles to imported datasets
+
+1. Understand the importance of extracting **dynamic data** (via HTML and APIs) in modern data analysis and teaching
+2. Learn how to access and work with **APIs** to retrieve structured, real-time data
+3. Learn how to bring HTML-based data (e.g., web tables) into R using scraping tools
+4. Apply these skills through **hands-on coding practice** and discussion of classroom integration
+
+
+
+
+#### Goals for Introduction
+
+(need to place)
 
 ### 2. Conceptual Foundation
 
-* Why use live data?
-* What is extraction and why it matters for teaching modern statistics
-* ETv framework: introduction to the first stage (Extraction)
-* Importance of code flexibility and the fragility of external sources (e.g., Spotify anecdote)
-* Tidy data principles: naming conventions, structure, and data types
+
+- P1. My mentor, Allan, says ask good questions...
+
+- P2. Statistical Question: **Who had the most impactful first season in terms of points: Michael Jordan, LeBron James, or Kobe Bryant?**
+
+- P3. I recently submitted a manuscript on this exact dataset, so let’s use it as our starting point.
+
+- P4. We’ll begin by working with a static Excel file that contains per-game stats for each player’s 15 seasons in the NBA. 
+
+
+- P5. Let's Load the pertinent libraries
+
+
+- T1. ____ Fill in the code (chatgpt)
+
+```{r message = FALSE, warning = FALSE}
+library(readxl)      ## Data Extraction      --- E
+library(dplyr)       ## Data Transformation  --- T
+library(ggplot2)     ## Data Visualization   --- V
+```
+
+- P6. Load in the data
+
+- T2. ____ Fill in the code (chatgpt)
+```{r}
+nba_df <- read_xlsx("nba_data.xlsx", sheet = "modern_nba_legends_08302019")
+```
+
+
+- P7. Let's view the data ...
+
+- T3. Use the `glimpse` function to view the data
+```{r}
+glimpse(nba_df)
+```
+
+
+- Q1. Look through the data, does it look clean? Discuss amongst  Your peers. (chatgpt)
+
+- Ans Q1: It is clean the numeric variables are supposed to be numeric and the characrets variables are treated as char (chatgpt)
+
+
+
+- P8. Now let's clean the focus on the data frame that we are after
+
+- T4. ____ Fill in the code (chatgpt)
+```{r}
+season_1_df <- nba_df %>% 
+  filter(Season == "season_1")
+```
+
+
+- P9. Now lets look at a plot of their points (chatgpt)
+
+T5. ____ Fill in the code (chatgpt)
+```{r}
+season_1_df %>% 
+  ggplot(aes(x = Name, y = PTS)) +
+  geom_boxplot() +
+  theme_bw() 
+```
+- Note 1: We could have spruced it up but here we just wanted to answer the question, if you have the urge please do so.
+
+- Q2. What conclusion could be made (chatgpt)
+
+
+P10. Now what about, Magic Johnson or Wilt Chamberlain
+Maybe Luka Dončić or Ja Morant 
+If I wanted to add this data I need to go to the originnal source not an excel sheet to do this (chatgpt)
+
+
+Note 2:
+-   Shift students from being passive data users to **active data seekers**
+-   Move beyond the idea of “waiting for clean data” to *learning how to access, validate, and clean it* themselves
+-   Teach both the **skill to extract** and the **capacity to teach extraction**
+
+
+Note 3:
+-   **Why this matters:** We as instructors should not just rely on pre-built packages or static datasets. The digital world changes constantly — websites, APIs, and file structures evolve.
+
+-   **Our responsibility:** Teach students (and ourselves) how to adapt and access real-world data sources. Equip learners with *skills to extract*, not just *consume pre-extracted content*.
+
+-   **Key idea:** *Flat files can still be dynamic* depending on how they’re maintained — but we use the term "dynamic" here to emphasize **external, real-time data access** through APIs and web scraping.
+
+
+### A. Static Files or Sources Extraction 
+
+
+- P11. 
+
+-   Examples: CSV, Excel files
+
+-   Typically unchanging unless manually edited
+
+-   Often pre-loaded into classroom activities
+
+-   May still require cleaning (e.g., column names, missing data)
+
+- Note 4: Messy data is not always a bad thing
+
+### B. Dynamic Sources Extraction
+
+- P12.
+
+-    **Definition**: Data sources that update over time or are externally controlled (i.e., you don’t own the source)
+
+
+- P13. 
+
+-   **Two primary types:**
+
+    1.  **APIs** – Designed to serve structured data upon request (e.g., player stats, weather)
+    2.  **HTML/Web Pages** – Seen as dynamic when content changes (especially sports, news, etc.)
+
+
+
+
+Self Question 1: what other type are there, why do we not need them here?
+
+
+
+
+- Note 5: HTML *can be treated* as static or dynamic depending on how frequently the page updates. For this workshop, **we treat HTML as dynamic**, especially for sports data.
 
 
 
 
 
+
+
+
+
+
+-------------
+## OLD BELOW
 
 #### 2.a. HTML and APIs in the Classroom
 
+
+# EMAN start here: (Brek up text into Notes & pooints )
 The availability of continuously changing data and the use of web APIs have grown exponentially in recent years. Dynamic data is published online in formats designed for both human readability (HTML) and machine access (APIs). However, this not always reflected in introductory statistics or data science classes. Many times, instruction relies on pre-cleaned, static datasets, which are not realistic to the current data landscape.
 
 To bridge this gap, it is essential that we prepare students to meet real-world data challenges by equipping them with the skills to independently extract, process, and analyze data. While it is often sufficient to provide static datasets for demonstrations and exercises, careers in modern data science will demand the ability to find and retrieve data from live sources, not simply rely on what’s been prepackaged.
@@ -58,6 +191,8 @@ This pushes students to explore data fully, recognize potential limitations, bia
 
 Furthermore, as APIs often serve as the channel which to access and retrieve information from databases. In an evolving landscape where more and more data is created and captured with each passing day, being able to leverage the information stored in databases is more critical than ever.
 
+# EMAN IMPORTANT - Provide 2-3 sample API calls
+
 [![Volume of Data Created (Statista)](images/clipboard-272118191.png)](https://www.statista.com/statistics/871513/worldwide-data-created/)
 
 The use of APIs requires keys, which are unique and secret codes that are used to authorize your request and identify your user and billing information. Consequently, keeping these codes secret is imperative. To do so, store API keys in environment files which reside on your computer, and not coded into variables or available in plain text on your working files.
@@ -77,6 +212,9 @@ Much like APIs, lots of relevant and useful information is available directly on
 -   Transform and clean data for analysis and visualization
 
 Often times, HTML tables contain unexpected structures or data types (images, links, etc) and can present a challenge that develops not only data cleaning skills, but intention, planning, and adaptability when handling and analyzing difficult data.
+
+
+# EMAN IMPORTANT - Provide 2-3 webscrape
 
 ------------------------------------------------------------------------
 
@@ -117,7 +255,6 @@ While analyzing data is comprised of many steps and processes, one of the first 
     -   `httr2`
 
 #### 2.e. Workshop Agenda
-
 
 **Session 1: Introduction**
 
@@ -163,7 +300,6 @@ library(tigris)     # U.S. shapefiles for mapping
 ```
 
 This is a list of R packages used in this project, accompanied by brief descriptions of what they do.
-
 
 `rvest`
 
@@ -247,38 +383,31 @@ This is a list of R packages used in this project, accompanied by brief descript
 -   Downloads shapefiles and geographic boundary data (e.g., counties, states) from the U.S. Census Bureau.
 -   Returns spatial `sf` data frames, making it easy to map and visualize geographic data.
 
-
 ### 3. Hands-On Coding Activity
 
-* Extracting from accessible sources such as:
+-   Extracting from accessible sources such as:
 
-  * A static `.csv` hosted online (warm-up)
-  * A Wikipedia table using `rvest` and `janitor`
-* Introduce `read_csv()` and `rvest::html_table()`
-* Add cleaning steps to enforce tidy principles (snake\_case, correct types)
+    -   A static `.csv` hosted online (warm-up)
+    -   A Wikipedia table using `rvest` and `janitor`
 
+-   Introduce `read_csv()` and `rvest::html_table()`
 
-
+-   Add cleaning steps to enforce tidy principles (snake_case, correct types)
 
 ### 4. Reflection
 
-* How can you introduce real-world messiness without overwhelming students?
-* How would you scaffold tidy principles at the intro-level?
-
-
-
+-   How can you introduce real-world messiness without overwhelming students?
+-   How would you scaffold tidy principles at the intro-level?
 
 ### 5. Misc. Questions/Ideas
 
-1. Set expectations and workshop goals
-2. Why data extraction matters: relevance to real-world education
-3. Overview of the layout / table of contents
-4. Discuss libraries used (tidyverse, rvest, httr, etc.)
-5. Best practices (e.g., avoiding hardcoding, consistent comments)
-6. Adapting to changing APIs/websites
-7. Anecdote: Spotify example of lost API access
-8. Explain tidy data: snake\_case column names, correct data types
-9. Emphasize code flexibility — developers can change APIs overnight
+1.  Set expectations and workshop goals
+2.  Why data extraction matters: relevance to real-world education
+3.  Overview of the layout / table of contents
+4.  Discuss libraries used (tidyverse, rvest, httr, etc.)
+5.  Best practices (e.g., avoiding hardcoding, consistent comments)
+6.  Adapting to changing APIs/websites
+7.  Anecdote: Spotify example of lost API access
+8.  Explain tidy data: snake_case column names, correct data types
+9.  Emphasize code flexibility — developers can change APIs overnight
 10. Activity: Scaffolding + Code review using example(s)
-
-

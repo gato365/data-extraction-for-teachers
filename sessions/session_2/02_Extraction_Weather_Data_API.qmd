@@ -544,6 +544,9 @@ ggplot() +
 ### 5. Misc. Questions/Ideas
 
 1. What is an API? Examples (Spotify, Weather, one bonus example)
+-   Importance of code flexibility and the fragility of external sources (e.g., Spotify anecdote)
+-   Tidy data principles: naming conventions, structure, and data types
+
 2. Basic API structure: request URLs, endpoints, tokens
 3. HTTP protocols and status codes
 4. CRUD operations (Create, Read, Update, Delete)
