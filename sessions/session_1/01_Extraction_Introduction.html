@@ -127,8 +127,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Learn how to bring HTML-based data (e.g., web tables) into R using scraping tools</li>
 <li>Apply these skills through <strong>hands-on coding practice</strong> and discussion of classroom integration</li>
 </ol>
-<section id="goals-for-introduction" class="level4">
-<h4 class="anchored" data-anchor-id="goals-for-introduction">Goals for Introduction</h4>
+<section id="a.-goals-for-introduction" class="level4">
+<h4 class="anchored" data-anchor-id="a.-goals-for-introduction">1.a. Goals for Introduction</h4>
 <p>(need to place)</p>
 </section>
 </section>
@@ -247,9 +247,8 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 <li><p><strong>Key idea:</strong> <em>Flat files can still be dynamic</em> depending on how they’re maintained — but we use the term “dynamic” here to emphasize <strong>external, real-time data access</strong> through APIs and web scraping.</p></li>
 <li><p>The availability of dynamic, frequently updated data — especially via web APIs — has grown exponentially in recent years. This shift demands new strategies in how we teach data access.</p></li>
 </ul>
-</section>
-<section id="a.-static-files-or-sources-extraction" class="level3">
-<h3 class="anchored" data-anchor-id="a.-static-files-or-sources-extraction">A. Static Files or Sources Extraction</h3>
+<section id="a.-static-files-or-sources-extraction" class="level4">
+<h4 class="anchored" data-anchor-id="a.-static-files-or-sources-extraction">2.a. Static Files or Sources Extraction</h4>
 <ul>
 <li><p>P11.</p></li>
 <li><p>Examples: CSV, Excel files</p></li>
@@ -259,8 +258,8 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 <li><p>Note 4: Messy data is not always a bad thing</p></li>
 </ul>
 </section>
-<section id="b.-dynamic-sources-extraction" class="level3">
-<h3 class="anchored" data-anchor-id="b.-dynamic-sources-extraction">B. Dynamic Sources Extraction</h3>
+<section id="b.-dynamic-sources-extraction" class="level4">
+<h4 class="anchored" data-anchor-id="b.-dynamic-sources-extraction">2.b. Dynamic Sources Extraction</h4>
 <ul>
 <li><p>P12.</p></li>
 <li><p><strong>Definition</strong>: Data sources that update over time or are externally controlled (i.e., you don’t own the source)</p></li>
@@ -274,8 +273,9 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 <li><p>Bridging the gap between classroom exercises and real-world data practice requires that students learn not just how to analyze data — but how to find it, extract it, and prepare it themselves.</p></li>
 <li><p>Note 5: HTML <em>can be treated</em> as static or dynamic depending on how frequently the page updates. For this workshop, <strong>we treat HTML as dynamic</strong>, especially for sports data.</p></li>
 </ul>
-<section id="b.-what-are-web-apis" class="level4">
-<h4 class="anchored" data-anchor-id="b.-what-are-web-apis">2.b. What are Web APIs?</h4>
+</section>
+<section id="c.-what-are-web-apis" class="level4">
+<h4 class="anchored" data-anchor-id="c.-what-are-web-apis">2.c. What are Web APIs?</h4>
 <p>Note 6:</p>
 <ul>
 <li>There are many kinds of APIs, but in this workshop, we’ll focus specifically on <strong>web APIs</strong> — tools designed to let us request and retrieve data from online sources.</li>
@@ -328,11 +328,6 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 <li><p>Note 9:</p></li>
 </ul>
 <p>This is what pushes students from passive observers of data to active agents in its collection, structure, and use. It aligns closely with what real-world data science jobs require, especially when you’re no longer just analyzing data, but acquiring it.</p>
-</section>
-</section>
-</section>
-<section id="eman-important---provide-2-3-sample-api-calls" class="level1">
-<h1>EMAN IMPORTANT - Provide 2-3 sample API calls</h1>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><a href="https://www.statista.com/statistics/871513/worldwide-data-created/"><img src="images/clipboard-272118191.png" class="img-fluid figure-img" alt="Volume of Data Created (Statista)"></a></p>
@@ -340,69 +335,127 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 </figure>
 </div>
 <p>The use of APIs requires keys, which are unique and secret codes that are used to authorize your request and identify your user and billing information. Consequently, keeping these codes secret is imperative. To do so, store API keys in environment files which reside on your computer, and not coded into variables or available in plain text on your working files.</p>
-<p>show images creating an app (provide my youtube video) - going to website - filling in information for api - click on what approtate location - get id and secret (blurr it out)</p>
+<p>show images creating an app (provide my youtube video) - get id and secret (blurr it out) (make highlighe secret and ID on image )</p>
 <p>[<img src="images/spotify_id.png" class="img-fluid" alt="Volume of Data Created (Statista)"></p>
 <p>id: (eman post in some way) secret: (eman post on screen)</p>
-<p>Note 10:</p>
-<p>Note all APIs website work the same, getting experience with 1-2, you start to develop a philosophy on how to approach them (chatgpt)</p>
+<p>Note 10: Note all APIs website work the same, getting experience with 1-2, you start to develop a philosophy on how to approach them (chatgpt)</p>
+<p>Code 2</p>
+<p><strong>Step 1: Load the Required Packages</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spotifyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spotifyr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Note 11: How databases and access can change. Data types are usually sotred correctly as chars or numerics so noy much cleaning required</p>
 <hr>
-<section id="c.-html-web-scraping" class="level4">
-<h4 class="anchored" data-anchor-id="c.-html-web-scraping">2.c. HTML Web Scraping</h4>
+<p><strong>Step 2: Set Up Credentials</strong></p>
+<p>Before using the Spotify API, you need to create an app on the and retrieve your <strong>Client ID</strong> and <strong>Client Secret</strong>. (I have a video here to do this on your own but on the screen, you can see the id and secret - (chatgpt))<a href="%22%22">How to make app</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace these with your actual credentials (do NOT share them publicly)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>client_id <span class="ot">&lt;-</span> <span class="st">'your_spotify_client_id_here'</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>client_secret <span class="ot">&lt;-</span> <span class="st">'your_spotify_client_secret_here'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><strong>Step 3: Get an Access Token</strong></p>
+<p>The token allows Spotify to recognize both <strong>who you are</strong> and <strong>what you’re requesting</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>access_token <span class="ot">&lt;-</span> <span class="fu">get_spotify_access_token</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">client_id =</span> client_id,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">client_secret =</span> client_secret</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><strong>Step 4: Request Artist Data</strong></p>
+<p>Now that you’re authenticated, you can request track-level data from Spotify’s API.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>beatles_df <span class="ot">&lt;-</span> <span class="fu">get_artist_audio_features</span>(<span class="st">'the beatles'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><strong>Step 5: Explore the Dataset</strong></p>
+<p>Use <code>glimpse()</code> to quickly examine the structure of the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(beatles_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+<p><strong>Step 6: Try Another Artist</strong></p>
+<p>Try retrieving audio features for a different artist.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>taylor_df <span class="ot">&lt;-</span> <span class="fu">get_artist_audio_features</span>(<span class="st">'taylor swift'</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(taylor_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note 11: How databases and access can change in that the developers may change access or change the way you access information so you have to be aware of this. (chatgpt)</p>
+<p>Data types are usually sotred correctly as chars or numerics so noy much cleaning required (chatgpt)</p>
+<hr>
+</section>
+<section id="d.-what-is-web-scraping" class="level4">
+<h4 class="anchored" data-anchor-id="d.-what-is-web-scraping">2.d. What is Web Scraping?</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/clipboard-258030846.jpeg" class="img-fluid figure-img" width="722"></p>
 <figcaption>Process of HTML Scraping (sstm2.com)</figcaption>
 </figure>
 </div>
-<p>Much like APIs, lots of relevant and useful information is available directly on webpages, which are readable by humans rather than APIs which are designed for machine access. By learning this skill, students are able to:</p>
 <ul>
-<li><p>Locate relevant sources (e.g., sports data from Pro Football Reference)</p></li>
-<li><p>Understand how websites deliver and organize content</p></li>
-<li><p>Transform and clean data for analysis and visualization</p></li>
+<li>P17</li>
 </ul>
-<p>Often times, HTML tables contain unexpected structures or data types (images, links, etc) and can present a challenge that develops not only data cleaning skills, but intention, planning, and adaptability when handling and analyzing difficult data.</p>
-</section>
-</section>
-<section id="eman-important---provide-2-3-webscrape" class="level1">
-<h1>EMAN IMPORTANT - Provide 2-3 webscrape</h1>
-<hr>
-<section id="d.-our-focus-extraction" class="level4">
-<h4 class="anchored" data-anchor-id="d.-our-focus-extraction">2.d. Our Focus: Extraction</h4>
-<p>While analyzing data is comprised of many steps and processes, one of the first and most foundational of these is <em>extracting the data</em>. Here are some common ways data can be extracted. In this workshop, the focus will be on the last two methods.</p>
+<p>Websites are designed using Hypertext Markup Language (HTML) to display information, (chatgpt: say better)</p>
+<p>Information stored as tables are ideal within a HTML page (chatgpt: say more)</p>
+<p>Note 12: - we do not want to just copy and paste a table into a csv format it then clearn it up again in R, ideally we want to have access to and bring it into R (chatgpt: say better)</p>
 <ul>
-<li><p>CSV (comma-seperated values) files</p>
+<li>P18:</li>
+</ul>
+<p>Below is an image of code for html table and the actual table that it would produce</p>
+<p><img src="images/htmltable_corn-1.png" class="img-fluid" alt="Process of HTML Scraping (sstm2.com)">{width=“200”, height = “1000”}</p>
 <ul>
-<li><p><code>read.csv</code></p></li>
-<li><p><code>readr::read_csv</code></p></li>
+<li>Note 13:
+<ul>
+<li>Highlight the following concepts:
+<ul>
+<li>beginning and the end of table</li>
+<li>the column name</li>
+<li>each Row</li>
+<li>How it translate into a human readable table</li>
 </ul></li>
-<li><p>Excel files (.xlsx, .xlsb, .xlsm, .xls)</p>
-<ul>
-<li><p><code>readxl::read_excel</code></p>
-<ul>
-<li>Not .xlsb</li>
+<li>Emphasize that we’re only focusing on <code>&lt;table&gt;</code> tags for this workshop</li>
 </ul></li>
-<li><p><code>readxlsb::read_xlsb</code></p></li>
-<li><p><code>tidyxl::xlsx_cells</code></p></li>
-</ul></li>
-<li><p>Pre-loaded data frames in R (mtcars)</p>
+<li>P19.</li>
+</ul>
+<p>Now lets see one of the libraries that allows us to scrape in R</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(htmltab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note 14: Lets go to the url via webbroswer</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://en.wikipedia.org/wiki/List_of_counties_in_Iowa"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>P20.</p>
+<p>This function requires 2 args url and table number we can guess at it and may work</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>iowa_state_counties_df <span class="ot">&lt;-</span> <span class="fu">htmltab</span>(url,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>iowa_state_counties_df <span class="ot">&lt;-</span> <span class="fu">htmltab</span>(url,<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note 15:</p>
 <ul>
-<li><code>data()</code></li>
-</ul></li>
-<li><p>URLs to GitHub repositories</p>
+<li><p>Unless you know html and want to look at the source code or you what exactly a table looks like you will have to guess sometimes</p></li>
+<li><p>We can get the warning to go away by …</p></li>
+<li><p>P21.</p></li>
+</ul>
+<p>This is what I would call static because the counties are note changeing but if we wanted baseball data at which currently everyday new data is displayed it is ideal that we have a more robust method of fgetting this data rather using <code>htmltabs</code></p>
 <ul>
-<li><code>readr::read_csv("link")</code></li>
-</ul></li>
-<li><p><strong>HTML (Web Extraction/Scraping)</strong></p>
+<li>P22.</li>
+</ul>
+<p>Check out article: Web Scraping in the Statistics and Data Science Curriculum: Challenges and Opportunities - Mine Dogucu &amp; Mine Çetinkaya-Rundel</p>
 <ul>
-<li><code>rvest::read_html</code></li>
-</ul></li>
-<li><p><strong>API requests (Databases)</strong></p>
+<li>P23.
 <ul>
-<li><code>httr2</code></li>
+<li>Much like APIs, lots of relevant and useful information is available directly on webpages, which are readable by humans rather than APIs which are designed for machine access.</li>
+<li>By learning this skill, students are able to:
+<ul>
+<li>Locate relevant sources (e.g., sports data from Pro Football Reference)</li>
+<li>Understand how websites deliver and organize content</li>
+<li>Transform and clean data for analysis and visualization</li>
+</ul></li>
+<li>Often times, HTML tables contain unexpected structures or data types (images, links, etc) and can present a challenge that develops not only data cleaning skills, but intention, planning, and adaptability when handling and analyzing difficult data.</li>
 </ul></li>
 </ul>
 </section>
@@ -424,119 +477,39 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 </div>
 <hr>
 </section>
-<section id="need-to-delete-place-somewhere-introduction-to-libraries-glossary" class="level4">
-<h4 class="anchored" data-anchor-id="need-to-delete-place-somewhere-introduction-to-libraries-glossary">(need to delete, place somewhere) Introduction to Libraries &amp; Glossary</h4>
-<p>This project, when possible, utilizes <code>tidyverse</code> packages. <code>tidyverse</code> is a collection of open-source packages that are well-integrated to tackle problems of data extraction, manipulation, transformation, exploration, and visualization.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="images/clipboard-59929015.png" class="img-fluid figure-img" width="631"></p>
-<figcaption>Collection of Tidyverse packages.</figcaption>
-</figure>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)      <span class="co"># Web scraping</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)      <span class="co"># Data manipulation</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)    <span class="co"># String cleaning</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rlang)      <span class="co"># Advanced evaluation</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)      <span class="co"># Functional tools</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)    <span class="co"># Visualizations</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)      <span class="co"># Makes web requests</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)     <span class="co"># Easier and prettier data frames</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)  <span class="co"># Handles dates</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dotenv)     <span class="co"># Loads environment variables from .Renviron</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)       <span class="co"># Easier string concatenation</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris)     <span class="co"># U.S. shapefiles for mapping</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>This is a list of R packages used in this project, accompanied by brief descriptions of what they do.</p>
-<p><code>rvest</code></p>
-<ul>
-<li>Used for web scraping: parses HTML/XML documents into a navigable format.</li>
-<li>Extracts structured data using CSS selectors, XPath, or tag-based search (<code>html_table()</code>, <code>html_text()</code>, etc.).</li>
-</ul>
-<hr>
-<p><code>dplyr</code></p>
-<ul>
-<li>Core package for tidyverse-style data manipulation (<code>filter()</code>, <code>mutate()</code>, <code>select()</code>, etc.).</li>
-<li>Supports chaining operations with <code>%&gt;%</code> / |<code>&gt;</code>, making data workflows readable and efficient.</li>
-</ul>
-<hr>
-<p><code>stringr</code></p>
-<ul>
-<li>Provides a consistent set of functions for string manipulation.</li>
-<li>Handles pattern matching, replacement, splitting, and formatting.</li>
-</ul>
-<hr>
-<p><code>rlang</code></p>
-<ul>
-<li>Supports advanced evaluation and programming with tidyverse tools.</li>
-<li>Useful when writing custom functions that dynamically reference or modify variables.</li>
-</ul>
-<hr>
-<p><code>purrr</code></p>
-<ul>
-<li>Enables functional programming with mapping tools like <code>map()</code>, <code>map_df()</code>, <code>walk()</code>, etc.</li>
-<li>Replaces (many) for-loops and supports clean iteration over lists and vectors.</li>
-</ul>
-<hr>
-<p><code>ggplot2</code></p>
-<ul>
-<li>Graphics package for building layered, flexible visualizations.</li>
-<li>Supports various plot types, themes, scales, and faceting for data storytelling.</li>
-</ul>
-<hr>
-<p><code>httr2</code></p>
-<ul>
-<li>Modern HTTP client designed for tidyverse-like API interaction.</li>
-<li>Replaces <code>httr</code> with a more intuitive and pipeable interface (<code>request() |&gt; req_perform()</code>).</li>
-</ul>
-<hr>
-<p><code>tibble</code></p>
-<ul>
-<li>A modern rethinking of the <code>data.frame</code> that prints cleaner and behaves more predictably.</li>
-<li>Default in tidyverse workflows; avoids surprises like string-to-factor conversion.</li>
-</ul>
-<hr>
-<p><code>lubridate</code></p>
-<ul>
-<li>Simplifies working with dates and times: parsing, formatting, and arithmetic.</li>
-<li>Makes it easy to extract components (e.g., month, weekday) and perform date math.</li>
-</ul>
-<hr>
-<p><code>dotenv</code></p>
-<ul>
-<li>Loads environment variables from a <code>.env</code> or <code>.Renviron</code> file into R.</li>
-<li>Keeps sensitive data like API keys out of your scripts and version control.</li>
-</ul>
-<hr>
-<p><code>glue</code></p>
-<ul>
-<li>Provides string interpolation (e.g., <code>glue("Hello {name}")</code>).</li>
-<li>Cleaner and safer than <code>paste()</code> for building URLs, messages, or SQL queries.</li>
-</ul>
-<hr>
-<p><code>tigris</code></p>
-<ul>
-<li>Downloads shapefiles and geographic boundary data (e.g., counties, states) from the U.S. Census Bureau.</li>
-<li>Returns spatial <code>sf</code> data frames, making it easy to map and visualize geographic data.</li>
-</ul>
 </section>
-<section id="hands-on-coding-activity" class="level3">
-<h3 class="anchored" data-anchor-id="hands-on-coding-activity">3. Hands-On Coding Activity</h3>
+<section id="hands-on-coding-activity-chatgpt-make-it" class="level3">
+<h3 class="anchored" data-anchor-id="hands-on-coding-activity-chatgpt-make-it">3. Hands-On Coding Activity (chatgpt: make it)</h3>
+<p><strong>Goal:</strong> Engage participants in applying both API and HTML extraction methods.</p>
+<p><strong>Part A: API</strong></p>
 <ul>
-<li><p>Extracting from accessible sources such as:</p>
+<li><p>Use a new function from the <strong><code>spotifyr</code></strong> package</p></li>
+<li><p>Create a simple plot using the data</p></li>
+<li><p>Ask comprehension questions:</p>
 <ul>
-<li>A static <code>.csv</code> hosted online (warm-up)</li>
-<li>A Wikipedia table using <code>rvest</code> and <code>janitor</code></li>
+<li>How does this differ from static file use?</li>
+<li>What’s confusing about working with API responses?</li>
 </ul></li>
-<li><p>Introduce <code>read_csv()</code> and <code>rvest::html_table()</code></p></li>
-<li><p>Add cleaning steps to enforce tidy principles (snake_case, correct types)</p></li>
+</ul>
+<p><strong>Part B: HTML</strong></p>
+<ul>
+<li><p>Extract state-specific data from a chosen Wikipedia page</p></li>
+<li><p>Guide participants through cleaning it (if time allows)</p></li>
+<li><p>Ask guiding questions:</p>
+<ul>
+<li>Did the table number match what you expected?</li>
+<li>What challenges did you face?</li>
+<li><em>(Example prompt written on the board: “Not every state’s table is the same.”)</em></li>
+</ul></li>
 </ul>
 </section>
-<section id="reflection" class="level3">
-<h3 class="anchored" data-anchor-id="reflection">4. Reflection</h3>
+<section id="reflection-make-questions-within-coursekata-to-solidyfy-approach" class="level3">
+<h3 class="anchored" data-anchor-id="reflection-make-questions-within-coursekata-to-solidyfy-approach">4. Reflection (make questions within CourseKata to solidyfy approach)</h3>
 <ul>
-<li>How can you introduce real-world messiness without overwhelming students?</li>
-<li>How would you scaffold tidy principles at the intro-level?</li>
+<li>What did we learn?</li>
+<li>How does this connect to the original <strong>Goals &amp; Objectives</strong> of the session?</li>
+<li>How do you see yourself using this in your classroom?</li>
+<li>What kinds of APIs or HTML sources would be most relevant for your students?</li>
 </ul>
 </section>
 <section id="misc.-questionsideas" class="level3">
