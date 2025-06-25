@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Immanuel Williams &amp; Ciera Millard">
-<meta name="dcterms.date" content="2025-06-24">
+<meta name="dcterms.date" content="2025-06-25">
 
 <title>Session 1: Introduction To Extraction Workshop - HTML &amp; APIs</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 24, 2025</p>
+      <p class="date">June 25, 2025</p>
     </div>
   </div>
   
@@ -115,7 +115,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="logisitcs" class="level3">
 <h3 class="anchored" data-anchor-id="logisitcs">0. Logisitcs</h3>
 <ul>
-<li>COurseKata</li>
+<li>CourseKata</li>
+<li>organization of workshop of lecture and questions throughout</li>
 </ul>
 </section>
 <section id="goals-objectives-presentation" class="level3">
@@ -242,7 +243,9 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 <p>Note 3: - <strong>Why this matters:</strong> We as instructors should not just rely on pre-built packages or static datasets. The digital world changes constantly — websites, APIs, and file structures evolve.</p>
 <ul>
 <li><p><strong>Our responsibility:</strong> Teach students (and ourselves) how to adapt and access real-world data sources. Equip learners with <em>skills to extract</em>, not just <em>consume pre-extracted content</em>.</p></li>
+<li><p>Despite the growing importance of live data, most introductory courses still rely heavily on static, pre-cleaned datasets. This limits students’ exposure to the realities of modern data work.</p></li>
 <li><p><strong>Key idea:</strong> <em>Flat files can still be dynamic</em> depending on how they’re maintained — but we use the term “dynamic” here to emphasize <strong>external, real-time data access</strong> through APIs and web scraping.</p></li>
+<li><p>The availability of dynamic, frequently updated data — especially via web APIs — has grown exponentially in recent years. This shift demands new strategies in how we teach data access.</p></li>
 </ul>
 </section>
 <section id="a.-static-files-or-sources-extraction" class="level3">
@@ -264,63 +267,89 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 <li><p>P13.</p></li>
 <li><p><strong>Two primary types:</strong></p>
 <ol type="1">
-<li><strong>APIs</strong> – Designed to serve structured data upon request (e.g., player stats, weather)</li>
-<li><strong>HTML/Web Pages</strong> – Seen as dynamic when content changes (especially sports, news, etc.)</li>
+<li>Application Programming Interface <strong>APIs</strong> – Designed to serve structured data upon request (e.g., player stats, weather)</li>
+<li>Hypertext Markup Language <strong>HTML/Web Pages</strong> – Seen as dynamic when content changes (especially sports, news, etc.)</li>
 </ol></li>
+<li><p>HTML pages are primarily designed for human readability, while APIs are designed for structured machine access. Both offer pathways to dynamic data, each with different advantages and challenges.</p></li>
+<li><p>Bridging the gap between classroom exercises and real-world data practice requires that students learn not just how to analyze data — but how to find it, extract it, and prepare it themselves.</p></li>
+<li><p>Note 5: HTML <em>can be treated</em> as static or dynamic depending on how frequently the page updates. For this workshop, <strong>we treat HTML as dynamic</strong>, especially for sports data.</p></li>
 </ul>
-<p>Self Question 1: what other type are there, why do we not need them here?</p>
+<section id="b.-what-are-web-apis" class="level4">
+<h4 class="anchored" data-anchor-id="b.-what-are-web-apis">2.b. What are Web APIs?</h4>
+<p>Note 6:</p>
 <ul>
-<li>Note 5: HTML <em>can be treated</em> as static or dynamic depending on how frequently the page updates. For this workshop, <strong>we treat HTML as dynamic</strong>, especially for sports data.</li>
+<li>There are many kinds of APIs, but in this workshop, we’ll focus specifically on <strong>web APIs</strong> — tools designed to let us request and retrieve data from online sources.</li>
+<li>In R, we’ll act like a piece of software making those requests, allowing us to access live data programmatically.</li>
 </ul>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">## OLD BELOW</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">#### 2.a. HTML and APIs in the Classroom</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">The availability of continuously changing data and the use of web APIs have grown exponentially in recent years. Dynamic data is published online in formats designed for both human readability (HTML) and machine access (APIs). However, this not always reflected in introductory statistics or data science classes. Many times, instruction relies on pre-cleaned, static datasets, which are not realistic to the current data landscape.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">To bridge this gap, it is essential that we prepare students to meet real-world data challenges by equipping them with the skills to independently extract, process, and analyze data. While it is often sufficient to provide static datasets for demonstrations and exercises, careers in modern data science will demand the ability to find and retrieve data from live sources, not simply rely on what’s been prepackaged.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">#### 2.b. Web APIs</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><img src="images/clipboard-1951848651.jpeg" class="img-fluid" alt="Flow of Data via API (vrogue.co)"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">APIs (Application Programming Interfaces) allow programs to request data directly from external servers in a structured format (most often JSON). Learning to work with web APIs teaches students not just to observe data, but to understand how to:</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">- Locate relevant APIs (e.g., weather data from OpenWeatherMap)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">- Construct their own API requests (instead of relying on pre-built packages)</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">- Interpret the response structure (e.g., nested JSON)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">- Transform the returned data into usable formats for analysis</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">This pushes students to explore data fully, recognize potential limitations, biases, or technical issues in the data structure, and move beyond canned examples.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Furthermore, as APIs often serve as the channel which to access and retrieve information from databases. In an evolving landscape where more and more data is created and captured with each passing day, being able to leverage the information stored in databases is more critical than ever.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><a href="https://www.statista.com/statistics/871513/worldwide-data-created/"><img src="images/clipboard-272118191.png" class="img-fluid" alt="Volume of Data Created (Statista)"></a></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">The use of APIs requires keys, which are unique and secret codes that are used to authorize your request and identify your user and billing information. Consequently, keeping these codes secret is imperative. To do so, store API keys in environment files which reside on your computer, and not coded into variables or available in plain text on your working files.</td>
-</tr>
-</tbody>
-</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1951848651.jpeg" class="img-fluid figure-img"></p>
+<figcaption>Flow of Data via API (vrogue.co)</figcaption>
+</figure>
+</div>
+<ul>
+<li><p>P14.</p></li>
+<li><p>API stand for Application Programming Interfaces</p></li>
+<li><p>It is a way for software to communicate with one another</p></li>
+<li><p>One way it work is that it allow programs to request data directly from external servers in a structured format (most often JSON).</p></li>
+</ul>
+<pre><code>{
+  "player": "LeBron James",
+  "points": 27.1,
+  "team": "Lakers"
+}</code></pre>
+<ul>
+<li>The <strong>keys</strong> are <code>players</code>, <code>points</code>and <code>team</code></li>
+<li>The <strong>values</strong> for the corresponding keys are <code>LeBron James</code>, <code>27.1</code>, <code>Lakers</code></li>
+</ul>
+<p>Note 7:</p>
+<ul>
+<li>There are a lot of acronyms</li>
+<li>JSON - Java Script Object Notation - javascript is web developing software (chatgpt)</li>
+</ul>
+<p>Q3. What does JSON? Answer: Java script object notation</p>
+<p>Note 8:</p>
+<ul>
+<li><p>Describe Image <code>Flow of Data via API (vrogue.co)</code></p></li>
+<li><p>A user sends a request via the internet → the API talks to the server → the server queries the database → the API responds with data, often as JSON.</p></li>
+<li><p>P15.</p></li>
+<li><p>Learning to work with web APIs teaches students more than just how to extract data — it gives them the tools to:</p>
+<ul>
+<li>Locate relevant APIs (e.g., weather, sports, music)</li>
+<li>Construct and test their own API requests</li>
+<li>Interpret JSON responses (including nested structures)</li>
+<li>Transform the results into tidy formats ready for analysis</li>
+</ul></li>
+</ul>
+<p><strong>P16</strong></p>
+<ul>
+<li><p>APIs aren’t just technical tools, they’re increasingly the primary way to access and query data stored in external databases.</p></li>
+<li><p>In today’s fast-changing digital environment, students must be equipped to retrieve and work with information from live, external sources, not just rely on pre-cleaned datasets.</p></li>
+<li><p>Note 9:</p></li>
+</ul>
+<p>This is what pushes students from passive observers of data to active agents in its collection, structure, and use. It aligns closely with what real-world data science jobs require, especially when you’re no longer just analyzing data, but acquiring it.</p>
+</section>
+</section>
+</section>
+<section id="eman-important---provide-2-3-sample-api-calls" class="level1">
+<h1>EMAN IMPORTANT - Provide 2-3 sample API calls</h1>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://www.statista.com/statistics/871513/worldwide-data-created/"><img src="images/clipboard-272118191.png" class="img-fluid figure-img" alt="Volume of Data Created (Statista)"></a></p>
+<figcaption>Volume of Data Created (Statista)</figcaption>
+</figure>
+</div>
+<p>The use of APIs requires keys, which are unique and secret codes that are used to authorize your request and identify your user and billing information. Consequently, keeping these codes secret is imperative. To do so, store API keys in environment files which reside on your computer, and not coded into variables or available in plain text on your working files.</p>
+<p>show images creating an app (provide my youtube video) - going to website - filling in information for api - click on what approtate location - get id and secret (blurr it out)</p>
+<p>[<img src="images/spotify_id.png" class="img-fluid" alt="Volume of Data Created (Statista)"></p>
+<p>id: (eman post in some way) secret: (eman post on screen)</p>
+<p>Note 10:</p>
+<p>Note all APIs website work the same, getting experience with 1-2, you start to develop a philosophy on how to approach them (chatgpt)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spotifyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note 11: How databases and access can change. Data types are usually sotred correctly as chars or numerics so noy much cleaning required</p>
+<hr>
 <section id="c.-html-web-scraping" class="level4">
 <h4 class="anchored" data-anchor-id="c.-html-web-scraping">2.c. HTML Web Scraping</h4>
 <div class="quarto-figure quarto-figure-center">
@@ -336,8 +365,11 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 <li><p>Transform and clean data for analysis and visualization</p></li>
 </ul>
 <p>Often times, HTML tables contain unexpected structures or data types (images, links, etc) and can present a challenge that develops not only data cleaning skills, but intention, planning, and adaptability when handling and analyzing difficult data.</p>
-<hr>
 </section>
+</section>
+<section id="eman-important---provide-2-3-webscrape" class="level1">
+<h1>EMAN IMPORTANT - Provide 2-3 webscrape</h1>
+<hr>
 <section id="d.-our-focus-extraction" class="level4">
 <h4 class="anchored" data-anchor-id="d.-our-focus-extraction">2.d. Our Focus: Extraction</h4>
 <p>While analyzing data is comprised of many steps and processes, one of the first and most foundational of these is <em>extracting the data</em>. Here are some common ways data can be extracted. In this workshop, the focus will be on the last two methods.</p>
@@ -402,18 +434,18 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 </figure>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)      <span class="co"># Web scraping</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)      <span class="co"># Data manipulation</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)    <span class="co"># String cleaning</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rlang)      <span class="co"># Advanced evaluation</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)      <span class="co"># Functional tools</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)    <span class="co"># Visualizations</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)      <span class="co"># Makes web requests</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)     <span class="co"># Easier and prettier data frames</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)  <span class="co"># Handles dates</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dotenv)     <span class="co"># Loads environment variables from .Renviron</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)       <span class="co"># Easier string concatenation</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris)     <span class="co"># U.S. shapefiles for mapping</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)      <span class="co"># Web scraping</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)      <span class="co"># Data manipulation</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)    <span class="co"># String cleaning</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rlang)      <span class="co"># Advanced evaluation</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)      <span class="co"># Functional tools</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)    <span class="co"># Visualizations</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr2)      <span class="co"># Makes web requests</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)     <span class="co"># Easier and prettier data frames</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)  <span class="co"># Handles dates</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dotenv)     <span class="co"># Loads environment variables from .Renviron</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)       <span class="co"># Easier string concatenation</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tigris)     <span class="co"># U.S. shapefiles for mapping</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is a list of R packages used in this project, accompanied by brief descriptions of what they do.</p>
 <p><code>rvest</code></p>
@@ -487,7 +519,6 @@ $ Last_Name     &lt;chr&gt; "Jordan", "Jordan", "Jordan", "Jordan", "Jordan", "J
 <li>Downloads shapefiles and geographic boundary data (e.g., counties, states) from the U.S. Census Bureau.</li>
 <li>Returns spatial <code>sf</code> data frames, making it easy to map and visualize geographic data.</li>
 </ul>
-</section>
 </section>
 <section id="hands-on-coding-activity" class="level3">
 <h3 class="anchored" data-anchor-id="hands-on-coding-activity">3. Hands-On Coding Activity</h3>

@@ -9,7 +9,8 @@ format: html
 
 ### 0. Logisitcs
 
-- COurseKata
+- CourseKata
+- organization of workshop of lecture and questions throughout
 
 
 ### 1. Goals & Objectives (Presentation)
@@ -111,7 +112,12 @@ Note 3:
 
 -   **Our responsibility:** Teach students (and ourselves) how to adapt and access real-world data sources. Equip learners with *skills to extract*, not just *consume pre-extracted content*.
 
+-   Despite the growing importance of live data, most introductory courses still rely heavily on static, pre-cleaned datasets. This limits students' exposure to the realities of modern data work.
+
+
 -   **Key idea:** *Flat files can still be dynamic* depending on how they’re maintained — but we use the term "dynamic" here to emphasize **external, real-time data access** through APIs and web scraping.
+
+-   The availability of dynamic, frequently updated data — especially via web APIs — has grown exponentially in recent years. This shift demands new strategies in how we teach data access.
 
 
 ### A. Static Files or Sources Extraction 
@@ -140,14 +146,13 @@ Note 3:
 
 -   **Two primary types:**
 
-    1.  **APIs** – Designed to serve structured data upon request (e.g., player stats, weather)
-    2.  **HTML/Web Pages** – Seen as dynamic when content changes (especially sports, news, etc.)
+    1.  Application Programming Interface **APIs** – Designed to serve structured data upon request (e.g., player stats, weather)
+    2. Hypertext Markup Language **HTML/Web Pages** – Seen as dynamic when content changes (especially sports, news, etc.)
+
+-   HTML pages are primarily designed for human readability, while APIs are designed for structured machine access. Both offer pathways to dynamic data, each with different advantages and challenges.
 
 
-
-
-Self Question 1: what other type are there, why do we not need them here?
-
+-   Bridging the gap between classroom exercises and real-world data practice requires that students learn not just how to analyze data — but how to find it, extract it, and prepare it themselves.
 
 
 
@@ -161,41 +166,112 @@ Self Question 1: what other type are there, why do we not need them here?
 
 
 
+#### 2.b. What are Web APIs?
 
--------------
-## OLD BELOW
+Note 6: 
 
-#### 2.a. HTML and APIs in the Classroom
+- There are many kinds of APIs, but in this workshop, we’ll focus specifically on **web APIs** — tools designed to let us request and retrieve data from online sources.
+- In R, we’ll act like a piece of software making those requests, allowing us to access live data programmatically.
 
 
-# EMAN start here: (Brek up text into Notes & pooints )
-The availability of continuously changing data and the use of web APIs have grown exponentially in recent years. Dynamic data is published online in formats designed for both human readability (HTML) and machine access (APIs). However, this not always reflected in introductory statistics or data science classes. Many times, instruction relies on pre-cleaned, static datasets, which are not realistic to the current data landscape.
 
-To bridge this gap, it is essential that we prepare students to meet real-world data challenges by equipping them with the skills to independently extract, process, and analyze data. While it is often sufficient to provide static datasets for demonstrations and exercises, careers in modern data science will demand the ability to find and retrieve data from live sources, not simply rely on what’s been prepackaged.
 
-#### 2.b. Web APIs
 
 ![Flow of Data via API (vrogue.co)](images/clipboard-1951848651.jpeg)
 
-APIs (Application Programming Interfaces) allow programs to request data directly from external servers in a structured format (most often JSON). Learning to work with web APIs teaches students not just to observe data, but to understand how to:
 
--   Locate relevant APIs (e.g., weather data from OpenWeatherMap)
+- P14.
 
--   Construct their own API requests (instead of relying on pre-built packages)
+- API stand for  Application Programming Interfaces
 
--   Interpret the response structure (e.g., nested JSON)
+- It is a way for software to communicate with one another
 
--   Transform the returned data into usable formats for analysis
+- One way it work is that it allow programs to request data directly from external servers in a structured format (most often JSON). 
 
-This pushes students to explore data fully, recognize potential limitations, biases, or technical issues in the data structure, and move beyond canned examples.
+```
+{
+  "player": "LeBron James",
+  "points": 27.1,
+  "team": "Lakers"
+}
+```
+- The **keys** are `players`, `points `and `team`
+- The **values** for the corresponding keys are `LeBron James`, `27.1`, `Lakers`
 
-Furthermore, as APIs often serve as the channel which to access and retrieve information from databases. In an evolving landscape where more and more data is created and captured with each passing day, being able to leverage the information stored in databases is more critical than ever.
+
+Note 7: 
+
+- There are a lot of acronyms 
+- JSON - Java Script Object Notation - javascript is web developing software (chatgpt)
+
+
+
+Q3. What does JSON?
+Answer: Java script object notation 
+
+
+Note 8:
+
+- Describe Image `Flow of Data via API (vrogue.co)`
+- A user sends a request via the internet → the API talks to the server → the server queries the database → the API responds with data, often as JSON.
+
+
+- P15.
+
+- Learning to work with web APIs teaches students more than just how to extract data — it gives them the tools to:
+
+  - Locate relevant APIs (e.g., weather, sports, music)
+  - Construct and test their own API requests
+  - Interpret JSON responses (including nested structures)
+  - Transform the results into tidy formats ready for analysis
+
+**P16**
+
+- APIs aren't just technical tools, they’re increasingly the primary way to access and query data stored in external databases.
+
+- In today’s fast-changing digital environment, students must be equipped to retrieve and work with information from live, external sources, not just rely on pre-cleaned datasets.
+
+- Note 9:
+
+This is what pushes students from passive observers of data to active agents in its collection, structure, and use. It aligns closely with what real-world data science jobs require, especially when you're no longer just analyzing data, but acquiring it.
+
+
 
 # EMAN IMPORTANT - Provide 2-3 sample API calls
 
 [![Volume of Data Created (Statista)](images/clipboard-272118191.png)](https://www.statista.com/statistics/871513/worldwide-data-created/)
 
 The use of APIs requires keys, which are unique and secret codes that are used to authorize your request and identify your user and billing information. Consequently, keeping these codes secret is imperative. To do so, store API keys in environment files which reside on your computer, and not coded into variables or available in plain text on your working files.
+
+
+
+
+show images creating an app (provide my youtube video)
+  - going to website
+  - filling in information for api
+  - click on what approtate location
+  - get id and secret (blurr it out)
+
+
+
+[![Volume of Data Created (Statista)](images/spotify_id.png)
+
+id: (eman post in some way)
+secret: (eman post on screen)
+
+Note 10:
+
+Note all APIs website work the same, getting experience with 1-2, you start to develop a philosophy on how to approach them (chatgpt)
+
+
+```{r}
+library(spotifyr)
+```
+
+
+Note 11:
+How databases and access can change.
+Data types are usually sotred correctly as chars or numerics so noy much cleaning required
 
 ------------------------------------------------------------------------
 
