@@ -3,8 +3,14 @@ title: "Session 2: Weather Data  - OpenWeatherAPI"
 author: "Immanuel Williams & Ciera Millard"
 date: "`r Sys.Date()`"
 output: html_document
+execute:
+  echo: true
 ---
 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 
 
